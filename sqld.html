@@ -1,0 +1,3949 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SQLD SQL 개발자 교본</title>
+<meta name="description" content="데이터 모델링과 SQL, 쿼리가 실행되는 순서대로 이해하는 교본.">
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pretendard@1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+:root{--accent:#0a55c2;--accent-2:#e4edfb;--accent-ink:#ffffff;}
+:root{
+  --bg:#ffffff; --surface:#f3f5f7; --surface-2:#e8ecf0; --line:#d6dce2;
+  --text:#121a22; --text-2:#4f5d6b; --code-bg:#11161b; --code-text:#e4eaf0; --code-dim:#8b97a3;
+  --ok:#0d7a4f; --ok-bg:#e2f3ea; --bad:#b42318; --bad-bg:#fcebe9;
+  --ease-out:cubic-bezier(.23,1,.32,1); --ease-io:cubic-bezier(.77,0,.175,1);
+  --font:"Pretendard Variable",Pretendard,-apple-system,"Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
+  --mono:ui-monospace,"SF Mono","D2Coding",Consolas,"Liberation Mono",monospace;
+  --top:60px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:calc(var(--top) + 20px);-webkit-text-size-adjust:100%;font-family:var(--font);overflow-x:clip}
+button,input,select,textarea{font-family:inherit}
+body{margin:0;overflow-x:clip;background:var(--bg);color:var(--text);font-family:var(--font);font-size:17px;line-height:1.75;
+  word-break:keep-all;overflow-wrap:anywhere;-webkit-font-smoothing:antialiased}
+::selection{background:var(--accent);color:var(--accent-ink)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:2px}
+a{color:var(--accent);text-underline-offset:3px;text-decoration-thickness:1px}
+h1,h2,h3,h4{text-wrap:balance;line-height:1.25;margin:0}
+img,svg{max-width:100%}
+html{scrollbar-color:var(--line) transparent}
+
+/* progress */
+.progress{position:fixed;inset:0 0 auto 0;height:3px;z-index:60;pointer-events:none}
+.progress i{display:block;height:100%;background:var(--accent);transform-origin:0 50%;transform:scaleX(0)}
+
+/* top bar */
+.topbar{position:sticky;top:0;z-index:50;background:var(--bg);border-bottom:1px solid var(--line)}
+.topbar-in{max-width:1320px;margin:0 auto;height:var(--top);display:flex;align-items:center;gap:28px;padding:0 28px}
+.brand{color:var(--text);text-decoration:none;font-size:16px;white-space:nowrap}
+.brand b{font-weight:700;margin-left:4px}
+.guides{display:flex;gap:22px;margin-left:auto}
+.guides a{color:var(--text-2);text-decoration:none;font-size:15px;padding:6px 0;border-bottom:2px solid transparent}
+.guides a[aria-current]{color:var(--text);border-bottom-color:var(--accent);font-weight:600}
+.toc-toggle{display:none}
+.btn{font:inherit;font-size:15px;font-weight:600;border-radius:999px;padding:10px 20px;cursor:pointer;border:1px solid transparent;
+  text-decoration:none;display:inline-flex;align-items:center;gap:8px;line-height:1.2;
+  transition:transform 160ms var(--ease-out),background-color 160ms var(--ease-out)}
+.btn:active{transform:scale(.97)}
+.btn-solid{background:var(--accent);color:var(--accent-ink)}
+.btn-light{background:#fff;color:var(--accent)}
+.btn-line-light{background:transparent;color:#fff;border-color:rgba(255,255,255,.55)}
+@media (hover:hover) and (pointer:fine){
+  .btn-solid:hover{background:color-mix(in srgb,var(--accent) 86%,#000)}
+  .btn-line-light:hover{background:rgba(255,255,255,.12)}
+  .guides a:hover{color:var(--text)}
+}
+
+/* hero: solid accent plane */
+.hero{background:var(--accent);color:#fff}
+.hero-in{max-width:1320px;margin:0 auto;padding:96px 28px 104px;display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:56px;align-items:center}
+.hero h1{font-size:clamp(40px,5.4vw,76px);letter-spacing:-.035em;line-height:1.08;font-weight:800}
+.hero-tag{font-size:clamp(18px,1.6vw,22px);margin:24px 0 0;max-width:30em;color:rgba(255,255,255,.9);line-height:1.6}
+.hero-stats{display:flex;gap:44px;margin:48px 0 0;padding:0}
+.hero-stats div{margin:0}
+.hero-stats dt{font-size:14px;color:rgba(255,255,255,.75)}
+.hero-stats dd{margin:2px 0 0;font-size:40px;font-weight:700;letter-spacing:-.02em;font-variant-numeric:tabular-nums;line-height:1.1}
+.hero-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:44px}
+.hero-fig svg{display:block;width:100%;height:auto}
+
+/* layout */
+.layout{max-width:1320px;margin:0 auto;display:grid;grid-template-columns:290px minmax(0,1fr);gap:64px;padding:0 28px}
+.sidebar{position:relative}
+.sidebar-in{position:sticky;top:calc(var(--top) + 0px);max-height:calc(100vh - var(--top));overflow:auto;padding:48px 8px 48px 0;scrollbar-width:thin}
+.toc-title{font-size:14px;color:var(--text-2);margin:0 0 12px}
+.toc,.toc ol{list-style:none;margin:0;padding:0}
+.toc>li{margin:0 0 4px}
+.toc-ch{display:block;color:var(--text);text-decoration:none;font-size:15px;font-weight:600;padding:8px 10px;border-radius:4px;line-height:1.4}
+.toc-g{display:block;font-size:13px;font-weight:500;color:var(--text-2)}
+.toc ol{display:none;padding:2px 0 8px 10px}
+.toc li.open>ol{display:block}
+.toc ol a{display:block;color:var(--text-2);text-decoration:none;font-size:14px;padding:4px 10px;line-height:1.45;border-radius:4px}
+.toc a.on{background:var(--accent-2);color:var(--text)}
+@media (hover:hover) and (pointer:fine){ .toc a:hover{background:var(--surface)} }
+
+.content{min-width:0;max-width:800px;padding:0 0 120px}
+
+/* chapter */
+.chapter{padding-top:120px}
+.ch-head{padding-bottom:36px;margin-bottom:44px;border-bottom:1px solid var(--line);position:relative}
+.ch-group{margin:0 0 12px;font-size:16px;color:var(--accent);font-weight:600}
+.ch-head h2{font-size:clamp(32px,4vw,50px);letter-spacing:-.03em;font-weight:800}
+.ch-pdf{margin-top:22px;font:inherit;font-size:14px;color:var(--text-2);background:var(--surface);border:0;border-radius:999px;padding:7px 14px 7px 11px;
+  display:inline-flex;align-items:center;gap:7px;cursor:pointer;transition:transform 160ms var(--ease-out),background-color 160ms var(--ease-out)}
+.ch-pdf svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.3;stroke-linejoin:round;stroke-linecap:round}
+.ch-pdf:active{transform:scale(.97)}
+@media (hover:hover) and (pointer:fine){ .ch-pdf:hover{background:var(--surface-2);color:var(--text)} }
+
+.ch-body h3{font-size:28px;letter-spacing:-.02em;font-weight:750;margin:80px 0 20px}
+.ch-body h3:first-child{margin-top:0}
+.ch-body h4{font-size:20px;font-weight:700;margin:44px 0 12px;letter-spacing:-.01em}
+.ch-body p{margin:0 0 16px}
+.ch-body ul,.ch-body ol{margin:0 0 18px;padding-left:1.4em}
+.ch-body li{margin:4px 0}
+.ch-body li>ul,.ch-body li>ol{margin:4px 0}
+.ch-body strong{font-weight:700}
+.ch-body hr{border:0;border-top:1px solid var(--line);margin:48px 0}
+
+/* inline code & blocks */
+code{font-family:var(--mono);font-size:.88em;background:var(--surface);padding:.12em .4em;border-radius:3px}
+pre{background:var(--code-bg);color:var(--code-text);border-radius:6px;padding:18px 20px;overflow:auto;margin:0 0 20px;line-height:1.6;font-size:14.5px}
+pre code{background:none;padding:0;font-size:inherit;color:inherit;white-space:pre}
+
+/* tables */
+.tw{overflow-x:auto;margin:0 0 22px}
+table{border-collapse:collapse;width:100%;font-size:15.5px;line-height:1.55;font-variant-numeric:tabular-nums}
+th,td{text-align:left;vertical-align:top;padding:10px 12px;border-bottom:1px solid var(--line)}
+thead th{background:var(--surface);font-weight:650;border-bottom:1px solid var(--text-2)}
+td code{white-space:nowrap}
+
+/* boxes */
+.box{margin:28px 0;padding:22px 24px 8px;background:var(--surface);border-radius:6px}
+.box-t{font-weight:700;margin:0 0 8px !important;font-size:16px}
+.box-exam{background:var(--accent-2)}
+.box-exam .box-t{color:var(--accent)}
+.box-warn{background:#fdf3e4}
+.box-warn .box-t{color:#8a4b00}
+.box-ex{background:transparent;border:1px solid var(--line)}
+.box table{background:#fff}
+
+/* quiz */
+.quiz{list-style:none;padding:0 !important;margin:32px 0 !important;counter-reset:q}
+.q{counter-increment:q;margin:0 0 18px !important;padding:22px 24px;background:var(--surface);border-radius:6px}
+.q-text{font-weight:600}
+.q-text p:first-child::before{content:"문제 " counter(q) ". ";color:var(--accent);font-weight:700}
+.q-text p{margin:0 0 10px}
+.q-text pre{font-weight:400;font-size:14px}
+.opts{list-style:none;padding:0 !important;margin:6px 0 0 !important;display:grid;gap:6px}
+.opts li{margin:0}
+.opt{all:unset;box-sizing:border-box;width:100%;display:flex;gap:10px;align-items:flex-start;padding:10px 14px;background:#fff;border:1px solid var(--line);
+  border-radius:4px;cursor:pointer;font-size:16px;line-height:1.55;transition:transform 140ms var(--ease-out),border-color 140ms var(--ease-out),background-color 140ms var(--ease-out)}
+.opt .n{flex:none;color:var(--text-2)}
+.opt:active{transform:scale(.99)}
+.opt:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+@media (hover:hover) and (pointer:fine){ .q:not(.done) .opt:hover{border-color:var(--text-2)} }
+.q.done .opt{cursor:default}
+.opt.right{border-color:var(--ok);background:var(--ok-bg)}
+.opt.wrong{border-color:var(--bad);background:var(--bad-bg)}
+.ans{display:none;margin-top:12px;padding-top:12px;border-top:1px solid var(--line);font-size:15.5px}
+.ans p{margin:0}
+.ans b{color:var(--ok);margin-right:6px}
+.q.done .ans{display:block}
+.no-js .ans{display:block}
+.ans-toggle{all:unset;cursor:pointer;font-size:14px;color:var(--text-2);margin-top:10px;display:inline-block;text-decoration:underline;text-underline-offset:3px}
+
+/* figures */
+.fig{margin:36px 0;padding:28px;background:var(--surface);border-radius:6px}
+.fig svg{display:block;width:100%;height:auto}
+.fig figcaption{font-size:15px;color:var(--text-2);margin-top:14px;line-height:1.6}
+.fig-ctrl{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px}
+.chip{font:inherit;font-size:14px;padding:6px 14px;border-radius:999px;border:1px solid var(--line);background:#fff;color:var(--text);cursor:pointer;
+  transition:transform 140ms var(--ease-out),background-color 140ms var(--ease-out),color 140ms var(--ease-out)}
+.chip:active{transform:scale(.97)}
+.chip[aria-pressed="true"]{background:var(--text);color:#fff;border-color:var(--text)}
+.term{background:var(--code-bg);color:var(--code-text);font-family:var(--mono);font-size:14px;border-radius:6px;padding:16px 18px;line-height:1.65;min-height:3em;white-space:pre-wrap}
+.term .p{color:#7ee2a8}
+.term .d{color:var(--code-dim)}
+
+/* reveal */
+.js .reveal{opacity:0;transform:translateY(22px);transition:opacity 520ms var(--ease-out),transform 520ms var(--ease-out)}
+.js .reveal.in{opacity:1;transform:none}
+
+.end{margin-top:140px;padding-top:28px;border-top:1px solid var(--line);color:var(--text-2);font-size:15px}
+
+/* modal */
+.modal[hidden]{display:none}
+.modal{position:fixed;inset:0;z-index:100;display:grid;place-items:center;padding:20px}
+.modal-back{position:absolute;inset:0;background:rgba(10,14,18,.5);animation:fade 180ms var(--ease-out)}
+.modal-box{position:relative;background:#fff;border-radius:10px;width:min(620px,100%);max-height:min(86vh,820px);display:flex;flex-direction:column;
+  box-shadow:0 24px 60px rgba(0,0,0,.25);animation:pop 220ms var(--ease-out)}
+@keyframes fade{from{opacity:0}}
+@keyframes pop{from{opacity:0;transform:scale(.96) translateY(8px)}}
+.modal-head{display:flex;align-items:center;justify-content:space-between;padding:22px 24px 10px}
+.modal-head h2{font-size:22px;letter-spacing:-.02em}
+.x{all:unset;cursor:pointer;width:36px;height:36px;display:grid;place-items:center;border-radius:999px}
+.x svg{width:16px;height:16px;stroke:var(--text);stroke-width:1.6}
+.x:hover{background:var(--surface)}
+.pick-tools{display:flex;gap:16px;align-items:center;padding:0 24px 12px;border-bottom:1px solid var(--line);font-size:14px;flex-wrap:wrap}
+.link{all:unset;cursor:pointer;color:var(--accent);font-weight:600}
+.switch{margin-left:auto;display:flex;gap:6px;align-items:center;color:var(--text-2);cursor:pointer}
+.pick-list{overflow:auto;padding:8px 14px}
+.pick{display:grid;grid-template-columns:22px 1fr;column-gap:10px;padding:9px 10px;border-radius:4px;cursor:pointer;line-height:1.4}
+.pick:hover{background:var(--surface)}
+.pick input{grid-row:span 2;margin-top:3px;accent-color:var(--accent);width:16px;height:16px}
+.pick-g{font-size:13px;color:var(--text-2)}
+.pick-t{font-size:16px;font-weight:600}
+.modal-foot{padding:16px 24px 22px;border-top:1px solid var(--line)}
+.hint{font-size:14px;color:var(--text-2);margin:0 0 14px;line-height:1.6}
+#doPrint{width:100%;justify-content:center;padding:13px}
+
+.print-cover{display:none}
+
+/* responsive */
+@media (max-width:1080px){
+  .layout{grid-template-columns:1fr;gap:0}
+  .sidebar{position:fixed;inset:var(--top) 0 0 auto;width:min(360px,88vw);background:#fff;z-index:45;border-left:1px solid var(--line);
+    transform:translateX(100%);visibility:hidden;transition:transform 260ms var(--ease-io),visibility 0s linear 260ms}
+  body.toc-open .sidebar{transform:none;visibility:visible;transition:transform 260ms var(--ease-io),visibility 0s;box-shadow:-20px 0 40px rgba(0,0,0,.12)}
+  .sidebar-in{position:static;max-height:100%;height:100%;padding:24px 20px}
+  .toc-toggle{display:inline-flex;font:inherit;font-size:15px;background:none;border:1px solid var(--line);border-radius:999px;padding:8px 16px;cursor:pointer;color:var(--text)}
+  .guides{display:none}
+  .topbar-in{gap:10px}
+  .toc-toggle{margin-left:auto}
+  .content{max-width:760px;width:100%;margin:0 auto}
+  .hero-in{grid-template-columns:1fr;padding:72px 28px 80px}
+  .hero-fig{max-width:560px}
+}
+@media (max-width:600px){
+  body{font-size:16px}
+  .topbar-in{padding:0 16px}
+  .layout{padding:0 18px}
+  .hero-in{padding:56px 20px 64px;gap:40px}
+  .hero-stats{gap:28px}
+  .hero-stats dd{font-size:32px}
+  .topbar .btn-solid{padding:8px 14px;font-size:14px}
+  .chapter{padding-top:88px}
+  .ch-body h3{font-size:24px;margin-top:64px}
+  .box,.q,.fig{padding-left:16px;padding-right:16px;margin-left:-4px;margin-right:-4px}
+  pre{font-size:13px;padding:14px;margin-left:-4px;margin-right:-4px}
+  table{font-size:14.5px}
+  th,td{padding:8px 9px}
+  .switch{margin-left:0}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .js .reveal{transform:none;transition:opacity 300ms linear}
+  *,*::before,*::after{animation-duration:1ms !important;animation-iteration-count:1 !important}
+  .sidebar{transition:none}
+}
+
+/* ============ PRINT ============ */
+@page{size:A4;margin:16mm 15mm 17mm}
+@media print{
+  :root{--surface:#f2f4f6}
+  *{-webkit-print-color-adjust:exact !important;print-color-adjust:exact !important;animation:none !important;transition:none !important}
+  html,body{background:#fff;font-size:10pt;line-height:1.62;scroll-behavior:auto}
+  .topbar,.progress,.sidebar,.hero,.ch-pdf,.modal,.fig-ctrl,.ans-toggle,.no-print,.end{display:none !important}
+  .layout{display:block;padding:0;max-width:none}
+  .content{max-width:none;padding:0}
+  .js .reveal{opacity:1 !important;transform:none !important}
+  body.pick-mode .chapter:not(.pr){display:none !important}
+
+  .print-cover{display:flex;flex-direction:column;justify-content:flex-start;min-height:250mm;break-after:page;padding-top:40mm}
+  .pc-kind{font-size:12pt;color:var(--accent);font-weight:700;margin:0 0 6mm}
+  .print-cover h1{font-size:34pt;letter-spacing:-.03em;line-height:1.15}
+  .pc-tag{font-size:13pt;color:var(--text-2);margin:6mm 0 18mm}
+  .pc-list{margin:0;padding:8mm 0 0 1.2em;border-top:1.5pt solid var(--accent);font-size:11pt;line-height:1.9}
+  .pc-list span{color:var(--text-2);margin-right:3mm}
+  .pc-date{margin-top:auto;font-size:9pt;color:var(--text-2)}
+
+  .chapter{padding-top:0;break-before:page}
+  .ch-head{padding-bottom:5mm;margin-bottom:7mm;break-after:avoid;break-inside:avoid}
+  .ch-group{font-size:10pt;margin-bottom:2mm}
+  .ch-head h2{font-size:22pt}
+  .ch-body h3{font-size:15pt;margin:9mm 0 3mm;break-after:avoid;break-inside:avoid}
+  .ch-body h4{font-size:12pt;margin:6mm 0 2mm;break-after:avoid;break-inside:avoid}
+  .keep{break-inside:avoid}
+  p{orphans:3;widows:3}
+  .ch-body p{margin-bottom:2.5mm}
+  pre{font-size:8.6pt;padding:3.5mm 4mm;line-height:1.5;white-space:pre-wrap;break-inside:avoid;overflow:visible;
+      background:#f4f6f8 !important;color:#14202b !important;border:.6pt solid #d6dce2}
+  pre code{white-space:pre-wrap}
+  .term{background:#f4f6f8 !important;color:#14202b !important;border:.6pt solid #d6dce2}
+  .term .p{color:#0d7a4f}
+  .tw{overflow:visible}
+  table{font-size:9pt;break-inside:auto}
+  thead{display:table-header-group}
+  tr,th,td{break-inside:avoid}
+  th,td{padding:1.6mm 2.2mm}
+  .tw.small-table, table.small{break-inside:avoid}
+  .box{break-inside:avoid;padding:4mm 5mm 1.5mm;margin:5mm 0}
+  .fig{break-inside:avoid;padding:4mm;margin:5mm 0}
+  .fig svg{max-height:120mm}
+  .quiz{margin:5mm 0 !important;display:block}
+  .opts{display:block !important}
+  .opts li{margin:0}
+  .opt{display:flex;border:0 !important;padding:.5mm 0 !important;background:transparent !important}
+  .q{break-inside:avoid;padding:3.2mm 4.5mm;margin-bottom:2.5mm !important}
+  .q-text p{margin-bottom:1.5mm}
+  .opt{padding:1.4mm 3mm;font-size:9.5pt;border-color:#d6dce2;background:#fff !important}
+  .opt.right,.opt.wrong{background:#fff !important;border-color:#d6dce2}
+  .ans{display:block !important;font-size:9.3pt;margin-top:2.5mm;padding-top:2.5mm}
+  body.no-ans .ans{display:none !important}
+  a{color:inherit;text-decoration:none}
+}
+
+/* hero svg animations */
+.hero-svg .pt{opacity:0;transform-box:fill-box;transform-origin:center;animation:ptIn 420ms var(--ease-out) forwards}
+@keyframes ptIn{from{opacity:0;transform:scale(.6)}to{opacity:.95;transform:none}}
+.hero-svg .reg{stroke-dasharray:500;stroke-dashoffset:500;animation:draw 1100ms var(--ease-io) 1400ms forwards}
+.hero-svg .rs{opacity:0;animation:fadeIn 300ms var(--ease-out) forwards}
+.hero-svg .eq{opacity:0;animation:fadeIn 500ms var(--ease-out) 2300ms forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+@keyframes fadeIn{to{opacity:1}}
+#hero-sqld .er rect,#hero-sqld .dr rect{transition:fill 260ms var(--ease-out)}
+#hero-sqld .on rect{fill:rgba(255,255,255,.2)}
+#hero-sqld .jl{transition:opacity 200ms var(--ease-out)}
+.hero-term{min-height:300px;font-size:15px;background:#0b0f12}
+.hero-term .cur{display:inline-block;width:.6em;height:1.1em;background:#7ee2a8;vertical-align:-.15em;animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+
+/* DIKW */
+.js #fig-dikw:not(.play) .lay{opacity:0}
+#fig-dikw.play .lay{animation:rise 620ms var(--ease-out) both;animation-delay:var(--d)}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+
+/* CRISP */
+#fig-crisp .ph rect{fill:#fff;stroke:var(--line);stroke-width:1.5;transition:fill 300ms var(--ease-out),stroke 300ms var(--ease-out)}
+#fig-crisp .ph text{fill:var(--text);transition:fill 300ms var(--ease-out)}
+#fig-crisp .ph.on rect{fill:var(--accent);stroke:var(--accent)}
+#fig-crisp .ph.on text{fill:#fff}
+#fig-crisp .orbit{transition:transform 900ms var(--ease-io)}
+
+/* CM */
+.cm{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:28px;align-items:start}
+.cm-grid{display:grid;grid-template-columns:auto 1fr 1fr;gap:6px;font-size:14px}
+.cm-h{font-weight:600;color:var(--text-2);text-align:center;align-self:end;padding-bottom:2px}
+.cm-v{writing-mode:horizontal-tb;text-align:right;align-self:center;padding-right:6px}
+.cm-c{display:flex;flex-direction:column;gap:4px;padding:12px;border-radius:4px;font-weight:700;font-size:14px;background:#fff;border:1px solid var(--line)}
+.cm-c.tp,.cm-c.tn{background:var(--accent-2);border-color:transparent}
+.cm-c input{font:inherit;font-size:24px;font-weight:700;width:100%;border:0;background:transparent;padding:0;color:var(--text);font-variant-numeric:tabular-nums}
+.cm-c input:focus{outline:none}
+.cm-c:focus-within{outline:2px solid var(--accent);outline-offset:1px}
+.cm-out{display:grid;grid-template-columns:1fr 1fr;gap:14px 18px;margin:0}
+.cm-out div{margin:0}
+.cm-out dt{font-size:13.5px;color:var(--text-2)}
+.cm-out dd{margin:0;font-size:26px;font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:-.01em;line-height:1.25}
+.cm-out p{margin:0 !important;font-size:14px;color:var(--text-2)}
+
+/* ORDER */
+.ord{display:grid;grid-template-columns:1fr 1.4fr;gap:28px}
+.ord-h{font-size:14px;color:var(--text-2);margin:0 0 8px !important;font-weight:600}
+.ord ol{list-style:none;padding:0 !important;margin:0 !important;display:grid;gap:6px}
+.ord li{margin:0;padding:10px 14px;background:#fff;border:1px solid var(--line);border-radius:4px;font-family:var(--mono);font-size:15px;
+  transition:background-color 260ms var(--ease-out),color 260ms var(--ease-out),border-color 260ms var(--ease-out),transform 260ms var(--ease-out)}
+.ord-x li{display:flex;justify-content:space-between;gap:12px}
+.ord-x li span{font-family:var(--font);color:var(--text-2);font-size:14px}
+.ord-x li::before{content:attr(data-s);font-family:var(--font);font-weight:700;color:var(--accent);margin-right:-4px;min-width:1.2em}
+.ord-x li b{flex:1}
+.ord li.on{background:var(--accent);border-color:var(--accent);color:#fff;transform:translateX(4px)}
+.ord li.on span,.ord-x li.on::before{color:#fff}
+.ord li.done{border-color:var(--accent)}
+
+/* JOIN */
+.j-sql{margin-bottom:16px}
+.j-wrap{display:grid;grid-template-columns:.8fr .8fr 1.4fr;gap:16px;align-items:start}
+.j-t{font-size:14px;font-weight:700;margin:0 0 6px !important}
+.j-n{color:var(--accent);font-weight:600;margin-left:6px}
+.j-wrap table{font-size:13.5px;background:#fff}
+.j-wrap th,.j-wrap td{padding:6px 8px;font-family:var(--mono);white-space:nowrap}
+.j-wrap tr.m td{background:var(--accent-2)}
+.j-wrap td.nul{color:var(--text-2);font-style:italic}
+.j-r tbody tr{animation:rowIn 260ms var(--ease-out) both}
+@keyframes rowIn{from{opacity:0;transform:translateY(6px)}}
+
+/* BOOT */
+.boot{list-style:none;padding:0 !important;margin:0 0 14px !important;display:grid;grid-template-columns:repeat(6,1fr);gap:6px}
+.boot li{margin:0;padding:12px 10px;background:#fff;border:1px solid var(--line);border-radius:4px;display:flex;flex-direction:column;
+  transition:background-color 300ms var(--ease-out),color 300ms var(--ease-out),border-color 300ms var(--ease-out)}
+.boot b{font-size:15px}
+.boot span{font-size:12.5px;color:var(--text-2);line-height:1.4;margin-top:2px}
+.boot li.on{background:var(--accent);border-color:var(--accent);color:#fff}
+.boot li.on span{color:rgba(255,255,255,.85)}
+.boot li.done{border-color:var(--accent)}
+.boot-bar{height:4px;background:var(--surface-2);border-radius:2px;overflow:hidden}
+.boot-bar i{display:block;height:100%;background:var(--accent);transform-origin:0 50%;transform:scaleX(0);transition:transform 900ms var(--ease-io)}
+.boot-desc{min-height:3.4em;margin:14px 0 0 !important;font-size:15.5px}
+
+/* CHMOD */
+.perm{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:24px;align-items:start}
+.perm-grid{display:grid;grid-template-columns:auto repeat(3,1fr);gap:6px;font-size:13.5px;align-items:center}
+.perm-grid>b{color:var(--text-2);font-weight:600;text-align:center}
+.perm-grid>b.perm-who{text-align:right;padding-right:6px;color:var(--text)}
+.perm-grid button{font:inherit;font-family:var(--mono);font-size:20px;font-weight:700;height:52px;border-radius:4px;border:1px solid var(--line);background:#fff;color:var(--text-2);cursor:pointer;
+  transition:background-color 160ms var(--ease-out),color 160ms var(--ease-out),transform 140ms var(--ease-out)}
+.perm-grid button:active{transform:scale(.96)}
+.perm-grid button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+.perm-grid button[aria-pressed="false"]{text-decoration:line-through;text-decoration-thickness:1px}
+.perm-out label{display:flex;flex-direction:column;font-size:13.5px;color:var(--text-2);gap:4px;margin-bottom:10px}
+.perm-num{font:inherit;font-family:var(--mono);font-size:30px;font-weight:700;width:5em;padding:4px 10px;border:1px solid var(--line);border-radius:4px;color:var(--text);letter-spacing:.08em}
+.perm-term{font-size:13.5px;min-height:7.5em}
+
+@media (max-width:720px){
+  .cm,.perm,.ord{grid-template-columns:1fr}
+  .j-wrap{grid-template-columns:1fr 1fr}
+  .j-res{grid-column:1/-1;overflow-x:auto}
+  .boot{grid-template-columns:repeat(3,1fr)}
+}
+@media print{
+  .hero-term{display:none}
+  #fig-dikw .lay{opacity:1 !important}
+  #fig-crisp .orbit{display:none}
+  #fig-crisp .ph rect{fill:#fff !important;stroke:var(--accent) !important}
+  #fig-crisp .ph text{fill:var(--text) !important}
+  .ord li.on,.boot li.on{background:#fff !important;color:var(--text) !important;border-color:var(--accent) !important;transform:none}
+  .ord li.on span,.boot li.on span{color:var(--text-2) !important}
+  .ord-x li.on::before{color:var(--accent) !important}
+  .boot-bar,.boot-desc{display:none}
+  .boot{grid-template-columns:repeat(6,1fr)}
+  .perm-grid button{height:9mm;font-size:12pt}
+  .cm-c input{font-size:14pt}
+  .j-wrap{grid-template-columns:.8fr .8fr 1.4fr}
+}
+
+</style>
+<script>document.documentElement.classList.add('js')</script>
+</head>
+<body data-guide="sqld">
+<div class="progress" aria-hidden="true"><i></i></div>
+<header class="topbar">
+  <div class="topbar-in">
+    <a class="brand" href="index.html">교본 <b>SQLD</b></a>
+    <nav class="guides" aria-label="다른 교본"><a href="adsp.html">ADsP</a>
+<a href="sqld.html" aria-current="page">SQLD</a>
+<a href="linux.html">리눅스마스터 2급</a></nav>
+    <button type="button" class="toc-toggle" aria-expanded="false" aria-controls="toc">목차</button>
+    <button type="button" class="btn btn-solid open-pdf">PDF로 저장</button>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="hero-in">
+    <div class="hero-text">
+      <h1>SQLD SQL 개발자</h1>
+      <p class="hero-tag">데이터 모델링과 SQL, 쿼리가 실행되는 순서대로 이해하는 교본.</p>
+      <dl class="hero-stats">
+        <div><dt>단원</dt><dd>12</dd></div>
+        <div><dt>주제</dt><dd>47</dd></div>
+        <div><dt>확인 문제</dt><dd>89</dd></div>
+      </dl>
+      <div class="hero-actions">
+        <a class="btn btn-light" href="#ch0">처음부터 읽기</a>
+        <button type="button" class="btn btn-line-light open-pdf">원하는 단원만 PDF로</button>
+      </div>
+    </div>
+    <div class="hero-fig"><svg viewBox="0 0 560 330" class="hero-svg" id="hero-sqld" role="img" aria-label="EMP 테이블의 부서번호가 DEPT 테이블의 같은 부서번호 행과 차례로 연결되는 조인 그림">
+<g transform="translate(10,60)"><text x="0" y="-12" fill="rgba(255,255,255,.8)" font-size="15" font-weight="600">EMP</text><rect x="0" y="0" width="230" height="34" fill="rgba(255,255,255,.16)"/><text x="12" y="22" fill="#fff" font-size="14" font-weight="700">EMPNO</text><text x="82" y="22" fill="#fff" font-size="14" font-weight="700">ENAME</text><text x="166" y="22" fill="#fff" font-size="14" font-weight="700">DEPTNO</text><g class="er" data-r="0"><rect x="0" y="34" width="230" height="36" fill="transparent"/><text x="12" y="57" fill="#fff" font-size="14" font-family="ui-monospace,Consolas,monospace">7369</text><text x="82" y="57" fill="#fff" font-size="14" font-family="ui-monospace,Consolas,monospace">SMITH</text><text x="166" y="57" fill="#fff" font-size="14" font-family="ui-monospace,Consolas,monospace">20</text></g><line x1="0" y1="70" x2="230" y2="70" stroke="rgba(255,255,255,.22)"/><g class="er" data-r="1"><rect x="0" y="70" width="230" height="36" fill="transparent"/><text x="12" y="93" fill="#fff" font-size="14" font-family="ui-monospace,Consolas,monospace">7499</text><text x="82" y="93" fill="#fff" font-size="14" font-family="ui-monospace,Consolas,monospace">ALLEN</text><text x="166" y="93" fill="#fff" font-size="14" font-family="ui-monospace,Consolas,monospace">30</text></g><line x1="0" y1="106" x2="230" y2="106" stroke="rgba(255,255,255,.22)"/><g class="er" data-r="2"><rect x="0" y="106" width="230" height="36" fill="transparent"/><text x="12" y="129" fill="#fff" font-size="14" font-family="ui-monospace,Consolas,monospace">7566</text><text x="82" y="129" fill="#fff" font-size="14" font-family="ui-monospace,Consolas,monospace">JONES</text><text x="166" y="129" fill="#fff" font-size="14" font-family="ui-monospace,Consolas,monospace">20</text></g><line x1="0" y1="142" x2="230" y2="142" stroke="rgba(255,255,255,.22)"/><g class="er" data-r="3"><rect x="0" y="142" width="230" height="36" fill="transparent"/><text x="12" y="165" fill="#fff" font-size="14" font-family="ui-monospace,Consolas,monospace">7839</text><text x="82" y="165" fill="#fff" font-size="14" font-family="ui-monospace,Consolas,monospace">KING</text><text x="166" y="165" fill="#fff" font-size="14" font-family="ui-monospace,Consolas,monospace">10</text></g><line x1="0" y1="178" x2="230" y2="178" stroke="rgba(255,255,255,.22)"/></g>
+<g transform="translate(340,78)"><text x="0" y="-12" fill="rgba(255,255,255,.8)" font-size="15" font-weight="600">DEPT</text><rect x="0" y="0" width="208" height="34" fill="rgba(255,255,255,.16)"/><text x="12" y="22" fill="#fff" font-size="14" font-weight="700">DEPTNO</text><text x="88" y="22" fill="#fff" font-size="14" font-weight="700">DNAME</text><g class="dr" data-r="0"><rect x="0" y="34" width="208" height="36" fill="transparent"/><text x="12" y="57" fill="#fff" font-size="14" font-family="ui-monospace,Consolas,monospace">10</text><text x="88" y="57" fill="#fff" font-size="14" font-family="ui-monospace,Consolas,monospace">ACCOUNTING</text></g><line x1="0" y1="70" x2="208" y2="70" stroke="rgba(255,255,255,.22)"/><g class="dr" data-r="1"><rect x="0" y="70" width="208" height="36" fill="transparent"/><text x="12" y="93" fill="#fff" font-size="14" font-family="ui-monospace,Consolas,monospace">20</text><text x="88" y="93" fill="#fff" font-size="14" font-family="ui-monospace,Consolas,monospace">RESEARCH</text></g><line x1="0" y1="106" x2="208" y2="106" stroke="rgba(255,255,255,.22)"/><g class="dr" data-r="2"><rect x="0" y="106" width="208" height="36" fill="transparent"/><text x="12" y="129" fill="#fff" font-size="14" font-family="ui-monospace,Consolas,monospace">30</text><text x="88" y="129" fill="#fff" font-size="14" font-family="ui-monospace,Consolas,monospace">SALES</text></g><line x1="0" y1="142" x2="208" y2="142" stroke="rgba(255,255,255,.22)"/></g>
+<path class="jl" d="" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/>
+<text x="10" y="318" fill="#fff" font-size="16" font-family="ui-monospace,Consolas,monospace" class="jsql">ON E.DEPTNO = D.DEPTNO</text>
+</svg></div>
+  </div>
+</section>
+
+<div class="print-cover" aria-hidden="true">
+  <p class="pc-kind">교본</p>
+  <h1>SQLD SQL 개발자</h1>
+  <p class="pc-tag">데이터 모델링과 SQL, 쿼리가 실행되는 순서대로 이해하는 교본.</p>
+  <ol class="pc-list"></ol>
+  <p class="pc-date">2026년 11월 기준으로 정리 · 시험 일정과 세부 규정은 접수 전 공식 사이트에서 다시 확인하세요.</p>
+</div>
+
+<div class="layout">
+  <aside class="sidebar" id="toc" aria-label="목차">
+    <div class="sidebar-in">
+      <p class="toc-title">목차</p>
+      <ol class="toc"><li><a href="#ch0" class="toc-ch" data-ch="ch0"><span class="toc-g">시작하기</span>시험 구성과 공부 순서</a>
+<ol><li><a href="#s1">SQLD는 어떤 시험인가</a></li><li><a href="#s2">어떻게 공부할까</a></li><li><a href="#s3">4주 공부 순서</a></li></ol>
+</li>
+<li><a href="#ch1" class="toc-ch" data-ch="ch1"><span class="toc-g">1과목 · 데이터 모델링의 이해</span>데이터 모델링의 이해</a>
+<ol><li><a href="#s4">모델링이란</a></li><li><a href="#s5">데이터 모델링의 3단계</a></li><li><a href="#s6">3층 스키마와 데이터 독립성</a></li><li><a href="#s7">ERD 표기법</a></li></ol>
+</li>
+<li><a href="#ch2" class="toc-ch" data-ch="ch2"><span class="toc-g">1과목 · 데이터 모델링의 이해</span>엔터티, 속성, 관계, 식별자</a>
+<ol><li><a href="#s8">엔터티</a></li><li><a href="#s9">속성</a></li><li><a href="#s10">관계</a></li><li><a href="#s11">식별자</a></li></ol>
+</li>
+<li><a href="#ch3" class="toc-ch" data-ch="ch3"><span class="toc-g">1과목 · 데이터 모델링의 이해</span>데이터 모델과 SQL</a>
+<ol><li><a href="#s12">정규화</a></li><li><a href="#s13">반정규화 (역정규화)</a></li><li><a href="#s14">슈퍼타입 / 서브타입 모델의 변환</a></li><li><a href="#s15">분산 데이터베이스</a></li><li><a href="#s16">트랜잭션</a></li><li><a href="#s17">NULL 속성의 이해</a></li><li><a href="#s18">본질식별자와 인조식별자</a></li></ol>
+</li>
+<li><a href="#ch4" class="toc-ch" data-ch="ch4"><span class="toc-g">2과목 · SQL 기본과 활용</span>SELECT와 함수</a>
+<ol><li><a href="#s19">관계형 데이터베이스와 SQL</a></li><li><a href="#s20">SELECT 기본</a></li><li><a href="#s21">WHERE 절과 연산자</a></li><li><a href="#s22">단일행 함수</a></li></ol>
+</li>
+<li><a href="#ch5" class="toc-ch" data-ch="ch5"><span class="toc-g">2과목 · SQL 기본과 활용</span>GROUP BY, HAVING, ORDER BY</a>
+<ol><li><a href="#s23">집계 함수</a></li><li><a href="#s24">GROUP BY와 HAVING</a></li><li><a href="#s25">실행 순서</a></li><li><a href="#s26">ORDER BY</a></li></ol>
+</li>
+<li><a href="#ch6" class="toc-ch" data-ch="ch6"><span class="toc-g">2과목 · SQL 기본과 활용</span>조인</a>
+<ol><li><a href="#s27">조인이란</a></li><li><a href="#s28">EQUI JOIN과 Non-EQUI JOIN</a></li><li><a href="#s29">ANSI 표준 조인</a></li><li><a href="#s30">CROSS JOIN</a></li><li><a href="#s31">OUTER JOIN</a></li><li><a href="#s32">셀프 조인</a></li></ol>
+</li>
+<li><a href="#ch7" class="toc-ch" data-ch="ch7"><span class="toc-g">2과목 · SQL 기본과 활용</span>서브쿼리, 집합 연산자, 뷰</a>
+<ol><li><a href="#s33">서브쿼리</a></li><li><a href="#s34">집합 연산자</a></li><li><a href="#s35">뷰 (View)</a></li></ol>
+</li>
+<li><a href="#ch8" class="toc-ch" data-ch="ch8"><span class="toc-g">2과목 · SQL 기본과 활용</span>그룹 함수와 윈도우 함수</a>
+<ol><li><a href="#s36">그룹 함수: ROLLUP, CUBE, GROUPING SETS</a></li><li><a href="#s37">윈도우 함수</a></li></ol>
+</li>
+<li><a href="#ch9" class="toc-ch" data-ch="ch9"><span class="toc-g">2과목 · SQL 기본과 활용</span>Top-N, 계층형 질의, PIVOT, 정규표현식</a>
+<ol><li><a href="#s38">Top-N 쿼리</a></li><li><a href="#s39">계층형 질의</a></li><li><a href="#s40">셀프 조인으로 계층 보기</a></li><li><a href="#s41">PIVOT과 UNPIVOT</a></li><li><a href="#s42">정규 표현식</a></li></ol>
+</li>
+<li><a href="#ch10" class="toc-ch" data-ch="ch10"><span class="toc-g">2과목 · SQL 기본과 활용</span>DML, TCL, DDL, DCL</a>
+<ol><li><a href="#s43">DML: 데이터 조작</a></li><li><a href="#s44">TCL: 트랜잭션 제어</a></li><li><a href="#s45">DDL: 데이터 정의</a></li><li><a href="#s46">DCL: 권한 제어</a></li></ol>
+</li>
+<li><a href="#ch11" class="toc-ch" data-ch="ch11"><span class="toc-g">마무리</span>실전 모의 문제</a>
+<ol><li><a href="#s47">과목 섞어 풀기</a></li></ol>
+</li></ol>
+    </div>
+  </aside>
+  <main class="content">
+
+<section class="chapter" id="ch0" data-title="시험 구성과 공부 순서" data-group="시작하기">
+  <header class="ch-head reveal">
+    <p class="ch-group">시작하기</p>
+    <h2>시험 구성과 공부 순서</h2>
+    <button type="button" class="ch-pdf" data-ch="ch0"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 1.5h5.5L12.5 4.5V14.5h-8.5z M9.5 1.5v3h3 M6 9.5l2 2 2-2 M8 6.5v5"/></svg>이 장만 PDF로</button>
+  </header>
+  <div class="ch-body">
+<h3 id="s1">SQLD는 어떤 시험인가</h3>
+<p>SQLD(SQL Developer, SQL 개발자)는 한국데이터산업진흥원이 주관하는 국가공인 민간자격이다. 데이터 모델링의 기본 개념과, SQL로 데이터를 조회·조작하는 능력을 확인한다. 응시 자격 제한이 없다.</p>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>항목</th>
+<th>내용</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>주관</td>
+<td>한국데이터산업진흥원 (데이터자격검정 dataq.or.kr)</td>
+</tr>
+<tr>
+<td>시험 방식</td>
+<td>필기 객관식 4지선다 50문항</td>
+</tr>
+<tr>
+<td>시험 시간</td>
+<td>90분</td>
+</tr>
+<tr>
+<td>과목</td>
+<td>1과목 데이터 모델링의 이해 (10문항) · 2과목 SQL 기본과 활용 (40문항)</td>
+</tr>
+<tr>
+<td>합격 기준</td>
+<td>총점 60점 이상, 과목별 40% 미만이면 과락</td>
+</tr>
+<tr>
+<td>응시료</td>
+<td>50,000원</td>
+</tr>
+<tr>
+<td>시행</td>
+<td>연 4회</td>
+</tr>
+</tbody>
+</table></div>
+<aside class="box box-warn">
+<p class="box-t">접수 전에 꼭 다시 확인할 것</p>
+<p>이 표는 2026년 11월 기준으로 정리했다. 회차별 날짜·응시료·세부 규정은 접수 전에 데이터자격검정 홈페이지 공지에서 다시 확인하자.</p>
+</aside>
+<h3 id="s2">어떻게 공부할까</h3>
+<p>2과목이 40문항, 80점이다. <strong>SQL을 직접 쳐 보지 않으면 2과목은 풀리지 않는다.</strong> 결과 행 수를 세는 문제, NULL이 섞인 집계 결과를 고르는 문제, 윈도우 함수 결과표를 고르는 문제가 대부분이기 때문이다.</p>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>과목</th>
+<th>성격</th>
+<th>공부 방법</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1과목 데이터 모델링의 이해</td>
+<td>개념·용어</td>
+<td>엔터티·속성·관계·식별자 분류표와 정규화 단계를 표로 외운다</td>
+</tr>
+<tr>
+<td>2과목 SQL 기본과 활용</td>
+<td>SQL 결과 예측</td>
+<td>예제 테이블을 손으로 그려 놓고 쿼리 결과를 직접 계산한다. 실제 DB에서 실행해 확인하면 가장 빠르다</td>
+</tr>
+</tbody>
+</table></div>
+<aside class="box box-tip">
+<p class="box-t">실습 환경 만들기</p>
+<ul>
+<li>오라클 기준 문제가 대부분이다. 설치가 부담되면 웹 브라우저에서 바로 쓰는 <strong>Oracle Live SQL</strong>(무료, 오라클 계정 필요)을 쓰면 된다.</li>
+<li>이 교본의 예제는 오라클의 대표 샘플 테이블 EMP(사원)와 DEPT(부서)를 기준으로 한다.</li>
+<li>오라클과 SQL Server 문법 차이도 시험에 나온다. 차이가 있는 곳마다 표로 정리해 두었다.</li>
+</ul>
+</aside>
+<h3 id="s3">4주 공부 순서</h3>
+<ol>
+<li><strong>1주차</strong> — 1~3장 (1과목 전체). 정규화는 예제 표를 직접 쪼개 본다.</li>
+<li><strong>2주차</strong> — 4~6장. SELECT 기본, 함수, GROUP BY, 조인. 실행 순서 그림을 외운다.</li>
+<li><strong>3주차</strong> — 7~10장. 서브쿼리, 집합 연산, 윈도우 함수, 계층형 질의, PIVOT, 정규표현식, DML·DDL·DCL.</li>
+<li><strong>4주차</strong> — 11장 모의 문제와 기출문제. 틀린 문제는 쿼리를 직접 실행해 결과를 확인한다.</li>
+</ol>
+<h4>예제 테이블</h4>
+<pre><code class="language-text">EMP                                                    DEPT
+EMPNO ENAME  JOB       MGR  HIREDATE   SAL  COMM DEPTNO   DEPTNO DNAME      LOC
+7369  SMITH  CLERK     7902 1980-12-17  800  NULL  20      10     ACCOUNTING NEW YORK
+7499  ALLEN  SALESMAN  7698 1981-02-20 1600   300  30      20     RESEARCH   DALLAS
+7521  WARD   SALESMAN  7698 1981-02-22 1250   500  30      30     SALES      CHICAGO
+7566  JONES  MANAGER   7839 1981-04-02 2975  NULL  20      40     OPERATIONS BOSTON
+7654  MARTIN SALESMAN  7698 1981-09-28 1250  1400  30
+7698  BLAKE  MANAGER   7839 1981-05-01 2850  NULL  30
+7782  CLARK  MANAGER   7839 1981-06-09 2450  NULL  10
+7788  SCOTT  ANALYST   7566 1987-04-19 3000  NULL  20
+7839  KING   PRESIDENT NULL 1981-11-17 5000  NULL  10
+7844  TURNER SALESMAN  7698 1981-09-08 1500     0  30
+7876  ADAMS  CLERK     7788 1987-05-23 1100  NULL  20
+7900  JAMES  CLERK     7698 1981-12-03  950  NULL  30
+7902  FORD   ANALYST   7566 1981-12-03 3000  NULL  20
+7934  MILLER CLERK     7782 1982-01-23 1300  NULL  10
+</code></pre>
+  </div>
+</section>
+
+<section class="chapter" id="ch1" data-title="데이터 모델링의 이해" data-group="1과목 · 데이터 모델링의 이해">
+  <header class="ch-head reveal">
+    <p class="ch-group">1과목 · 데이터 모델링의 이해</p>
+    <h2>데이터 모델링의 이해</h2>
+    <button type="button" class="ch-pdf" data-ch="ch1"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 1.5h5.5L12.5 4.5V14.5h-8.5z M9.5 1.5v3h3 M6 9.5l2 2 2-2 M8 6.5v5"/></svg>이 장만 PDF로</button>
+  </header>
+  <div class="ch-body">
+<h3 id="s4">모델링이란</h3>
+<p><strong>모델링(Modeling)</strong>은 복잡한 현실 세계를 일정한 표기법으로 단순화해 표현하는 것이다. 데이터 모델링은 업무에 필요한 데이터를 분석하고, 이를 데이터베이스로 구현하기 위한 설계 과정이다.</p>
+<h4>모델링의 특징</h4>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>특징</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>추상화 (Abstraction)</td>
+<td>현실 세계를 일정한 형식에 맞춰 표현</td>
+</tr>
+<tr>
+<td>단순화 (Simplification)</td>
+<td>복잡한 현실을 제한된 표기법이나 언어로 쉽게 표현</td>
+</tr>
+<tr>
+<td>명확화 (Clarity)</td>
+<td>누구나 이해하기 쉽게 애매함을 제거하고 정확하게 기술</td>
+</tr>
+</tbody>
+</table></div>
+<h4>모델링의 세 가지 관점</h4>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>관점</th>
+<th>질문</th>
+<th>내용</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>데이터 관점</td>
+<td>What</td>
+<td>업무가 어떤 데이터와 관련 있는지, 데이터 간 관계는 무엇인지</td>
+</tr>
+<tr>
+<td>프로세스 관점</td>
+<td>How</td>
+<td>업무가 실제로 무엇을 하는지, 무엇을 해야 하는지</td>
+</tr>
+<tr>
+<td>데이터와 프로세스의 상관 관점</td>
+<td>Interaction</td>
+<td>업무 처리 방법에 따라 데이터가 어떻게 영향받는지</td>
+</tr>
+</tbody>
+</table></div>
+<h4>데이터 모델링의 중요성과 유의점</h4>
+<p>데이터 모델링은 <strong>파급 효과(Leverage)</strong>가 크고, 복잡한 정보 요구사항을 <strong>간결하게 표현(Conciseness)</strong>하며, <strong>데이터 품질(Data Quality)</strong>을 보장한다. 설계 시 다음 세 가지를 피해야 한다.</p>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>유의점</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>중복 (Duplication)</td>
+<td>같은 정보를 여러 곳에 저장하지 않도록</td>
+</tr>
+<tr>
+<td>비유연성 (Inflexibility)</td>
+<td>사소한 업무 변화에도 모델을 자주 바꿔야 하는 설계를 피함. 데이터 정의와 프로세스를 분리</td>
+</tr>
+<tr>
+<td>비일관성 (Inconsistency)</td>
+<td>데이터 간 상호 연관 관계를 명확히 정의해 한 데이터 변경 시 다른 데이터와 모순이 생기지 않게</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="s5">데이터 모델링의 3단계</h3>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>단계</th>
+<th>설명</th>
+<th>특징</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>개념적 데이터 모델링</td>
+<td>추상화 수준이 가장 높음. 업무 중심의 포괄적 모델링. 핵심 엔터티와 관계를 정의, <strong>ERD</strong> 작성</td>
+<td>전사적 데이터 모델링, EA 수립에 활용</td>
+</tr>
+<tr>
+<td>논리적 데이터 모델링</td>
+<td>시스템으로 구축하려는 업무의 Key, 속성, 관계를 정확히 표현. <strong>정규화</strong> 수행</td>
+<td>재사용성이 높음. 특정 DBMS에 독립적</td>
+</tr>
+<tr>
+<td>물리적 데이터 모델링</td>
+<td>실제 DB에 구현할 수 있도록 테이블, 인덱스, 저장 구조, 성능을 고려해 설계</td>
+<td>특정 DBMS에 종속</td>
+</tr>
+</tbody>
+</table></div>
+<p>추상화 수준: 개념 &gt; 논리 &gt; 물리. 구체화 수준은 반대다.</p>
+<h3 id="s6">3층 스키마와 데이터 독립성</h3>
+<p>ANSI-SPARC 아키텍처는 사용자, 설계자, 개발자가 데이터베이스를 보는 관점을 세 단계로 나눠 <strong>데이터 독립성</strong>을 확보한다.</p>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>스키마</th>
+<th>관점</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>외부 스키마 (External)</td>
+<td>사용자 관점</td>
+<td>각 사용자가 보는 개인적 DB 스키마. 응용 프로그램이 접근하는 DB (뷰)</td>
+</tr>
+<tr>
+<td>개념 스키마 (Conceptual)</td>
+<td>통합 관점</td>
+<td>모든 사용자 관점을 통합한 조직 전체의 DB 구조. 하나만 존재</td>
+</tr>
+<tr>
+<td>내부 스키마 (Internal)</td>
+<td>물리적 관점</td>
+<td>물리적 저장 구조. 실제로 데이터가 저장되는 방법</td>
+</tr>
+</tbody>
+</table></div>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>독립성</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>논리적 독립성</td>
+<td>개념 스키마가 변경되어도 외부 스키마에 영향을 주지 않음</td>
+</tr>
+<tr>
+<td>물리적 독립성</td>
+<td>내부 스키마(저장 구조)가 변경되어도 개념·외부 스키마에 영향을 주지 않음</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>사상(Mapping)</strong>: 외부적/개념적 사상(논리적 사상), 개념적/내부적 사상(물리적 사상).</p>
+<h3 id="s7">ERD 표기법</h3>
+<p><strong>ERD(Entity Relationship Diagram)</strong>는 1976년 피터 첸(Peter Chen)이 만든 표기법으로, 엔터티와 관계를 그림으로 표현한다.</p>
+<ul>
+<li><strong>IE(Information Engineering) 표기법</strong>: 관계의 차수를 까마귀발(Crow's Foot)로 표현. 실무에서 많이 사용</li>
+<li><strong>Barker 표기법</strong>: 오라클 CASE 도구에서 사용. 엔터티를 둥근 사각형, 선택성은 점선</li>
+</ul>
+<p>ERD 작성 순서: 엔터티를 그린다 → 엔터티를 적절히 배치한다 → 엔터티 간 관계를 설정한다 → 관계명을 기술한다 → 관계의 참여도(차수)를 기술한다 → 관계의 필수 여부(선택성)를 기술한다.</p>
+<aside class="box box-tip">
+<p class="box-t">좋은 데이터 모델의 요소</p>
+<p>완전성, 중복 배제, 업무 규칙(Business Rule) 표현, 데이터 재사용, 의사소통, 통합성.</p>
+</aside>
+<ol class="quiz">
+<li class="q" data-ans="4"><div class="q-text"><p>데이터 모델링의 특징이 아닌 것은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>추상화</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>단순화</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>명확화</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>구체화</span></button></li>
+</ol><div class="ans"><p><b>정답 ④</b> 추상화, 단순화, 명확화다.</p></div></li>
+<li class="q" data-ans="4"><div class="q-text"><p>데이터 모델링 시 유의해야 할 점이 아닌 것은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>중복</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>비유연성</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>비일관성</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>정규화</span></button></li>
+</ol><div class="ans"><p><b>정답 ④</b> 중복, 비유연성, 비일관성을 피해야 한다. 정규화는 이를 해결하는 방법이다.</p></div></li>
+<li class="q" data-ans="1"><div class="q-text"><p>추상화 수준이 가장 높고, 업무 중심의 포괄적인 모델링을 하는 단계는?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>개념적 데이터 모델링</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>논리적 데이터 모델링</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>물리적 데이터 모델링</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>내부 스키마 설계</span></button></li>
+</ol><div class="ans"><p><b>정답 ①</b> 개념적 모델링은 핵심 엔터티와 관계를 정의하며 ERD를 작성한다.</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>데이터베이스의 저장 구조가 바뀌어도 응용 프로그램에 영향을 주지 않는 성질은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>논리적 독립성</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>물리적 독립성</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>개념적 독립성</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>외부적 독립성</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> 내부 스키마 변경이 상위 스키마에 영향을 주지 않는 것이 물리적 독립성이다.</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>3층 스키마 중 모든 사용자 관점을 통합한, 조직 전체 관점의 스키마는?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>외부 스키마</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>개념 스키마</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>내부 스키마</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>물리 스키마</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> 개념 스키마는 하나만 존재하며 통합된 DB 구조를 표현한다.</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>데이터 모델링의 세 가지 관점 중 '업무가 무엇을 하는지(How)'에 해당하는 것은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>데이터 관점</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>프로세스 관점</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>상관 관점</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>물리 관점</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> 데이터 관점(What), 프로세스 관점(How), 데이터와 프로세스의 상관 관점(Interaction).</p></div></li>
+</ol>
+  </div>
+</section>
+
+<section class="chapter" id="ch2" data-title="엔터티, 속성, 관계, 식별자" data-group="1과목 · 데이터 모델링의 이해">
+  <header class="ch-head reveal">
+    <p class="ch-group">1과목 · 데이터 모델링의 이해</p>
+    <h2>엔터티, 속성, 관계, 식별자</h2>
+    <button type="button" class="ch-pdf" data-ch="ch2"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 1.5h5.5L12.5 4.5V14.5h-8.5z M9.5 1.5v3h3 M6 9.5l2 2 2-2 M8 6.5v5"/></svg>이 장만 PDF로</button>
+  </header>
+  <div class="ch-body">
+<h3 id="s8">엔터티</h3>
+<p><strong>엔터티(Entity)</strong>는 업무에 필요하고 유용한 정보를 저장·관리하기 위한 집합적인 것(Thing)이다. 테이블로 구현된다. 엔터티에 속한 개별 대상을 <strong>인스턴스(Instance)</strong>라 한다 (테이블의 한 행).</p>
+<h4>엔터티의 특징</h4>
+<ol>
+<li>반드시 해당 업무에서 <strong>필요하고 관리하고자 하는 정보</strong>여야 한다</li>
+<li><strong>유일한 식별자</strong>로 식별 가능해야 한다</li>
+<li>영속적으로 존재하는 <strong>인스턴스가 2개 이상</strong>이어야 한다</li>
+<li>업무 프로세스에 의해 <strong>이용</strong>되어야 한다 (CRUD가 발생)</li>
+<li>반드시 <strong>속성</strong>을 가져야 한다 (주식별자만 있고 속성이 없으면 관계 엔터티 외에는 부적절)</li>
+<li>다른 엔터티와 <strong>최소 1개 이상의 관계</strong>가 있어야 한다 (코드성, 시스템 처리용 내부 엔터티, 통계성 엔터티는 예외)</li>
+</ol>
+<h4>엔터티의 분류</h4>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>기준</th>
+<th>분류</th>
+<th>설명</th>
+<th>예</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>유무형</td>
+<td>유형 엔터티</td>
+<td>물리적 형태가 있고 안정적, 지속적으로 활용</td>
+<td>사원, 물품, 강사</td>
+</tr>
+<tr>
+<td></td>
+<td>개념 엔터티</td>
+<td>물리적 형태는 없지만 관리할 개념적 정보</td>
+<td>조직, 보험상품</td>
+</tr>
+<tr>
+<td></td>
+<td>사건 엔터티</td>
+<td>업무 수행 중 발생. 발생량이 많고 통계에 활용</td>
+<td>주문, 청구, 미납</td>
+</tr>
+<tr>
+<td>발생 시점</td>
+<td>기본(키) 엔터티</td>
+<td>업무에 원래 존재. 다른 엔터티 영향 없이 독립 생성, 자신의 고유 주식별자</td>
+<td>사원, 부서, 고객, 상품</td>
+</tr>
+<tr>
+<td></td>
+<td>중심 엔터티</td>
+<td>기본 엔터티에서 발생. 업무의 중심, 데이터 양이 많음</td>
+<td>계약, 사고, 주문, 청구</td>
+</tr>
+<tr>
+<td></td>
+<td>행위 엔터티</td>
+<td>두 개 이상의 부모 엔터티에서 발생. 자주 변경, 데이터 증가</td>
+<td>주문목록, 사원변경이력</td>
+</tr>
+</tbody>
+</table></div>
+<h4>엔터티 명명 규칙</h4>
+<p>현업에서 쓰는 용어를 사용, 약어 사용 자제, <strong>단수 명사</strong> 사용, 모든 엔터티 이름은 유일, 생성 의미대로 이름 부여.</p>
+<h3 id="s9">속성</h3>
+<p><strong>속성(Attribute)</strong>은 업무에서 필요로 하는, 인스턴스로 관리하고자 하는 <strong>더 이상 분리되지 않는 최소의 데이터 단위</strong>다. 테이블의 칼럼이 된다.</p>
+<ul>
+<li>하나의 인스턴스에서 각각의 속성은 <strong>하나의 값만</strong> 가진다 (1정규형)</li>
+<li>엔터티 : 인스턴스 = 1 : N, 인스턴스 : 속성 = 1 : N, 속성 : 속성값 = 1 : 1</li>
+</ul>
+<h4>속성의 분류</h4>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>기준</th>
+<th>분류</th>
+<th>설명</th>
+<th>예</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>특성</td>
+<td>기본 속성</td>
+<td>업무로부터 추출한 일반 속성</td>
+<td>제품명, 가격</td>
+</tr>
+<tr>
+<td></td>
+<td>설계 속성</td>
+<td>업무에 없지만 설계 시 규칙화를 위해 새로 만든 속성</td>
+<td>상품코드, 일련번호</td>
+</tr>
+<tr>
+<td></td>
+<td>파생 속성</td>
+<td>다른 속성에서 계산·변형된 속성. 데이터 정합성 유지를 위해 가급적 적게</td>
+<td>총금액, 평균</td>
+</tr>
+<tr>
+<td>구성 방식</td>
+<td>PK 속성</td>
+<td>엔터티를 식별</td>
+<td>사원번호</td>
+</tr>
+<tr>
+<td></td>
+<td>FK 속성</td>
+<td>다른 엔터티와의 관계</td>
+<td>부서번호</td>
+</tr>
+<tr>
+<td></td>
+<td>일반 속성</td>
+<td>PK·FK가 아닌 속성</td>
+<td>이름, 주소</td>
+</tr>
+<tr>
+<td>분해 여부</td>
+<td>단일 속성 / 복합 속성</td>
+<td>복합은 여러 의미로 분해 가능</td>
+<td>주소 → 시, 구, 동</td>
+</tr>
+<tr>
+<td>값 개수</td>
+<td>단일값 / 다중값</td>
+<td>다중값은 1정규화 대상</td>
+<td>전화번호 여러 개</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>도메인(Domain)</strong>: 각 속성이 가질 수 있는 값의 범위 (데이터 타입, 크기, 제약조건). 예: 성별 도메인 = {'M', 'F'}</p>
+<h3 id="s10">관계</h3>
+<p><strong>관계(Relationship)</strong>는 엔터티의 인스턴스 사이에 논리적으로 연관된 의미다.</p>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>관계 종류</th>
+<th>설명</th>
+<th>예</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>존재에 의한 관계</td>
+<td>한 엔터티가 존재하면 다른 엔터티와 연관</td>
+<td>부서 – 사원 (소속)</td>
+</tr>
+<tr>
+<td>행위에 의한 관계</td>
+<td>특정 행위가 일어나야 연관</td>
+<td>고객 – 주문 (주문하다)</td>
+</tr>
+</tbody>
+</table></div>
+<p>ERD에서는 두 관계를 구분하지 않는다. UML 클래스 다이어그램에서는 연관 관계(실선)와 의존 관계(점선)로 구분한다.</p>
+<h4>관계의 표기</h4>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>요소</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>관계명 (Membership)</td>
+<td>관계의 이름. 양방향에서 각각 관점의 이름. 애매한 동사를 피하고 <strong>현재형</strong>으로</td>
+</tr>
+<tr>
+<td>관계 차수 (Cardinality)</td>
+<td>1:1, 1:M, M:N</td>
+</tr>
+<tr>
+<td>관계 선택 사양 (Optionality)</td>
+<td>필수 참여(반드시 존재) / 선택 참여(없어도 됨, IE 표기법에서 원 ○)</td>
+</tr>
+</tbody>
+</table></div>
+<p>M:N 관계는 관계형 DB에서 그대로 구현할 수 없어 <strong>관계 엔터티(교차 엔터티)</strong>로 풀어 1:M, M:1 두 관계로 바꾼다.</p>
+<h4>관계 정의 시 체크 사항</h4>
+<ul>
+<li>두 엔터티 사이에 관심 있는 <strong>연관 규칙</strong>이 있는가?</li>
+<li>두 엔터티 사이에 <strong>정보의 조합</strong>이 발생하는가?</li>
+<li>업무 기술서, 장표에 관계 연결에 대한 <strong>규칙이 서술</strong>되어 있는가?</li>
+<li>업무 기술서, 장표에 관계 연결을 가능하게 하는 <strong>동사(Verb)</strong>가 있는가?</li>
+</ul>
+<h3 id="s11">식별자</h3>
+<p><strong>식별자(Identifier)</strong>는 엔터티 내에서 인스턴스를 구분하는 구분자다.</p>
+<h4>주식별자의 특징</h4>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>특징</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>유일성</td>
+<td>주식별자로 모든 인스턴스를 유일하게 구분</td>
+</tr>
+<tr>
+<td>최소성</td>
+<td>주식별자를 구성하는 속성 수는 유일성을 만족하는 최소 수</td>
+</tr>
+<tr>
+<td>불변성</td>
+<td>주식별자 값은 자주 변하지 않아야 함</td>
+</tr>
+<tr>
+<td>존재성</td>
+<td>주식별자 값은 반드시 존재 (NULL 불가)</td>
+</tr>
+</tbody>
+</table></div>
+<h4>식별자의 분류</h4>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>기준</th>
+<th>분류</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>대표성</td>
+<td>주식별자</td>
+<td>인스턴스를 대표, 다른 엔터티와 참조 관계 연결에 사용</td>
+</tr>
+<tr>
+<td></td>
+<td>보조식별자</td>
+<td>유일성은 있지만 대표성이 없어 참조 관계에 쓰지 않음 (주민번호 등)</td>
+</tr>
+<tr>
+<td>생성 방식</td>
+<td>내부식별자</td>
+<td>엔터티 내부에서 스스로 만들어지는 식별자</td>
+</tr>
+<tr>
+<td></td>
+<td>외부식별자</td>
+<td>다른 엔터티와의 관계로 받아온 식별자 (FK)</td>
+</tr>
+<tr>
+<td>속성 수</td>
+<td>단일식별자 / 복합식별자</td>
+<td>하나의 속성 / 둘 이상의 속성</td>
+</tr>
+<tr>
+<td>대체 여부</td>
+<td>본질식별자</td>
+<td>업무에 의해 만들어지는 식별자</td>
+</tr>
+<tr>
+<td></td>
+<td>인조식별자</td>
+<td>업무적으로 만들어지지 않지만 원조식별자가 복잡해 인위적으로 만든 식별자 (일련번호)</td>
+</tr>
+</tbody>
+</table></div>
+<p>주식별자 도출 기준: 업무에서 <strong>자주 이용되는 속성</strong>을 지정, <strong>명칭·내역처럼 이름으로 된 속성은 피함</strong>, 복합으로 구성할 때 속성이 너무 많지 않게(많으면 인조식별자 고려).</p>
+<h4>식별 관계와 비식별 관계</h4>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>구분</th>
+<th>식별 관계 (Identifying)</th>
+<th>비식별 관계 (Non-Identifying)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>의미</td>
+<td>부모의 주식별자가 자식의 <strong>주식별자 일부</strong>가 됨</td>
+<td>부모의 주식별자가 자식의 <strong>일반 속성</strong>이 됨</td>
+</tr>
+<tr>
+<td>연결 강도</td>
+<td>강한 연결 관계</td>
+<td>약한 연결 관계</td>
+</tr>
+<tr>
+<td>표기 (IE)</td>
+<td>실선</td>
+<td>점선</td>
+</tr>
+<tr>
+<td>고려 사항</td>
+<td>자식이 부모에 종속, 부모 없이 생성 불가</td>
+<td>자식이 독립적 주식별자를 가짐, 부모 없이 생성 가능</td>
+</tr>
+<tr>
+<td>문제점</td>
+<td>계속 이어지면 자식의 PK 속성이 너무 많아짐 → 조인 SQL 복잡</td>
+<td>부모 정보를 얻으려면 조인이 많아져 성능 저하 가능</td>
+</tr>
+</tbody>
+</table></div>
+<aside class="box box-exam">
+<p class="box-t">시험 포인트</p>
+<p>비식별 관계를 고려하는 경우: 부모와 자식의 관계가 약할 때, 자식 엔터티에 독립적인 PK가 필요할 때, 부모 없이 자식이 생성될 수 있을 때, 상속받은 PK 속성이 너무 많을 때.</p>
+</aside>
+<ol class="quiz">
+<li class="q" data-ans="2"><div class="q-text"><p>엔터티의 특징으로 옳지 않은 것은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>유일한 식별자로 식별 가능해야 한다</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>인스턴스가 1개만 있어도 엔터티가 될 수 있다</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>반드시 속성을 가져야 한다</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>다른 엔터티와 최소 1개 이상의 관계가 있어야 한다</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> 영속적으로 존재하는 인스턴스가 2개 이상이어야 한다.</p></div></li>
+<li class="q" data-ans="3"><div class="q-text"><p>발생 시점에 따른 엔터티 분류 중, 두 개 이상의 부모 엔터티에서 발생하고 내용이 자주 바뀌는 것은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>기본 엔터티</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>중심 엔터티</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>행위 엔터티</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>개념 엔터티</span></button></li>
+</ol><div class="ans"><p><b>정답 ③</b> 주문목록, 사원변경이력 같은 행위 엔터티다.</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>다음 중 파생 속성은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>상품코드</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>주문 총금액</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>고객명</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>일련번호</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> 다른 속성으로 계산되는 값이 파생 속성이다. 상품코드·일련번호는 설계 속성.</p></div></li>
+<li class="q" data-ans="4"><div class="q-text"><p>주식별자의 특징이 아닌 것은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>유일성</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>최소성</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>불변성</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>다양성</span></button></li>
+</ol><div class="ans"><p><b>정답 ④</b> 유일성, 최소성, 불변성, 존재성이다.</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>부모 엔터티의 주식별자가 자식 엔터티의 일반 속성으로 상속되는 관계는?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>식별 관계</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>비식별 관계</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>재귀 관계</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>상호배타 관계</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> 비식별 관계는 약한 연결 관계이며 IE 표기법에서 점선으로 표시한다.</p></div></li>
+<li class="q" data-ans="4"><div class="q-text"><p>관계의 표기 요소가 아닌 것은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>관계명</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>관계 차수</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>관계 선택 사양</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>관계 도메인</span></button></li>
+</ol><div class="ans"><p><b>정답 ④</b> 관계명(Membership), 관계 차수(Cardinality), 관계 선택 사양(Optionality).</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>업무에 의해 만들어진 것이 아니라, 원조 식별자가 복잡해 인위적으로 만든 식별자는?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>본질식별자</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>인조식별자</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>보조식별자</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>외부식별자</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> 일련번호 같은 인조식별자다.</p></div></li>
+</ol>
+  </div>
+</section>
+
+<section class="chapter" id="ch3" data-title="데이터 모델과 SQL" data-group="1과목 · 데이터 모델링의 이해">
+  <header class="ch-head reveal">
+    <p class="ch-group">1과목 · 데이터 모델링의 이해</p>
+    <h2>데이터 모델과 SQL</h2>
+    <button type="button" class="ch-pdf" data-ch="ch3"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 1.5h5.5L12.5 4.5V14.5h-8.5z M9.5 1.5v3h3 M6 9.5l2 2 2-2 M8 6.5v5"/></svg>이 장만 PDF로</button>
+  </header>
+  <div class="ch-body">
+<h3 id="s12">정규화</h3>
+<p><strong>정규화(Normalization)</strong>는 데이터 중복을 제거하고 이상 현상을 막기 위해 함수적 종속성에 따라 테이블을 분해하는 과정이다.</p>
+<h4>이상 현상 (Anomaly)</h4>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>이상</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>삽입 이상</td>
+<td>불필요한 데이터를 함께 넣어야 원하는 데이터를 삽입할 수 있음</td>
+</tr>
+<tr>
+<td>갱신 이상</td>
+<td>중복된 데이터 중 일부만 수정되어 데이터 불일치 발생</td>
+</tr>
+<tr>
+<td>삭제 이상</td>
+<td>한 데이터를 삭제할 때 필요한 다른 데이터까지 함께 삭제됨</td>
+</tr>
+</tbody>
+</table></div>
+<h4>함수적 종속성</h4>
+<p>X 값이 정해지면 Y 값이 하나로 정해질 때 <strong>Y는 X에 함수적으로 종속</strong>된다(X → Y). X를 결정자, Y를 종속자라 한다. 예: 주민번호 → 이름.</p>
+<h4>정규형 단계</h4>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>정규형</th>
+<th>조건</th>
+<th>해결할 것</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1정규형 (1NF)</td>
+<td>모든 속성이 <strong>원자값</strong>(하나의 값)을 가짐</td>
+<td>다중값 속성, 반복 그룹 제거</td>
+</tr>
+<tr>
+<td>2정규형 (2NF)</td>
+<td>1NF + 기본키가 아닌 속성이 <strong>기본키 전체에 완전 함수 종속</strong></td>
+<td><strong>부분 함수 종속</strong> 제거 (복합키의 일부에만 종속된 속성 분리)</td>
+</tr>
+<tr>
+<td>3정규형 (3NF)</td>
+<td>2NF + 기본키가 아닌 속성끼리 종속 관계가 없음</td>
+<td><strong>이행 함수 종속</strong> 제거 (A → B, B → C 이면 A → C)</td>
+</tr>
+<tr>
+<td>BCNF</td>
+<td>모든 <strong>결정자가 후보키</strong></td>
+<td>후보키가 아닌 결정자 제거</td>
+</tr>
+<tr>
+<td>4정규형 (4NF)</td>
+<td>BCNF + 다치 종속 없음</td>
+<td>다치 종속 제거</td>
+</tr>
+<tr>
+<td>5정규형 (5NF)</td>
+<td>4NF + 조인 종속 없음</td>
+<td>조인 종속 제거</td>
+</tr>
+</tbody>
+</table></div>
+<aside class="box box-ex">
+<p class="box-t">2정규화 예</p>
+<p>주문상품(<strong>주문번호, 상품번호</strong>, 수량, 상품명) → 상품명은 상품번호에만 종속(부분 종속).
+분해: 주문상품(<strong>주문번호, 상품번호</strong>, 수량), 상품(<strong>상품번호</strong>, 상품명)</p>
+</aside>
+<aside class="box box-ex">
+<p class="box-t">3정규화 예</p>
+<p>사원(<strong>사원번호</strong>, 이름, 부서번호, 부서명) → 사원번호 → 부서번호 → 부서명 (이행 종속).
+분해: 사원(<strong>사원번호</strong>, 이름, 부서번호), 부서(<strong>부서번호</strong>, 부서명)</p>
+</aside>
+<p>정규화의 효과: 중복 감소, 이상 현상 방지, 데이터 구조 안정화. 단, 테이블이 많아져 <strong>조회 시 조인이 늘어 성능이 떨어질 수 있다</strong>. 입력·수정·삭제 성능은 대체로 좋아진다.</p>
+<h3 id="s13">반정규화 (역정규화)</h3>
+<p><strong>반정규화(De-Normalization)</strong>는 정규화된 모델에서 <strong>조회 성능 향상</strong>을 위해 의도적으로 중복·통합·분리를 하는 과정이다. 데이터 무결성이 깨질 위험이 있으므로 꼭 필요한 경우에만 한다.</p>
+<h4>반정규화 절차</h4>
+<ol>
+<li><strong>반정규화 대상 조사</strong>: 범위 처리 빈도수 조사, 대량의 범위 처리 조사, 통계성 프로세스 조사, 테이블 조인 개수 조사</li>
+<li><strong>다른 방법 유도 검토</strong>: 뷰(View) 테이블, 클러스터링, 인덱스 조정, 응용 애플리케이션 변경으로 해결 가능한지 먼저 검토</li>
+<li><strong>반정규화 적용</strong></li>
+</ol>
+<h4>반정규화 기법</h4>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>대상</th>
+<th>기법</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>테이블</td>
+<td>테이블 병합 (1:1, 1:M 관계 병합, 슈퍼/서브타입 병합), 테이블 분할 (수직 분할: 칼럼 단위 / 수평 분할: 행 단위, 파티셔닝), 테이블 추가 (중복 테이블, 통계 테이블, 이력 테이블, 부분 테이블)</td>
+</tr>
+<tr>
+<td>칼럼</td>
+<td>중복 칼럼 추가 (조인 감소), 파생 칼럼 추가 (미리 계산한 값), 이력 테이블 칼럼 추가 (최근값 여부, 시작·종료일), PK에 의한 칼럼 추가, 응용 시스템 오작동을 위한 칼럼 추가</td>
+</tr>
+<tr>
+<td>관계</td>
+<td>중복 관계 추가 (조인 경로 단축)</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="s14">슈퍼타입 / 서브타입 모델의 변환</h3>
+<p>공통 속성을 가진 <strong>슈퍼타입</strong>(예: 고객)과 개별 속성을 가진 <strong>서브타입</strong>(예: 개인고객, 법인고객)을 테이블로 바꾸는 방법은 세 가지다.</p>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>방식</th>
+<th>설명</th>
+<th>적합한 경우</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>개별 테이블 (One to One Type)</td>
+<td>슈퍼타입과 서브타입을 각각 별도 테이블로</td>
+<td>개별 처리가 많을 때</td>
+</tr>
+<tr>
+<td>슈퍼 + 서브 (Plus Type)</td>
+<td>슈퍼타입 속성을 각 서브타입 테이블에 포함</td>
+<td>서브타입별 처리가 독립적일 때</td>
+</tr>
+<tr>
+<td>하나의 테이블 (Single Type, All in One)</td>
+<td>슈퍼·서브타입을 하나의 테이블로 통합</td>
+<td>전체를 함께 처리하는 경우가 많을 때. 조인 없음, 대신 NULL 칼럼이 많아짐</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="s15">분산 데이터베이스</h3>
+<p>여러 곳에 분산된 DB를 하나의 가상 DB처럼 사용. 사용자는 분산을 의식하지 않아야 한다 (<strong>투명성</strong>).</p>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>투명성</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>분할 투명성 (단편화)</td>
+<td>하나의 논리적 릴레이션이 여러 단편으로 분할되어 저장되어도 사용자는 모름</td>
+</tr>
+<tr>
+<td>위치 투명성</td>
+<td>데이터 저장 위치를 몰라도 됨</td>
+</tr>
+<tr>
+<td>지역 사상 투명성</td>
+<td>지역 DBMS와 물리적 DB 사이 사상 보장</td>
+</tr>
+<tr>
+<td>중복 투명성</td>
+<td>데이터가 여러 곳에 중복되어도 하나처럼 사용</td>
+</tr>
+<tr>
+<td>장애 투명성</td>
+<td>구성 요소 장애에도 무결성 보장</td>
+</tr>
+<tr>
+<td>병행 투명성</td>
+<td>여러 트랜잭션이 동시에 수행되어도 결과 일관성 유지</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="s16">트랜잭션</h3>
+<p><strong>트랜잭션(Transaction)</strong>은 데이터베이스의 논리적 연산 단위로, 하나 이상의 SQL로 이뤄진다. 예: 계좌이체 = 출금 + 입금. 둘 다 성공하거나 둘 다 취소되어야 한다.</p>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>특성 (ACID)</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>원자성 (Atomicity)</td>
+<td>트랜잭션의 연산은 모두 실행되거나 전혀 실행되지 않아야 함 (All or Nothing)</td>
+</tr>
+<tr>
+<td>일관성 (Consistency)</td>
+<td>트랜잭션 실행 전 DB가 일관된 상태였다면 실행 후에도 일관된 상태</td>
+</tr>
+<tr>
+<td>고립성 (Isolation)</td>
+<td>실행 중인 트랜잭션의 중간 결과를 다른 트랜잭션이 볼 수 없음</td>
+</tr>
+<tr>
+<td>지속성 (Durability)</td>
+<td>성공적으로 완료된 트랜잭션의 결과는 영구적으로 저장</td>
+</tr>
+</tbody>
+</table></div>
+<p>데이터 모델에서 트랜잭션 단위를 이해하면 관계의 <strong>필수/선택</strong>을 정할 수 있다. 예: 주문과 주문상품은 하나의 트랜잭션으로 함께 생성되므로 서로 필수 관계로 설계한다.</p>
+<h3 id="s17">NULL 속성의 이해</h3>
+<p><strong>NULL</strong>은 아직 정해지지 않은 값, 모르는 값이다. 0이나 공백(' ')과 다르다.</p>
+<ul>
+<li>NULL과의 <strong>산술 연산 결과는 NULL</strong>: <code>NULL + 100 = NULL</code></li>
+<li>NULL과의 <strong>비교 연산 결과는 UNKNOWN(알 수 없음)</strong>: <code>NULL = NULL</code>도 참이 아니다 → <code>IS NULL</code>로 비교</li>
+<li><strong>집계 함수는 NULL을 제외</strong>하고 계산한다 (COUNT(*)는 예외로 행 수를 셈)</li>
+<li>오라클은 <strong>빈 문자열('')을 NULL로 처리</strong>한다. SQL Server는 빈 문자열과 NULL을 구분한다</li>
+<li>ERD에서 NULL 허용 속성은 IE 표기법에서 보통 'O' 또는 NULL 여부 표시</li>
+</ul>
+<h3 id="s18">본질식별자와 인조식별자</h3>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>구분</th>
+<th>본질식별자</th>
+<th>인조식별자</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>의미</td>
+<td>업무적으로 의미 있는 속성(들)로 구성</td>
+<td>일련번호 같은 의미 없는 값</td>
+</tr>
+<tr>
+<td>장점</td>
+<td>데이터 중복 방지, 업무 의미 반영</td>
+<td>단순, 조인이 쉬움</td>
+</tr>
+<tr>
+<td>단점</td>
+<td>복합키가 길어짐</td>
+<td><strong>중복 데이터 발생 가능</strong>(같은 주문이 번호만 다르게 두 번 입력) → 품질 저하, 중복 방지를 위한 <strong>불필요한 인덱스 추가</strong> 필요</td>
+</tr>
+</tbody>
+</table></div>
+<ol class="quiz">
+<li class="q" data-ans="2"><div class="q-text"><p>기본키가 아닌 속성이 기본키의 일부에만 종속되는 부분 함수 종속을 제거하는 정규화 단계는?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>1정규화</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>2정규화</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>3정규화</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>BCNF</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> 2정규화는 부분 함수 종속을, 3정규화는 이행 함수 종속을 제거한다.</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>A → B, B → C 관계가 있을 때 제거해야 하는 종속성과 정규형은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>부분 종속, 2NF</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>이행 종속, 3NF</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>다치 종속, 4NF</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>조인 종속, 5NF</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> 이행 함수 종속을 제거하는 것이 3정규화다.</p></div></li>
+<li class="q" data-ans="4"><div class="q-text"><p>반정규화 절차에서 반정규화를 적용하기 전에 먼저 검토하는 다른 방법이 아닌 것은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>뷰 테이블</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>클러스터링</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>인덱스 조정</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>중복 칼럼 추가</span></button></li>
+</ol><div class="ans"><p><b>정답 ④</b> 중복 칼럼 추가는 반정규화 기법 자체다.</p></div></li>
+<li class="q" data-ans="1"><div class="q-text"><p>트랜잭션의 특성 중 '모두 실행되거나 전혀 실행되지 않아야 한다'는 것은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>원자성</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>일관성</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>고립성</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>지속성</span></button></li>
+</ol><div class="ans"><p><b>정답 ①</b> Atomicity, All or Nothing.</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>NULL에 대한 설명으로 옳지 않은 것은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>NULL과 숫자의 산술 연산 결과는 NULL이다</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>NULL = NULL 비교 결과는 참(TRUE)이다</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>집계 함수는 NULL을 제외하고 계산한다</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>오라클은 빈 문자열을 NULL로 처리한다</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> NULL끼리의 비교도 UNKNOWN이다. IS NULL로 비교해야 한다.</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>슈퍼타입과 서브타입을 하나의 테이블로 통합하는 변환 방식의 특징으로 옳은 것은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>조인이 많아진다</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>NULL 값을 갖는 칼럼이 많아질 수 있다</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>서브타입별 독립적 처리에 가장 유리하다</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>테이블 수가 가장 많다</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> All in One 방식은 조인이 없지만 서브타입마다 다른 칼럼이 NULL로 비게 된다.</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>인조식별자를 사용할 때의 단점으로 가장 적절한 것은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>복합키가 길어진다</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>중복 데이터가 발생할 수 있다</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>업무적 의미가 너무 강하다</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>조인이 복잡해진다</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> 의미 없는 번호라 같은 업무 데이터가 다른 번호로 중복 입력될 수 있다.</p></div></li>
+</ol>
+  </div>
+</section>
+
+<section class="chapter" id="ch4" data-title="SELECT와 함수" data-group="2과목 · SQL 기본과 활용">
+  <header class="ch-head reveal">
+    <p class="ch-group">2과목 · SQL 기본과 활용</p>
+    <h2>SELECT와 함수</h2>
+    <button type="button" class="ch-pdf" data-ch="ch4"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 1.5h5.5L12.5 4.5V14.5h-8.5z M9.5 1.5v3h3 M6 9.5l2 2 2-2 M8 6.5v5"/></svg>이 장만 PDF로</button>
+  </header>
+  <div class="ch-body">
+<h3 id="s19">관계형 데이터베이스와 SQL</h3>
+<p><strong>관계형 데이터베이스(RDB)</strong>는 1970년 E.F. 코드(Codd)가 제안한 관계형 모델에 기반한 DB로, 데이터를 <strong>테이블(릴레이션)</strong>로 표현한다. 정규화로 이상 현상을 줄이고, 동시성 관리·병행 제어로 여러 사용자가 동시에 데이터를 공유할 수 있다.</p>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>용어</th>
+<th>같은 뜻</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>테이블 (Table)</td>
+<td>릴레이션, 엔터티</td>
+</tr>
+<tr>
+<td>행 (Row)</td>
+<td>튜플, 레코드, 인스턴스</td>
+</tr>
+<tr>
+<td>칼럼 (Column)</td>
+<td>속성, 필드</td>
+</tr>
+</tbody>
+</table></div>
+<h4>SQL 문장의 종류</h4>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>종류</th>
+<th>명령어</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>DML (Data Manipulation Language)</td>
+<td>SELECT, INSERT, UPDATE, DELETE, MERGE</td>
+<td>데이터 조회·조작</td>
+</tr>
+<tr>
+<td>DDL (Data Definition Language)</td>
+<td>CREATE, ALTER, DROP, RENAME, TRUNCATE</td>
+<td>테이블 등 구조 정의</td>
+</tr>
+<tr>
+<td>DCL (Data Control Language)</td>
+<td>GRANT, REVOKE</td>
+<td>권한 부여·회수</td>
+</tr>
+<tr>
+<td>TCL (Transaction Control Language)</td>
+<td>COMMIT, ROLLBACK, SAVEPOINT</td>
+<td>트랜잭션 제어</td>
+</tr>
+</tbody>
+</table></div>
+<aside class="box box-warn">
+<p class="box-t">SELECT의 분류</p>
+<p>SELECT는 DML로 분류하는 것이 일반적이지만, 별도로 <strong>DQL</strong>(Data Query Language)로 분류하기도 한다. TRUNCATE는 DDL이다.</p>
+</aside>
+<h3 id="s20">SELECT 기본</h3>
+<pre><code class="language-sql">SELECT [DISTINCT] 칼럼명 [AS 별칭], ...
+  FROM 테이블명
+ WHERE 조건
+ ORDER BY 칼럼 [ASC | DESC];
+</code></pre>
+<pre><code class="language-sql">SELECT DISTINCT JOB FROM EMP;          -- 중복 제거: 5개 직무
+SELECT ENAME AS &quot;사원 이름&quot;, SAL * 12 AS 연봉 FROM EMP;
+SELECT * FROM EMP WHERE DEPTNO = 10;
+</code></pre>
+<ul>
+<li><code>*</code>는 모든 칼럼</li>
+<li><strong>별칭(Alias)</strong>: <code>AS</code>는 생략 가능. 공백이나 특수문자가 있으면 큰따옴표 <code>" "</code></li>
+<li><strong>문자열 상수</strong>는 작은따옴표 <code>' '</code></li>
+<li>DISTINCT는 SELECT 바로 뒤에 한 번만, 뒤에 오는 <strong>칼럼 조합 전체</strong>의 중복을 제거</li>
+</ul>
+<h4>합성 연산자 (문자열 붙이기)</h4>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>오라클</th>
+<th>SQL Server</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ENAME || '님'</code> 또는 <code>CONCAT(ENAME, '님')</code></td>
+<td><code>ENAME + '님'</code> 또는 <code>CONCAT(ENAME, '님')</code></td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="s21">WHERE 절과 연산자</h3>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>연산자</th>
+<th>의미</th>
+<th>예</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>=</code>, <code>&lt;&gt;</code>, <code>!=</code>, <code>^=</code></td>
+<td>같다, 같지 않다</td>
+<td><code>DEPTNO &lt;&gt; 10</code></td>
+</tr>
+<tr>
+<td><code>&gt;</code>, <code>&gt;=</code>, <code>&lt;</code>, <code>&lt;=</code></td>
+<td>대소 비교</td>
+<td><code>SAL &gt;= 3000</code></td>
+</tr>
+<tr>
+<td><code>BETWEEN a AND b</code></td>
+<td>a 이상 b 이하 (양 끝 포함)</td>
+<td><code>SAL BETWEEN 1000 AND 2000</code></td>
+</tr>
+<tr>
+<td><code>IN (list)</code></td>
+<td>목록 중 하나와 같음</td>
+<td><code>JOB IN ('CLERK', 'ANALYST')</code></td>
+</tr>
+<tr>
+<td><code>LIKE</code></td>
+<td>패턴 일치. <code>%</code> 0개 이상 문자, <code>_</code> 정확히 1문자</td>
+<td><code>ENAME LIKE '_A%'</code></td>
+</tr>
+<tr>
+<td><code>IS NULL</code> / <code>IS NOT NULL</code></td>
+<td>NULL 여부</td>
+<td><code>COMM IS NULL</code></td>
+</tr>
+<tr>
+<td><code>NOT</code>, <code>AND</code>, <code>OR</code></td>
+<td>논리 연산</td>
+<td></td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>연산자 우선순위</strong>: 괄호 → 산술 연산자 → 연결 연산자 → 비교 연산자 → IS NULL, LIKE, IN → BETWEEN → <strong>NOT → AND → OR</strong></p>
+<pre><code class="language-sql">-- AND가 OR보다 먼저 처리된다
+SELECT ENAME FROM EMP
+ WHERE DEPTNO = 10 OR DEPTNO = 20 AND SAL &gt; 2000;
+-- = DEPTNO = 10 OR (DEPTNO = 20 AND SAL &gt; 2000)
+</code></pre>
+<aside class="box box-warn">
+<p class="box-t">NULL과 IN / NOT IN</p>
+<ul>
+<li><code>COMM IN (300, NULL)</code> → COMM = 300 OR COMM = NULL → NULL 비교는 UNKNOWN이라 300인 행만 나온다</li>
+<li><code>COMM NOT IN (300, NULL)</code> → COMM &lt;&gt; 300 <strong>AND</strong> COMM &lt;&gt; NULL → 항상 UNKNOWN → <strong>결과 0건</strong></li>
+</ul>
+</aside>
+<p><code>LIKE</code>에서 <code>%</code>나 <code>_</code> 문자 자체를 찾으려면 <code>ESCAPE</code>를 쓴다: <code>WHERE ENAME LIKE '%\_%' ESCAPE '\'</code></p>
+<h3 id="s22">단일행 함수</h3>
+<p>행마다 하나의 결과를 돌려준다. SELECT, WHERE, ORDER BY 절에 쓸 수 있다.</p>
+<h4>문자 함수</h4>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>함수 (오라클)</th>
+<th>SQL Server</th>
+<th>결과 예</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>LOWER('SQL')</code>, <code>UPPER('sql')</code></td>
+<td>같음</td>
+<td>'sql', 'SQL'</td>
+</tr>
+<tr>
+<td><code>INITCAP('sql expert')</code></td>
+<td>없음</td>
+<td>'Sql Expert'</td>
+</tr>
+<tr>
+<td><code>LENGTH('SQL Expert')</code></td>
+<td><code>LEN</code></td>
+<td>10</td>
+</tr>
+<tr>
+<td><code>SUBSTR('SQL Expert', 5, 3)</code></td>
+<td><code>SUBSTRING</code></td>
+<td>'Exp'</td>
+</tr>
+<tr>
+<td><code>INSTR('SQL Expert', 'E')</code></td>
+<td><code>CHARINDEX('E', 'SQL Expert')</code></td>
+<td>5</td>
+</tr>
+<tr>
+<td><code>LTRIM('xxSQLxx', 'x')</code></td>
+<td><code>LTRIM</code>은 공백만</td>
+<td>'SQLxx'</td>
+</tr>
+<tr>
+<td><code>RTRIM('xxSQLxx', 'x')</code></td>
+<td></td>
+<td>'xxSQL'</td>
+</tr>
+<tr>
+<td><code>TRIM('x' FROM 'xxSQLxx')</code></td>
+<td></td>
+<td>'SQL'</td>
+</tr>
+<tr>
+<td><code>LPAD('SQL', 5, '*')</code>, <code>RPAD</code></td>
+<td></td>
+<td>'<strong>SQL', 'SQL</strong>'</td>
+</tr>
+<tr>
+<td><code>REPLACE('SQL', 'Q', 'q')</code></td>
+<td>같음</td>
+<td>'SqL'</td>
+</tr>
+<tr>
+<td><code>CONCAT('A', 'B')</code></td>
+<td>같음</td>
+<td>'AB'</td>
+</tr>
+<tr>
+<td><code>ASCII('A')</code>, <code>CHR(65)</code></td>
+<td><code>ASCII</code>, <code>CHAR(65)</code></td>
+<td>65, 'A'</td>
+</tr>
+</tbody>
+</table></div>
+<h4>숫자 함수</h4>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>함수</th>
+<th>결과</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ROUND(123.456, 1)</code></td>
+<td>123.5</td>
+<td>소수 1자리로 반올림</td>
+</tr>
+<tr>
+<td><code>ROUND(123.456, -1)</code></td>
+<td>120</td>
+<td>일의 자리에서 반올림</td>
+</tr>
+<tr>
+<td><code>TRUNC(123.456, 1)</code></td>
+<td>123.4</td>
+<td>버림 (SQL Server는 <code>ROUND(x, 1, 1)</code>)</td>
+</tr>
+<tr>
+<td><code>CEIL(12.1)</code>, <code>CEIL(-12.1)</code></td>
+<td>13, −12</td>
+<td>크거나 같은 최소 정수 (SQL Server <code>CEILING</code>)</td>
+</tr>
+<tr>
+<td><code>FLOOR(12.9)</code>, <code>FLOOR(-12.1)</code></td>
+<td>12, −13</td>
+<td>작거나 같은 최대 정수</td>
+</tr>
+<tr>
+<td><code>MOD(7, 3)</code></td>
+<td>1</td>
+<td>나머지 (SQL Server <code>7 % 3</code>)</td>
+</tr>
+<tr>
+<td><code>ABS(-5)</code></td>
+<td>5</td>
+<td>절댓값</td>
+</tr>
+<tr>
+<td><code>SIGN(-5)</code></td>
+<td>−1</td>
+<td>양수 1, 0이면 0, 음수 −1</td>
+</tr>
+<tr>
+<td><code>POWER(2, 3)</code>, <code>SQRT(16)</code></td>
+<td>8, 4</td>
+<td></td>
+</tr>
+</tbody>
+</table></div>
+<h4>날짜 함수</h4>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>오라클</th>
+<th>SQL Server</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>SYSDATE</code></td>
+<td><code>GETDATE()</code></td>
+<td>현재 날짜·시간</td>
+</tr>
+<tr>
+<td><code>EXTRACT(YEAR FROM SYSDATE)</code></td>
+<td><code>YEAR(GETDATE())</code>, <code>DATEPART(YEAR, ...)</code></td>
+<td>연도 추출</td>
+</tr>
+<tr>
+<td><code>ADD_MONTHS(SYSDATE, 3)</code></td>
+<td><code>DATEADD(MONTH, 3, GETDATE())</code></td>
+<td>3개월 후</td>
+</tr>
+<tr>
+<td><code>MONTHS_BETWEEN(d1, d2)</code></td>
+<td><code>DATEDIFF(MONTH, d2, d1)</code></td>
+<td>개월 수 차이</td>
+</tr>
+<tr>
+<td><code>LAST_DAY(d)</code></td>
+<td><code>EOMONTH(d)</code></td>
+<td>그 달의 마지막 날</td>
+</tr>
+</tbody>
+</table></div>
+<p>오라클 날짜 연산: <code>SYSDATE + 1</code> = 하루 뒤, <code>SYSDATE + 1/24</code> = 1시간 뒤, <code>SYSDATE + 1/24/60</code> = 1분 뒤. <strong>날짜 − 날짜 = 일수</strong>.</p>
+<h4>변환 함수</h4>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>오라클</th>
+<th>SQL Server</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>TO_CHAR(SYSDATE, 'YYYY-MM-DD')</code></td>
+<td><code>CONVERT(VARCHAR, GETDATE(), 23)</code></td>
+</tr>
+<tr>
+<td><code>TO_NUMBER('100')</code></td>
+<td><code>CAST('100' AS INT)</code></td>
+</tr>
+<tr>
+<td><code>TO_DATE('2026-11-07', 'YYYY-MM-DD')</code></td>
+<td><code>CAST('2026-11-07' AS DATE)</code></td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>명시적 형변환</strong>(함수 사용)과 <strong>암시적 형변환</strong>(DBMS가 자동 변환)이 있다. 인덱스 칼럼에 암시적 형변환이 일어나면 인덱스를 못 쓸 수 있으므로 명시적 변환을 권장한다.</p>
+<h4>NULL 관련 함수</h4>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>함수</th>
+<th>결과</th>
+<th>예</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>NVL(a, b)</code> (SQL Server <code>ISNULL</code>)</td>
+<td>a가 NULL이면 b, 아니면 a</td>
+<td><code>NVL(COMM, 0)</code></td>
+</tr>
+<tr>
+<td><code>NVL2(a, b, c)</code></td>
+<td>a가 NULL이 아니면 b, NULL이면 c</td>
+<td><code>NVL2(COMM, 'Y', 'N')</code></td>
+</tr>
+<tr>
+<td><code>NULLIF(a, b)</code></td>
+<td>a = b 이면 NULL, 아니면 a</td>
+<td><code>NULLIF(10, 10)</code> → NULL, <code>NULLIF(10, 20)</code> → 10</td>
+</tr>
+<tr>
+<td><code>COALESCE(a, b, c, ...)</code></td>
+<td>NULL이 아닌 첫 번째 값</td>
+<td><code>COALESCE(NULL, NULL, 3)</code> → 3</td>
+</tr>
+</tbody>
+</table></div>
+<h4>CASE와 DECODE</h4>
+<pre><code class="language-sql">SELECT ENAME, SAL,
+       CASE WHEN SAL &gt;= 3000 THEN 'HIGH'
+            WHEN SAL &gt;= 1500 THEN 'MID'
+            ELSE 'LOW'
+       END AS GRADE
+  FROM EMP;
+
+-- 단순 CASE
+CASE DEPTNO WHEN 10 THEN 'ACCOUNTING' WHEN 20 THEN 'RESEARCH' ELSE 'ETC' END
+-- 오라클 DECODE (같다 비교만 가능)
+DECODE(DEPTNO, 10, 'ACCOUNTING', 20, 'RESEARCH', 'ETC')
+</code></pre>
+<p>CASE에서 <strong>ELSE를 생략하면 NULL</strong>이 반환된다. 조건은 위에서부터 차례로 검사하고, 처음 참인 WHEN에서 멈춘다.</p>
+<ol class="quiz">
+<li class="q" data-ans="1"><div class="q-text"><p>다음 SQL의 결과는?</p>
+<pre><code class="language-sql">SELECT ROUND(45.926, -1), TRUNC(45.926, 1), CEIL(-2.3) FROM DUAL;
+</code></pre></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>50, 45.9, −2</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>46, 45.9, −3</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>50, 46.0, −3</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>40, 45.9, −2</span></button></li>
+</ol><div class="ans"><p><b>정답 ①</b> ROUND(45.926, −1)은 일의 자리에서 반올림 → 50. TRUNC는 버림 45.9. CEIL(−2.3)은 −2.3보다 크거나 같은 최소 정수 −2.</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p><code>NULLIF(SAL, 3000)</code>에서 SAL이 3000일 때와 2000일 때 결과는?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>3000, 2000</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>NULL, 2000</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>0, 2000</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>NULL, NULL</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> 두 값이 같으면 NULL, 다르면 첫 번째 값.</p></div></li>
+<li class="q" data-ans="1"><div class="q-text"><p>EMP 테이블의 COMM 값이 (NULL, 300, 500, NULL, 1400, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL)일 때, <code>SELECT COUNT(*) FROM EMP WHERE COMM NOT IN (300, NULL);</code>의 결과는?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>0</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>3</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>4</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>13</span></button></li>
+</ol><div class="ans"><p><b>정답 ①</b> NOT IN 목록에 NULL이 있으면 <code>COMM &lt;&gt; NULL</code>이 항상 UNKNOWN이라 결과는 0건이다.</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>다음 중 SQL Server에서 문자열 길이를 구하는 함수는?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>LENGTH</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>LEN</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>SIZE</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>CHAR_LENGTH</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> 오라클은 LENGTH, SQL Server는 LEN.</p></div></li>
+<li class="q" data-ans="1"><div class="q-text"><p>다음 SQL의 결과는?</p>
+<pre><code class="language-sql">SELECT SUBSTR('DATABASE', 3, 4), INSTR('DATABASE', 'A', 3) FROM DUAL;
+</code></pre></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>'TABA', 4</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>'ATAB', 2</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>'TABA', 2</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>'TABA', 6</span></button></li>
+</ol><div class="ans"><p><b>정답 ①</b> 3번째부터 4글자 → 'TABA'. INSTR는 3번째 위치부터 찾으므로 4번째의 'A'를 찾아 4를 반환한다.</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>오라클에서 <code>SELECT ENAME FROM EMP WHERE ENAME LIKE '_A%';</code>의 의미는?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>A로 시작하는 이름</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>두 번째 글자가 A인 이름</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>A로 끝나는 이름</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>A를 포함하는 이름</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> <code>_</code>는 정확히 1글자, <code>%</code>는 0글자 이상.</p></div></li>
+<li class="q" data-ans="3"><div class="q-text"><p>다음 CASE 식에서 SAL이 1000일 때 결과는?</p>
+<pre><code class="language-sql">CASE WHEN SAL &gt; 2000 THEN 'A' WHEN SAL &gt; 1500 THEN 'B' END
+</code></pre></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>'A'</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>'B'</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>NULL</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>오류</span></button></li>
+</ol><div class="ans"><p><b>정답 ③</b> 어떤 WHEN도 만족하지 않고 ELSE가 없으면 NULL.</p></div></li>
+</ol>
+  </div>
+</section>
+
+<section class="chapter" id="ch5" data-title="GROUP BY, HAVING, ORDER BY" data-group="2과목 · SQL 기본과 활용">
+  <header class="ch-head reveal">
+    <p class="ch-group">2과목 · SQL 기본과 활용</p>
+    <h2>GROUP BY, HAVING, ORDER BY</h2>
+    <button type="button" class="ch-pdf" data-ch="ch5"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 1.5h5.5L12.5 4.5V14.5h-8.5z M9.5 1.5v3h3 M6 9.5l2 2 2-2 M8 6.5v5"/></svg>이 장만 PDF로</button>
+  </header>
+  <div class="ch-body">
+<h3 id="s23">집계 함수</h3>
+<p>여러 행을 하나의 결과로 집계한다.</p>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>함수</th>
+<th>설명</th>
+<th>NULL 처리</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>COUNT(*)</code></td>
+<td>전체 행 수</td>
+<td><strong>NULL 포함</strong> 모든 행</td>
+</tr>
+<tr>
+<td><code>COUNT(칼럼)</code></td>
+<td>해당 칼럼이 NULL이 아닌 행 수</td>
+<td>NULL 제외</td>
+</tr>
+<tr>
+<td><code>SUM</code>, <code>AVG</code>, <code>MAX</code>, <code>MIN</code></td>
+<td>합계, 평균, 최댓값, 최솟값</td>
+<td>NULL 제외</td>
+</tr>
+<tr>
+<td><code>STDDEV</code>, <code>VARIANCE</code></td>
+<td>표준편차, 분산</td>
+<td>NULL 제외</td>
+</tr>
+</tbody>
+</table></div>
+<pre><code class="language-sql">SELECT COUNT(*), COUNT(COMM), SUM(COMM), AVG(COMM) FROM EMP;
+-- 14, 4, 2200, 550
+</code></pre>
+<aside class="box box-warn">
+<p class="box-t">AVG와 NULL</p>
+<p>COMM이 NULL이 아닌 행은 4개(300, 500, 1400, 0) → AVG(COMM) = 2200 / 4 = 550.
+NULL을 0으로 보고 전체 평균을 내려면 <code>AVG(NVL(COMM, 0))</code> = 2200 / 14 ≈ 157.1.
+<code>SUM(COMM) / COUNT(*)</code>도 157.1이다.</p>
+</aside>
+<ul>
+<li>집계 함수에 <code>DISTINCT</code>를 쓸 수 있다: <code>COUNT(DISTINCT JOB)</code> = 5</li>
+<li>행이 하나도 없을 때 <code>COUNT</code>는 0, <code>SUM</code>·<code>AVG</code>·<code>MAX</code>는 <strong>NULL</strong>을 반환한다</li>
+<li><code>SUM(A + B)</code>와 <code>SUM(A) + SUM(B)</code>는 NULL이 있으면 다를 수 있다: 행 단위로 A + B가 NULL이 되는 행은 SUM에서 빠지기 때문</li>
+</ul>
+<h3 id="s24">GROUP BY와 HAVING</h3>
+<pre><code class="language-sql">SELECT DEPTNO, COUNT(*) AS CNT, AVG(SAL) AS AVG_SAL
+  FROM EMP
+ WHERE JOB &lt;&gt; 'PRESIDENT'
+ GROUP BY DEPTNO
+HAVING AVG(SAL) &gt;= 2000
+ ORDER BY DEPTNO;
+</code></pre>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>DEPTNO</th>
+<th>CNT</th>
+<th>AVG_SAL</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>20</td>
+<td>5</td>
+<td>2175</td>
+</tr>
+</tbody>
+</table></div>
+<ul>
+<li><strong>WHERE</strong>는 그룹을 만들기 <strong>전에 행을</strong> 거른다. 집계 함수를 쓸 수 없다</li>
+<li><strong>HAVING</strong>은 그룹을 만든 <strong>후에 그룹을</strong> 거른다. 집계 함수를 쓸 수 있다</li>
+<li>GROUP BY를 쓰면 SELECT에는 <strong>GROUP BY에 쓴 칼럼과 집계 함수만</strong> 올 수 있다</li>
+<li>GROUP BY 절에는 SELECT의 <strong>별칭을 쓸 수 없다</strong></li>
+<li>GROUP BY 없이 HAVING만 쓸 수도 있다 (테이블 전체를 하나의 그룹으로)</li>
+</ul>
+<h3 id="s25">실행 순서</h3>
+<figure class="fig" id="fig-order">
+<div class="ord">
+ <div class="ord-col"><p class="ord-h">작성 순서</p>
+  <ol class="ord-w"><li data-s="5">SELECT</li><li data-s="1">FROM</li><li data-s="2">WHERE</li><li data-s="3">GROUP BY</li><li data-s="4">HAVING</li><li data-s="6">ORDER BY</li></ol></div>
+ <div class="ord-col"><p class="ord-h">실행 순서</p>
+  <ol class="ord-x"><li data-s="1"><b>FROM</b><span>테이블을 가져온다</span></li><li data-s="2"><b>WHERE</b><span>행을 거른다</span></li><li data-s="3"><b>GROUP BY</b><span>그룹으로 묶는다</span></li><li data-s="4"><b>HAVING</b><span>그룹을 거른다</span></li><li data-s="5"><b>SELECT</b><span>보여줄 칼럼을 고른다</span></li><li data-s="6"><b>ORDER BY</b><span>정렬한다</span></li></ol></div>
+</div>
+<figcaption>SELECT는 맨 위에 쓰지만 다섯 번째로 실행된다. 그래서 SELECT에서 붙인 별칭(alias)은 WHERE·GROUP BY에서 쓸 수 없고, 마지막인 ORDER BY에서만 쓸 수 있다.</figcaption>
+</figure>
+
+<pre><code class="language-sql">SELECT DEPTNO, SUM(SAL) AS TOTAL   -- 5
+  FROM EMP                          -- 1
+ WHERE SAL &gt; 1000                   -- 2
+ GROUP BY DEPTNO                    -- 3
+HAVING SUM(SAL) &gt; 5000              -- 4
+ ORDER BY TOTAL DESC;               -- 6 (별칭 사용 가능)
+</code></pre>
+<h3 id="s26">ORDER BY</h3>
+<pre><code class="language-sql">SELECT ENAME, SAL, DEPTNO FROM EMP ORDER BY DEPTNO ASC, SAL DESC;
+SELECT ENAME, SAL FROM EMP ORDER BY 2 DESC;       -- SELECT 목록 2번째 칼럼
+SELECT ENAME, SAL AS 급여 FROM EMP ORDER BY 급여; -- 별칭 사용 가능
+</code></pre>
+<ul>
+<li>기본은 오름차순(ASC)</li>
+<li>칼럼명, 별칭, <strong>SELECT 목록의 위치 번호</strong>를 쓸 수 있고 섞어 써도 된다</li>
+<li>SELECT에 없는 칼럼으로도 정렬할 수 있다. 단, <strong>GROUP BY나 DISTINCT</strong>를 쓰면 SELECT 목록이나 GROUP BY 칼럼만 사용 가능</li>
+<li>가장 마지막에 실행되므로 성능에 영향을 준다</li>
+</ul>
+<h4>NULL의 정렬 위치</h4>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>DBMS</th>
+<th>오름차순(ASC)</th>
+<th>내림차순(DESC)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>오라클</td>
+<td>NULL이 <strong>마지막</strong> (NULL을 가장 큰 값으로 취급)</td>
+<td>NULL이 처음</td>
+</tr>
+<tr>
+<td>SQL Server</td>
+<td>NULL이 <strong>처음</strong> (NULL을 가장 작은 값으로 취급)</td>
+<td>NULL이 마지막</td>
+</tr>
+</tbody>
+</table></div>
+<p>오라클은 <code>NULLS FIRST</code>, <code>NULLS LAST</code>로 직접 지정할 수 있다.</p>
+<ol class="quiz">
+<li class="q" data-ans="2"><div class="q-text"><p>다음 중 SQL 문장의 실행 순서로 옳은 것은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>SELECT → FROM → WHERE → GROUP BY → HAVING → ORDER BY</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>FROM → WHERE → GROUP BY → HAVING → SELECT → ORDER BY</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>FROM → WHERE → HAVING → GROUP BY → SELECT → ORDER BY</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>FROM → SELECT → WHERE → GROUP BY → HAVING → ORDER BY</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> FROM → WHERE → GROUP BY → HAVING → SELECT → ORDER BY.</p></div></li>
+<li class="q" data-ans="3"><div class="q-text"><p>다음 SQL 중 오류가 발생하는 것은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>SELECT DEPTNO, SUM(SAL) FROM EMP GROUP BY DEPTNO;</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>SELECT DEPTNO, SUM(SAL) FROM EMP GROUP BY DEPTNO HAVING SUM(SAL) &gt; 9000;</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>SELECT DEPTNO, ENAME, SUM(SAL) FROM EMP GROUP BY DEPTNO;</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>SELECT SUM(SAL) FROM EMP HAVING SUM(SAL) &gt; 1000;</span></button></li>
+</ol><div class="ans"><p><b>정답 ③</b> GROUP BY를 쓰면 SELECT에는 GROUP BY 칼럼과 집계 함수만 올 수 있다. ENAME은 오류.</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>테이블 T의 칼럼 C 값이 (10, NULL, 20, NULL, 30)일 때 <code>SELECT COUNT(*), COUNT(C), AVG(C) FROM T;</code>의 결과는?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>5, 5, 12</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>5, 3, 20</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>3, 3, 20</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>5, 3, 12</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> COUNT(*)는 5, COUNT(C)는 NULL 제외 3, AVG(C) = 60 / 3 = 20.</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>오라클에서 <code>ORDER BY COMM ASC</code>로 정렬할 때 NULL의 위치는?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>맨 앞</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>맨 뒤</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>0과 같은 위치</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>정렬에서 제외</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> 오라클은 NULL을 가장 큰 값으로 취급해 오름차순에서 맨 뒤에 온다. SQL Server는 맨 앞.</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>WHERE 절에 집계 함수를 쓸 수 없는 이유로 가장 적절한 것은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>WHERE 절은 SELECT 절보다 나중에 실행되기 때문</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>WHERE 절은 GROUP BY로 그룹이 만들어지기 전에 실행되기 때문</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>집계 함수는 ORDER BY 절에서만 사용할 수 있기 때문</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>WHERE 절은 문자 칼럼만 비교할 수 있기 때문</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> 그룹 조건은 HAVING에 써야 한다.</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>행이 하나도 없는 테이블에 <code>SELECT COUNT(*), SUM(SAL) FROM EMP_EMPTY;</code>를 실행하면?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>0, 0</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>0, NULL</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>NULL, NULL</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>결과 행 없음</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> 집계 함수는 GROUP BY 없이 쓰면 항상 한 행을 돌려준다. COUNT는 0, SUM은 NULL.</p></div></li>
+</ol>
+  </div>
+</section>
+
+<section class="chapter" id="ch6" data-title="조인" data-group="2과목 · SQL 기본과 활용">
+  <header class="ch-head reveal">
+    <p class="ch-group">2과목 · SQL 기본과 활용</p>
+    <h2>조인</h2>
+    <button type="button" class="ch-pdf" data-ch="ch6"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 1.5h5.5L12.5 4.5V14.5h-8.5z M9.5 1.5v3h3 M6 9.5l2 2 2-2 M8 6.5v5"/></svg>이 장만 PDF로</button>
+  </header>
+  <div class="ch-body">
+<h3 id="s27">조인이란</h3>
+<p><strong>조인(Join)</strong>은 두 개 이상의 테이블을 연결해 데이터를 조회하는 것이다. 정규화로 나뉜 테이블을 다시 합쳐 보여줄 때 쓴다. 보통 PK와 FK로 연결하지만, 값이 연관되면 PK·FK가 아니어도 조인할 수 있다.</p>
+<figure class="fig" id="fig-join">
+<div class="fig-ctrl" role="group" aria-label="조인 종류">
+ <button type="button" class="chip" data-j="inner" aria-pressed="true">INNER</button>
+ <button type="button" class="chip" data-j="left" aria-pressed="false">LEFT OUTER</button>
+ <button type="button" class="chip" data-j="right" aria-pressed="false">RIGHT OUTER</button>
+ <button type="button" class="chip" data-j="full" aria-pressed="false">FULL OUTER</button>
+ <button type="button" class="chip" data-j="cross" aria-pressed="false">CROSS</button>
+</div>
+<pre class="j-sql"><code></code></pre>
+<div class="j-wrap">
+ <div><p class="j-t">EMP</p><table class="j-a small"><thead><tr><th>ENAME</th><th>DEPTNO</th></tr></thead><tbody></tbody></table></div>
+ <div><p class="j-t">DEPT</p><table class="j-b small"><thead><tr><th>DEPTNO</th><th>DNAME</th></tr></thead><tbody></tbody></table></div>
+ <div class="j-res"><p class="j-t">결과 <span class="j-n"></span></p><table class="j-r small"><thead><tr><th>ENAME</th><th>E.DEPTNO</th><th>D.DEPTNO</th><th>DNAME</th></tr></thead><tbody></tbody></table></div>
+</div>
+<figcaption>버튼을 바꿔 보면 결과 행이 달라진다. 짝이 없는 행은 OUTER 쪽에서만 살아남고, 반대편 칼럼은 NULL로 채워진다. CROSS JOIN은 4 × 3 = 12행이다.</figcaption>
+</figure>
+
+<h3 id="s28">EQUI JOIN과 Non-EQUI JOIN</h3>
+<pre><code class="language-sql">-- EQUI JOIN: = 로 연결
+SELECT E.ENAME, D.DNAME
+  FROM EMP E, DEPT D
+ WHERE E.DEPTNO = D.DEPTNO;
+
+-- Non-EQUI JOIN: = 이외의 연산자 (BETWEEN, &gt;, &lt;)
+SELECT E.ENAME, E.SAL, S.GRADE
+  FROM EMP E, SALGRADE S
+ WHERE E.SAL BETWEEN S.LOSAL AND S.HISAL;
+</code></pre>
+<ul>
+<li>테이블에 <strong>별칭</strong>을 붙이면 별칭으로만 칼럼을 참조해야 한다 (원래 테이블명 사용 불가)</li>
+<li>두 테이블에 같은 이름의 칼럼이 있으면 반드시 <strong>테이블명 또는 별칭을 붙여야</strong> 한다</li>
+<li><strong>N개 테이블을 조인하려면 최소 N − 1개의 조인 조건</strong>이 필요하다</li>
+</ul>
+<h3 id="s29">ANSI 표준 조인</h3>
+<h4>INNER JOIN</h4>
+<p>조인 조건을 만족하는 행만 반환한다. <code>INNER</code>는 생략 가능하다.</p>
+<pre><code class="language-sql">SELECT E.ENAME, D.DNAME
+  FROM EMP E INNER JOIN DEPT D
+    ON E.DEPTNO = D.DEPTNO
+ WHERE E.SAL &gt; 2000;
+</code></pre>
+<h4>NATURAL JOIN</h4>
+<p>두 테이블에서 <strong>이름이 같은 모든 칼럼</strong>으로 자동 EQUI JOIN한다.</p>
+<pre><code class="language-sql">SELECT DEPTNO, E.ENAME, D.DNAME
+  FROM EMP E NATURAL JOIN DEPT D;
+</code></pre>
+<ul>
+<li>조인 칼럼(DEPTNO)에는 <strong>별칭(테이블명)을 붙일 수 없다</strong></li>
+<li>이름이 같으면 데이터 타입도 같아야 한다</li>
+<li><code>SELECT *</code>를 하면 조인 칼럼이 <strong>한 번만</strong>, 맨 앞에 나온다</li>
+</ul>
+<h4>USING 조건절</h4>
+<p>같은 이름의 칼럼 중 <strong>원하는 칼럼만</strong> 골라 조인한다.</p>
+<pre><code class="language-sql">SELECT DEPTNO, E.ENAME, D.DNAME
+  FROM EMP E JOIN DEPT D USING (DEPTNO);
+</code></pre>
+<p>USING에 쓴 칼럼도 NATURAL JOIN처럼 <strong>별칭을 붙일 수 없다</strong>. SQL Server는 지원하지 않는다.</p>
+<h4>ON 조건절</h4>
+<p>칼럼 이름이 달라도 조인 조건을 자유롭게 쓸 수 있다. 가장 많이 쓴다.</p>
+<pre><code class="language-sql">SELECT E.ENAME, D.DNAME
+  FROM EMP E JOIN DEPT D ON (E.DEPTNO = D.DEPTNO AND D.LOC = 'DALLAS');
+</code></pre>
+<h3 id="s30">CROSS JOIN</h3>
+<p>조인 조건 없이 두 테이블의 <strong>모든 조합(카티션 곱)</strong>을 만든다. EMP 14행 × DEPT 4행 = 56행.</p>
+<pre><code class="language-sql">SELECT E.ENAME, D.DNAME FROM EMP E CROSS JOIN DEPT D;
+-- 조인 조건을 빠뜨린 FROM EMP, DEPT 도 같은 결과
+</code></pre>
+<h3 id="s31">OUTER JOIN</h3>
+<p>조인 조건을 만족하지 않는 행도 함께 보여준다. 짝이 없는 쪽 칼럼은 <strong>NULL</strong>로 채운다.</p>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>종류</th>
+<th>결과</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>LEFT OUTER JOIN</td>
+<td>왼쪽 테이블의 모든 행 + 오른쪽에서 일치하는 행</td>
+</tr>
+<tr>
+<td>RIGHT OUTER JOIN</td>
+<td>오른쪽 테이블의 모든 행 + 왼쪽에서 일치하는 행</td>
+</tr>
+<tr>
+<td>FULL OUTER JOIN</td>
+<td>양쪽 모든 행 (LEFT ∪ RIGHT, 중복 제거)</td>
+</tr>
+</tbody>
+</table></div>
+<pre><code class="language-sql">-- 사원이 없는 부서(40번)도 나오게
+SELECT D.DEPTNO, D.DNAME, E.ENAME
+  FROM DEPT D LEFT OUTER JOIN EMP E
+    ON D.DEPTNO = E.DEPTNO;
+
+-- 오라클 전용 표기: 데이터가 없는(NULL로 채워질) 쪽에 (+)
+SELECT D.DEPTNO, D.DNAME, E.ENAME
+  FROM DEPT D, EMP E
+ WHERE D.DEPTNO = E.DEPTNO(+);
+</code></pre>
+<aside class="box box-warn">
+<p class="box-t">(+) 위치 헷갈리지 않기</p>
+<p><code>(+)</code>는 <strong>모자란 쪽</strong>, 즉 NULL이 채워질 쪽에 붙인다. <code>WHERE D.DEPTNO = E.DEPTNO(+)</code>는 DEPT를 기준으로 한 LEFT OUTER JOIN이다. 오라클 (+) 표기로는 FULL OUTER JOIN을 할 수 없다.</p>
+</aside>
+<h4>OUTER JOIN에서 ON과 WHERE의 차이</h4>
+<pre><code class="language-sql">-- (1) ON에 조건: 조인 전에 오른쪽 행을 거름 → 왼쪽(DEPT)은 모두 남음
+SELECT D.DEPTNO, E.ENAME
+  FROM DEPT D LEFT JOIN EMP E
+    ON D.DEPTNO = E.DEPTNO AND E.SAL &gt; 3000;
+-- 결과: 4행 (10 KING, 20 NULL, 30 NULL, 40 NULL)
+
+-- (2) WHERE에 조건: 조인 후 결과를 거름 → NULL 행이 사라져 INNER JOIN처럼 됨
+SELECT D.DEPTNO, E.ENAME
+  FROM DEPT D LEFT JOIN EMP E
+    ON D.DEPTNO = E.DEPTNO
+ WHERE E.SAL &gt; 3000;
+-- 결과: 1행 (10 KING)
+</code></pre>
+<h3 id="s32">셀프 조인</h3>
+<p>한 테이블을 <strong>자기 자신과</strong> 조인한다. 반드시 서로 다른 별칭을 붙인다. 사원과 그 관리자를 함께 볼 때 쓴다.</p>
+<pre><code class="language-sql">SELECT E.ENAME AS 사원, M.ENAME AS 관리자
+  FROM EMP E LEFT OUTER JOIN EMP M
+    ON E.MGR = M.EMPNO;
+-- KING은 MGR이 NULL → 관리자 NULL로 함께 출력 (14행)
+</code></pre>
+<ol class="quiz">
+<li class="q" data-ans="4"><div class="q-text"><p>EMP 테이블 14건, DEPT 테이블 4건일 때 <code>SELECT * FROM EMP CROSS JOIN DEPT;</code>의 결과 행 수는?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>14</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>18</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>4</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>56</span></button></li>
+</ol><div class="ans"><p><b>정답 ④</b> CROSS JOIN은 카티션 곱, 14 × 4 = 56.</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>NATURAL JOIN에 대한 설명으로 옳지 않은 것은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>두 테이블의 이름이 같은 모든 칼럼으로 조인한다</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>조인 칼럼에 테이블 별칭을 붙여야 한다</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>EQUI JOIN 형태다</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>SELECT * 사용 시 조인 칼럼은 한 번만 출력된다</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> NATURAL JOIN과 USING의 조인 칼럼에는 별칭을 붙일 수 없다.</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>오라클에서 <code>WHERE D.DEPTNO = E.DEPTNO(+)</code>와 같은 결과를 내는 ANSI 조인은? (FROM DEPT D, EMP E)</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>DEPT D INNER JOIN EMP E</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>DEPT D LEFT OUTER JOIN EMP E</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>DEPT D RIGHT OUTER JOIN EMP E</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>DEPT D FULL OUTER JOIN EMP E</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> (+)가 붙은 EMP 쪽이 NULL로 채워진다. DEPT 기준 LEFT OUTER JOIN.</p></div></li>
+<li class="q" data-ans="3"><div class="q-text"><p>테이블 A(1, 2, 3), B(2, 3, 4)를 같은 칼럼 값으로 FULL OUTER JOIN하면 결과 행 수는?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>2</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>3</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>4</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>6</span></button></li>
+</ol><div class="ans"><p><b>정답 ③</b> 일치 2행(2, 3) + A만 1행(1) + B만 1행(4) = 4행.</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>다섯 개의 테이블을 조인할 때 필요한 최소 조인 조건 수는?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>3</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>4</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>5</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>6</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> N개 테이블은 최소 N − 1개 조인 조건.</p></div></li>
+<li class="q" data-ans="1"><div class="q-text"><p>다음 두 SQL의 결과 행 수는? (DEPT 4행, 10번 부서에만 SAL &gt; 3000인 KING이 있다)</p>
+<pre><code class="language-sql">(가) SELECT * FROM DEPT D LEFT JOIN EMP E ON D.DEPTNO = E.DEPTNO AND E.SAL &gt; 3000;
+(나) SELECT * FROM DEPT D LEFT JOIN EMP E ON D.DEPTNO = E.DEPTNO WHERE E.SAL &gt; 3000;
+</code></pre></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>(가) 4, (나) 1</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>(가) 1, (나) 4</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>(가) 4, (나) 4</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>(가) 1, (나) 1</span></button></li>
+</ol><div class="ans"><p><b>정답 ①</b> ON의 조건은 조인 대상만 거르고 왼쪽 행은 유지된다. WHERE는 조인 후 NULL 행까지 걸러낸다.</p></div></li>
+</ol>
+  </div>
+</section>
+
+<section class="chapter" id="ch7" data-title="서브쿼리, 집합 연산자, 뷰" data-group="2과목 · SQL 기본과 활용">
+  <header class="ch-head reveal">
+    <p class="ch-group">2과목 · SQL 기본과 활용</p>
+    <h2>서브쿼리, 집합 연산자, 뷰</h2>
+    <button type="button" class="ch-pdf" data-ch="ch7"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 1.5h5.5L12.5 4.5V14.5h-8.5z M9.5 1.5v3h3 M6 9.5l2 2 2-2 M8 6.5v5"/></svg>이 장만 PDF로</button>
+  </header>
+  <div class="ch-body">
+<h3 id="s33">서브쿼리</h3>
+<p><strong>서브쿼리(Subquery)</strong>는 하나의 SQL 문 안에 포함된 또 다른 SELECT 문이다. 괄호로 감싼다.</p>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>위치</th>
+<th>이름</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SELECT 절</td>
+<td>스칼라 서브쿼리</td>
+<td>한 행, 한 칼럼만 반환. 칼럼처럼 사용</td>
+</tr>
+<tr>
+<td>FROM 절</td>
+<td>인라인 뷰 (Inline View)</td>
+<td>실행 시 동적으로 만들어지는 임시 테이블</td>
+</tr>
+<tr>
+<td>WHERE / HAVING 절</td>
+<td>중첩 서브쿼리 (Nested)</td>
+<td>조건 값으로 사용</td>
+</tr>
+</tbody>
+</table></div>
+<h4>반환 결과에 따른 분류</h4>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>종류</th>
+<th>설명</th>
+<th>사용 연산자</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>단일 행 서브쿼리</td>
+<td>결과가 <strong>1행</strong></td>
+<td><code>=</code>, <code>&lt;</code>, <code>&gt;</code>, <code>&lt;=</code>, <code>&gt;=</code>, <code>&lt;&gt;</code></td>
+</tr>
+<tr>
+<td>다중 행 서브쿼리</td>
+<td>결과가 <strong>여러 행</strong></td>
+<td><code>IN</code>, <code>ANY</code>, <code>SOME</code>, <code>ALL</code>, <code>EXISTS</code></td>
+</tr>
+<tr>
+<td>다중 칼럼 서브쿼리</td>
+<td>결과가 여러 칼럼</td>
+<td><code>(A, B) IN (SELECT ...)</code> (SQL Server 미지원)</td>
+</tr>
+</tbody>
+</table></div>
+<pre><code class="language-sql">-- 단일 행: 평균 급여보다 많이 받는 사원
+SELECT ENAME, SAL FROM EMP
+ WHERE SAL &gt; (SELECT AVG(SAL) FROM EMP);
+
+-- 다중 행: 단일 행 연산자에 여러 행이 오면 오류!
+SELECT ENAME FROM EMP
+ WHERE SAL = (SELECT MAX(SAL) FROM EMP GROUP BY DEPTNO);   -- 오류
+SELECT ENAME FROM EMP
+ WHERE SAL IN (SELECT MAX(SAL) FROM EMP GROUP BY DEPTNO);  -- 정상
+</code></pre>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>연산자</th>
+<th>의미</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>IN (서브쿼리)</code></td>
+<td>결과 중 하나라도 같으면</td>
+</tr>
+<tr>
+<td><code>&gt; ANY (서브쿼리)</code></td>
+<td>결과 중 <strong>최솟값보다</strong> 크면 (하나라도 만족)</td>
+</tr>
+<tr>
+<td><code>&gt; ALL (서브쿼리)</code></td>
+<td>결과 중 <strong>최댓값보다</strong> 크면 (모두 만족)</td>
+</tr>
+<tr>
+<td><code>&lt; ANY</code></td>
+<td>최댓값보다 작으면</td>
+</tr>
+<tr>
+<td><code>&lt; ALL</code></td>
+<td>최솟값보다 작으면</td>
+</tr>
+<tr>
+<td><code>EXISTS (서브쿼리)</code></td>
+<td>결과가 <strong>한 건이라도 있으면</strong> 참 (어떤 값인지는 상관없음)</td>
+</tr>
+</tbody>
+</table></div>
+<h4>연관 서브쿼리 (Correlated Subquery)</h4>
+<p>서브쿼리가 <strong>메인쿼리의 칼럼을 참조</strong>한다. 메인쿼리 행마다 서브쿼리가 실행된다.</p>
+<pre><code class="language-sql">-- 자기 부서 평균보다 급여가 많은 사원
+SELECT E.ENAME, E.DEPTNO, E.SAL
+  FROM EMP E
+ WHERE E.SAL &gt; (SELECT AVG(S.SAL) FROM EMP S WHERE S.DEPTNO = E.DEPTNO);
+
+-- 사원이 한 명이라도 있는 부서
+SELECT D.DNAME FROM DEPT D
+ WHERE EXISTS (SELECT 1 FROM EMP E WHERE E.DEPTNO = D.DEPTNO);
+</code></pre>
+<h4>스칼라 서브쿼리와 인라인 뷰</h4>
+<pre><code class="language-sql">-- 스칼라 서브쿼리: 반드시 1행 1열
+SELECT E.ENAME,
+       (SELECT D.DNAME FROM DEPT D WHERE D.DEPTNO = E.DEPTNO) AS DNAME
+  FROM EMP E;
+
+-- 인라인 뷰: FROM 절의 서브쿼리 (ORDER BY 사용 가능)
+SELECT T.DEPTNO, T.AVG_SAL
+  FROM (SELECT DEPTNO, AVG(SAL) AS AVG_SAL FROM EMP GROUP BY DEPTNO) T
+ WHERE T.AVG_SAL &gt; 2000;
+</code></pre>
+<aside class="box box-warn">
+<p class="box-t">서브쿼리 주의점</p>
+<ul>
+<li>서브쿼리 안에서는 메인쿼리 칼럼을 쓸 수 있지만, <strong>메인쿼리에서 서브쿼리 칼럼은 쓸 수 없다</strong> (인라인 뷰는 예외).</li>
+<li>WHERE 절 서브쿼리에는 ORDER BY를 쓸 수 없다 (인라인 뷰에서는 가능).</li>
+<li>스칼라 서브쿼리가 2행 이상을 반환하면 오류다.</li>
+</ul>
+</aside>
+<h3 id="s34">집합 연산자</h3>
+<p>두 SELECT 결과를 하나로 합친다. <strong>칼럼 수와 데이터 타입이 같아야</strong> 한다.</p>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>연산자</th>
+<th>결과</th>
+<th>정렬·중복</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>UNION</code></td>
+<td>합집합</td>
+<td><strong>중복 제거</strong> (정렬이 일어날 수 있음)</td>
+</tr>
+<tr>
+<td><code>UNION ALL</code></td>
+<td>합집합</td>
+<td><strong>중복 포함</strong>, 정렬 없음 → 가장 빠름</td>
+</tr>
+<tr>
+<td><code>INTERSECT</code></td>
+<td>교집합</td>
+<td>중복 제거</td>
+</tr>
+<tr>
+<td><code>MINUS</code> (오라클) / <code>EXCEPT</code> (SQL Server)</td>
+<td>차집합 (앞 결과에서 뒤 결과를 뺌)</td>
+<td>중복 제거</td>
+</tr>
+</tbody>
+</table></div>
+<pre><code class="language-sql">SELECT DEPTNO FROM EMP     -- 10, 20, 30 (중복 포함 14행)
+UNION
+SELECT DEPTNO FROM DEPT    -- 10, 20, 30, 40
+ORDER BY DEPTNO;           -- 결과: 10, 20, 30, 40 (4행)
+</code></pre>
+<ul>
+<li>결과 칼럼 이름은 <strong>첫 번째 SELECT</strong>의 칼럼명(별칭)을 따른다</li>
+<li>ORDER BY는 <strong>맨 마지막에 한 번만</strong> 쓴다</li>
+<li>우선순위가 같으면 위에서부터 차례로 수행 (괄호로 바꿀 수 있음)</li>
+</ul>
+<h3 id="s35">뷰 (View)</h3>
+<p><strong>뷰</strong>는 테이블처럼 쓰는 <strong>가상 테이블</strong>이다. 실제 데이터를 저장하지 않고 SQL 정의만 저장한다(오라클의 Materialized View는 예외).</p>
+<pre><code class="language-sql">CREATE VIEW V_EMP_DEPT AS
+SELECT E.EMPNO, E.ENAME, D.DNAME
+  FROM EMP E JOIN DEPT D ON E.DEPTNO = D.DEPTNO;
+
+SELECT * FROM V_EMP_DEPT WHERE DNAME = 'SALES';
+DROP VIEW V_EMP_DEPT;
+</code></pre>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>장점</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>독립성</td>
+<td>테이블 구조가 바뀌어도 뷰를 쓰는 응용 프로그램은 바꿀 필요가 없음</td>
+</tr>
+<tr>
+<td>편리성</td>
+<td>복잡한 질의를 뷰로 만들어 단순하게 사용</td>
+</tr>
+<tr>
+<td>보안성</td>
+<td>숨기고 싶은 칼럼을 빼고 뷰를 만들어 사용자에게 제공</td>
+</tr>
+</tbody>
+</table></div>
+<p>뷰는 <strong>ALTER로 정의를 수정할 수 없다</strong> (DROP 후 다시 CREATE, 오라클은 <code>CREATE OR REPLACE VIEW</code>).</p>
+<ol class="quiz">
+<li class="q" data-ans="3"><div class="q-text"><p>다음 중 다중 행 서브쿼리에 사용할 수 없는 연산자는?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>IN</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>ALL</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>=</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>EXISTS</span></button></li>
+</ol><div class="ans"><p><b>정답 ③</b> <code>=</code>는 단일 행 연산자다. 서브쿼리가 여러 행을 반환하면 오류가 난다.</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p><code>SAL &gt; ALL (SELECT SAL FROM EMP WHERE DEPTNO = 30)</code>의 의미는?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>30번 부서의 최소 급여보다 큰 급여</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>30번 부서의 최대 급여보다 큰 급여</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>30번 부서의 평균 급여보다 큰 급여</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>30번 부서의 급여 중 하나와 같은 급여</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> <blockquote>
+<p>ALL은 모든 값보다 커야 하므로 최댓값보다 크다는 뜻이다.</p>
+</blockquote></p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>중복을 제거하지 않고 정렬도 하지 않아 가장 성능이 좋은 집합 연산자는?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>UNION</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>UNION ALL</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>INTERSECT</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>MINUS</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> UNION ALL은 중복 제거 과정이 없다.</p></div></li>
+<li class="q" data-ans="3"><div class="q-text"><p>서브쿼리가 메인쿼리의 칼럼을 참조하여, 메인쿼리의 행마다 실행되는 서브쿼리는?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>스칼라 서브쿼리</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>인라인 뷰</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>연관 서브쿼리</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>다중 칼럼 서브쿼리</span></button></li>
+</ol><div class="ans"><p><b>정답 ③</b> 연관(Correlated) 서브쿼리다.</p></div></li>
+<li class="q" data-ans="4"><div class="q-text"><p>뷰의 장점이 아닌 것은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>독립성</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>편리성</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>보안성</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>저장 공간 절약을 위한 데이터 압축</span></button></li>
+</ol><div class="ans"><p><b>정답 ④</b> 뷰는 데이터를 저장하지 않는 가상 테이블일 뿐, 압축 기능이 아니다.</p></div></li>
+<li class="q" data-ans="1"><div class="q-text"><p>테이블 A의 칼럼 값이 (1, 2, 2, 3), B의 칼럼 값이 (2, 3, 4)일 때 <code>SELECT C FROM A MINUS SELECT C FROM B</code>의 결과는?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>1</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>1, 2</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>4</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>1, 4</span></button></li>
+</ol><div class="ans"><p><b>정답 ①</b> A에서 B에 있는 값(2, 3)을 빼면 1만 남는다. MINUS도 중복을 제거한다.</p></div></li>
+<li class="q" data-ans="1"><div class="q-text"><p>집합 연산의 결과에 표시되는 칼럼 이름은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>첫 번째 SELECT의 칼럼명</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>마지막 SELECT의 칼럼명</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>두 칼럼명을 합친 이름</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>자동으로 COL1, COL2</span></button></li>
+</ol><div class="ans"><p><b>정답 ①</b> 첫 번째 SELECT 문의 칼럼명(별칭)을 따른다.</p></div></li>
+</ol>
+  </div>
+</section>
+
+<section class="chapter" id="ch8" data-title="그룹 함수와 윈도우 함수" data-group="2과목 · SQL 기본과 활용">
+  <header class="ch-head reveal">
+    <p class="ch-group">2과목 · SQL 기본과 활용</p>
+    <h2>그룹 함수와 윈도우 함수</h2>
+    <button type="button" class="ch-pdf" data-ch="ch8"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 1.5h5.5L12.5 4.5V14.5h-8.5z M9.5 1.5v3h3 M6 9.5l2 2 2-2 M8 6.5v5"/></svg>이 장만 PDF로</button>
+  </header>
+  <div class="ch-body">
+<h3 id="s36">그룹 함수: ROLLUP, CUBE, GROUPING SETS</h3>
+<p>GROUP BY의 확장. 소계와 총계를 한 번에 구한다.</p>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>함수</th>
+<th>만들어지는 그룹</th>
+<th>그룹 수</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ROLLUP(A, B)</code></td>
+<td>(A, B), (A), () — <strong>오른쪽부터 하나씩 빼며</strong> 소계 + 총계</td>
+<td>n + 1</td>
+</tr>
+<tr>
+<td><code>CUBE(A, B)</code></td>
+<td>(A, B), (A), (B), () — <strong>모든 조합</strong></td>
+<td>2ⁿ</td>
+</tr>
+<tr>
+<td><code>GROUPING SETS(A, B)</code></td>
+<td>(A), (B) — <strong>각각의 소계만</strong>, 총계 없음</td>
+<td>지정한 수</td>
+</tr>
+</tbody>
+</table></div>
+<pre><code class="language-sql">SELECT DEPTNO, JOB, SUM(SAL)
+  FROM EMP
+ GROUP BY ROLLUP(DEPTNO, JOB);
+</code></pre>
+<pre><code class="language-text">DEPTNO JOB        SUM(SAL)
+    10 CLERK          1300
+    10 MANAGER        2450
+    10 PRESIDENT      5000
+    10                8750   ← 10번 부서 소계
+    20 ANALYST        6000
+    ...
+    30                9400   ← 30번 부서 소계
+                     29025   ← 전체 총계
+</code></pre>
+<ul>
+<li><code>ROLLUP(A, B)</code>와 <code>ROLLUP(B, A)</code>는 결과가 다르다 (<strong>순서 중요</strong>). CUBE와 GROUPING SETS는 순서가 바뀌어도 결과 집합은 같다</li>
+<li><code>GROUPING SETS(A, B, ())</code>처럼 <code>()</code>를 넣으면 총계도 나온다</li>
+<li><code>ROLLUP(A, (B, C))</code>처럼 괄호로 묶으면 하나의 단위로 취급</li>
+</ul>
+<h4>GROUPING 함수</h4>
+<p>소계·총계 행에서 해당 칼럼이 집계되어 NULL이 된 경우 <strong>1</strong>, 아니면 <strong>0</strong>을 반환한다. 소계 행에 이름을 붙일 때 쓴다.</p>
+<pre><code class="language-sql">SELECT CASE GROUPING(DEPTNO) WHEN 1 THEN '전체' ELSE TO_CHAR(DEPTNO) END AS 부서,
+       CASE GROUPING(JOB) WHEN 1 THEN '소계' ELSE JOB END AS 직무,
+       SUM(SAL)
+  FROM EMP
+ GROUP BY ROLLUP(DEPTNO, JOB);
+</code></pre>
+<h3 id="s37">윈도우 함수</h3>
+<p>행과 행 사이의 관계를 정의하는 함수. <strong>결과 행 수가 줄지 않는다</strong>(GROUP BY와의 차이).</p>
+<pre><code class="language-sql">SELECT 윈도우함수(인수) OVER (
+         [PARTITION BY 칼럼]     -- 그룹 나누기
+         [ORDER BY 칼럼]         -- 순서
+         [ROWS | RANGE BETWEEN 시작 AND 끝]  -- 윈도우 범위
+       )
+  FROM 테이블;
+</code></pre>
+<h4>순위 함수</h4>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>SAL</th>
+<th>RANK</th>
+<th>DENSE_RANK</th>
+<th>ROW_NUMBER</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>5000</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr>
+<td>3000</td>
+<td>2</td>
+<td>2</td>
+<td>2</td>
+</tr>
+<tr>
+<td>3000</td>
+<td>2</td>
+<td>2</td>
+<td>3</td>
+</tr>
+<tr>
+<td>2975</td>
+<td><strong>4</strong></td>
+<td><strong>3</strong></td>
+<td>4</td>
+</tr>
+</tbody>
+</table></div>
+<ul>
+<li><strong>RANK</strong>: 같은 값은 같은 순위, 다음 순위는 <strong>건너뜀</strong> (1, 2, 2, 4)</li>
+<li><strong>DENSE_RANK</strong>: 같은 값은 같은 순위, 다음 순위를 <strong>건너뛰지 않음</strong> (1, 2, 2, 3)</li>
+<li><strong>ROW_NUMBER</strong>: 같은 값이어도 <strong>고유한 순번</strong> (1, 2, 3, 4)</li>
+</ul>
+<pre><code class="language-sql">SELECT DEPTNO, ENAME, SAL,
+       RANK() OVER (PARTITION BY DEPTNO ORDER BY SAL DESC) AS 부서내순위
+  FROM EMP;
+</code></pre>
+<h4>집계 함수 + 윈도우</h4>
+<pre><code class="language-sql">SELECT ENAME, DEPTNO, SAL,
+       SUM(SAL) OVER (PARTITION BY DEPTNO) AS 부서합계,
+       SUM(SAL) OVER (ORDER BY SAL ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS 누적합,
+       AVG(SAL) OVER (ORDER BY SAL ROWS BETWEEN 1 PRECEDING AND 1 FOLLOWING) AS 이동평균
+  FROM EMP;
+</code></pre>
+<h4>윈도우 범위 (Window Frame)</h4>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>표현</th>
+<th>의미</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>UNBOUNDED PRECEDING</code></td>
+<td>파티션의 첫 행</td>
+</tr>
+<tr>
+<td><code>n PRECEDING</code></td>
+<td>현재 행에서 n행 앞</td>
+</tr>
+<tr>
+<td><code>CURRENT ROW</code></td>
+<td>현재 행</td>
+</tr>
+<tr>
+<td><code>n FOLLOWING</code></td>
+<td>n행 뒤</td>
+</tr>
+<tr>
+<td><code>UNBOUNDED FOLLOWING</code></td>
+<td>파티션의 마지막 행</td>
+</tr>
+<tr>
+<td><code>ROWS</code></td>
+<td><strong>물리적인 행</strong> 단위</td>
+</tr>
+<tr>
+<td><code>RANGE</code></td>
+<td><strong>값(논리적)</strong> 단위. ORDER BY 값이 같은 행은 같은 범위로 묶임</td>
+</tr>
+</tbody>
+</table></div>
+<aside class="box box-warn">
+<p class="box-t">ORDER BY만 쓰고 범위를 생략하면</p>
+<p>기본 범위는 <code>RANGE BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW</code>다. 그래서 <code>SUM(SAL) OVER (ORDER BY SAL)</code>은 <strong>누적합</strong>이 되고, SAL이 같은 행(3000, 3000)은 <strong>같은 누적합</strong>을 갖는다(RANGE라서). ORDER BY 없이 <code>OVER (PARTITION BY ...)</code>만 쓰면 파티션 전체 합계다.</p>
+</aside>
+<h4>행 순서 함수</h4>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>함수</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>FIRST_VALUE(칼럼)</code></td>
+<td>윈도우에서 첫 번째 값</td>
+</tr>
+<tr>
+<td><code>LAST_VALUE(칼럼)</code></td>
+<td>윈도우에서 마지막 값. 기본 범위가 CURRENT ROW까지라 <strong>현재 행 값</strong>이 나오기 쉬움 → <code>ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING</code> 지정</td>
+</tr>
+<tr>
+<td><code>LAG(칼럼, n, 기본값)</code></td>
+<td>n행 <strong>이전</strong> 행의 값 (기본 n = 1)</td>
+</tr>
+<tr>
+<td><code>LEAD(칼럼, n, 기본값)</code></td>
+<td>n행 <strong>이후</strong> 행의 값</td>
+</tr>
+</tbody>
+</table></div>
+<pre><code class="language-sql">SELECT ENAME, HIREDATE, SAL,
+       LAG(SAL) OVER (ORDER BY HIREDATE) AS 이전입사자급여,
+       LEAD(SAL, 1, 0) OVER (ORDER BY HIREDATE) AS 다음입사자급여
+  FROM EMP;
+</code></pre>
+<h4>비율 함수</h4>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>함수</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>RATIO_TO_REPORT(칼럼)</code></td>
+<td>파티션 합계에 대한 비율 (합 = 1)</td>
+</tr>
+<tr>
+<td><code>PERCENT_RANK()</code></td>
+<td>(순위 − 1) / (행 수 − 1). 첫 행 0, 마지막 행 1</td>
+</tr>
+<tr>
+<td><code>CUME_DIST()</code></td>
+<td>현재 행 이하 값을 가진 행 수 / 전체 행 수. 누적 분포 (0 초과 ~ 1)</td>
+</tr>
+<tr>
+<td><code>NTILE(n)</code></td>
+<td>파티션을 n개 그룹으로 나눔. 나머지는 앞 그룹부터 1개씩 배분 (14행을 4등분 → 4, 4, 3, 3)</td>
+</tr>
+</tbody>
+</table></div>
+<ol class="quiz">
+<li class="q" data-ans="2"><div class="q-text"><p>급여가 (5000, 3000, 3000, 2975)일 때 DENSE_RANK() OVER (ORDER BY SAL DESC)의 결과는?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>1, 2, 2, 4</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>1, 2, 2, 3</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>1, 2, 3, 4</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>1, 1, 2, 3</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> DENSE_RANK는 동순위 다음 순위를 건너뛰지 않는다.</p></div></li>
+<li class="q" data-ans="3"><div class="q-text"><p><code>GROUP BY CUBE(DEPTNO, JOB)</code>이 만드는 그룹 조합의 수는?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>2</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>3</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>4</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>6</span></button></li>
+</ol><div class="ans"><p><b>정답 ③</b> 2² = 4: (DEPTNO, JOB), (DEPTNO), (JOB), ().</p></div></li>
+<li class="q" data-ans="3"><div class="q-text"><p>다음 중 총계(전체 합계)를 반환하지 않는 것은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>ROLLUP(DEPTNO, JOB)</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>CUBE(DEPTNO, JOB)</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>GROUPING SETS(DEPTNO, JOB)</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>ROLLUP(DEPTNO)</span></button></li>
+</ol><div class="ans"><p><b>정답 ③</b> GROUPING SETS는 지정한 그룹의 소계만 구한다. ()를 넣어야 총계가 나온다.</p></div></li>
+<li class="q" data-ans="1"><div class="q-text"><p>14개 행을 <code>NTILE(4) OVER (ORDER BY SAL)</code>로 나눌 때 각 그룹의 행 수는?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>4, 4, 3, 3</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>3, 3, 4, 4</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>4, 4, 4, 2</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>3, 4, 4, 3</span></button></li>
+</ol><div class="ans"><p><b>정답 ①</b> 14 ÷ 4 = 3 나머지 2. 나머지는 앞 그룹부터 1개씩 → 4, 4, 3, 3.</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>현재 행을 기준으로 이전 행의 값을 가져오는 윈도우 함수는?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>LEAD</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>LAG</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>FIRST_VALUE</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>NTILE</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> LAG는 이전, LEAD는 이후 행.</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>다음 SQL에서 SAL 값이 (1000, 2000, 2000, 3000)일 때 SUM 결과는?</p>
+<pre><code class="language-sql">SELECT SAL, SUM(SAL) OVER (ORDER BY SAL) FROM T;
+</code></pre></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>1000, 3000, 5000, 8000</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>1000, 5000, 5000, 8000</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>8000, 8000, 8000, 8000</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>1000, 3000, 3000, 6000</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> 범위를 생략하면 RANGE ... CURRENT ROW. 같은 값(2000, 2000)은 같은 범위로 묶여 둘 다 1000 + 2000 + 2000 = 5000.</p></div></li>
+<li class="q" data-ans="1"><div class="q-text"><p>GROUPING 함수에 대한 설명으로 옳은 것은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>소계·총계로 집계된 칼럼이면 1을 반환한다</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>그룹의 행 수를 반환한다</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>그룹의 순위를 반환한다</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>NULL이면 0을 반환한다</span></button></li>
+</ol><div class="ans"><p><b>정답 ①</b> ROLLUP·CUBE·GROUPING SETS로 집계된 행에서 그 칼럼이 집계 대상이면 1, 아니면 0.</p></div></li>
+</ol>
+  </div>
+</section>
+
+<section class="chapter" id="ch9" data-title="Top-N, 계층형 질의, PIVOT, 정규표현식" data-group="2과목 · SQL 기본과 활용">
+  <header class="ch-head reveal">
+    <p class="ch-group">2과목 · SQL 기본과 활용</p>
+    <h2>Top-N, 계층형 질의, PIVOT, 정규표현식</h2>
+    <button type="button" class="ch-pdf" data-ch="ch9"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 1.5h5.5L12.5 4.5V14.5h-8.5z M9.5 1.5v3h3 M6 9.5l2 2 2-2 M8 6.5v5"/></svg>이 장만 PDF로</button>
+  </header>
+  <div class="ch-body">
+<h3 id="s38">Top-N 쿼리</h3>
+<h4>ROWNUM (오라클)</h4>
+<p>결과 행에 <strong>WHERE 절을 통과한 순서대로</strong> 붙는 가상 번호(Pseudo Column).</p>
+<pre><code class="language-sql">SELECT ENAME, SAL FROM EMP WHERE ROWNUM &lt;= 3;          -- 아무 3명 (정렬 전)
+
+-- 급여 상위 3명: 인라인 뷰에서 먼저 정렬
+SELECT ENAME, SAL
+  FROM (SELECT ENAME, SAL FROM EMP ORDER BY SAL DESC)
+ WHERE ROWNUM &lt;= 3;
+</code></pre>
+<aside class="box box-warn">
+<p class="box-t">ROWNUM의 함정</p>
+<ul>
+<li>ROWNUM은 ORDER BY보다 <strong>먼저</strong> 붙는다. 같은 쿼리 안에서 <code>WHERE ROWNUM &lt;= 3 ORDER BY SAL DESC</code>는 아무 3명을 뽑아 정렬할 뿐이다.</li>
+<li><code>WHERE ROWNUM = 1</code>, <code>ROWNUM &lt;= n</code>은 되지만 <code>ROWNUM = 2</code>, <code>ROWNUM &gt; 1</code>은 <strong>결과가 0건</strong>이다. 첫 행이 1번을 받지 못하면 다음 행도 계속 1번 후보가 되기 때문.</li>
+</ul>
+</aside>
+<h4>TOP (SQL Server), FETCH FIRST (표준)</h4>
+<pre><code class="language-sql">-- SQL Server
+SELECT TOP(3) ENAME, SAL FROM EMP ORDER BY SAL DESC;
+SELECT TOP(2) WITH TIES ENAME, SAL FROM EMP ORDER BY SAL DESC;  -- 동점자 포함 → 3행
+
+-- 오라클 12c 이상, ANSI 표준
+SELECT ENAME, SAL FROM EMP ORDER BY SAL DESC
+ FETCH FIRST 3 ROWS ONLY;
+SELECT ENAME, SAL FROM EMP ORDER BY SAL DESC
+OFFSET 3 ROWS FETCH NEXT 3 ROWS ONLY;     -- 4~6위
+</code></pre>
+<p><code>WITH TIES</code>는 마지막 순위와 같은 값을 가진 행까지 포함한다. ORDER BY가 반드시 있어야 한다.</p>
+<h3 id="s39">계층형 질의</h3>
+<p>테이블에 <strong>계층 구조 데이터</strong>(사원–관리자, 카테고리, 댓글)가 있을 때 사용한다.</p>
+<pre><code class="language-sql">SELECT LEVEL, LPAD(' ', 4 * (LEVEL - 1)) || ENAME AS 조직도, EMPNO, MGR
+  FROM EMP
+ START WITH MGR IS NULL            -- 루트 노드 (KING)
+CONNECT BY PRIOR EMPNO = MGR       -- 부모의 EMPNO = 자식의 MGR → 위에서 아래로
+ ORDER SIBLINGS BY ENAME;          -- 같은 레벨끼리 정렬
+</code></pre>
+<pre><code class="language-text">LEVEL 조직도          EMPNO  MGR
+    1 KING            7839
+    2     BLAKE       7698  7839
+    3         ALLEN   7499  7698
+    ...
+    2     CLARK       7782  7839
+    3         MILLER  7934  7782
+    2     JONES       7566  7839
+    3         FORD    7902  7566
+    4             SMITH 7369 7902
+</code></pre>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>키워드</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>START WITH</code></td>
+<td>루트(시작) 노드 지정</td>
+</tr>
+<tr>
+<td><code>CONNECT BY</code></td>
+<td>부모와 자식의 연결 조건</td>
+</tr>
+<tr>
+<td><code>PRIOR</code></td>
+<td>이전(이미 읽은) 행의 칼럼. <code>PRIOR 자식키 = 부모키</code> → <strong>순방향(부모 → 자식, Top-Down)</strong></td>
+</tr>
+<tr>
+<td></td>
+<td><code>PRIOR 부모키 = 자식키</code> (예: <code>CONNECT BY PRIOR MGR = EMPNO</code>) → <strong>역방향(자식 → 부모, Bottom-Up)</strong></td>
+</tr>
+<tr>
+<td><code>LEVEL</code></td>
+<td>계층의 깊이. 루트가 <strong>1</strong></td>
+</tr>
+<tr>
+<td><code>ORDER SIBLINGS BY</code></td>
+<td>계층 구조를 유지하면서 형제 노드끼리 정렬</td>
+</tr>
+<tr>
+<td><code>NOCYCLE</code></td>
+<td>순환 구조가 있어도 오류 없이 진행</td>
+</tr>
+</tbody>
+</table></div>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>가상 칼럼·함수</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>CONNECT_BY_ISLEAF</code></td>
+<td>리프(자식 없는) 노드면 1, 아니면 0</td>
+</tr>
+<tr>
+<td><code>CONNECT_BY_ISCYCLE</code></td>
+<td>순환이 발생한 노드면 1 (NOCYCLE과 함께)</td>
+</tr>
+<tr>
+<td><code>SYS_CONNECT_BY_PATH(칼럼, '/')</code></td>
+<td>루트부터 현재까지 경로 (/KING/JONES/FORD)</td>
+</tr>
+<tr>
+<td><code>CONNECT_BY_ROOT 칼럼</code></td>
+<td>현재 행의 루트 노드 값</td>
+</tr>
+</tbody>
+</table></div>
+<aside class="box box-exam">
+<p class="box-t">시험 포인트</p>
+<ul>
+<li>WHERE 절은 계층 전개가 <strong>끝난 후</strong> 결과를 거른다. START WITH·CONNECT BY보다 나중에 적용된다.</li>
+<li>CONNECT BY 절의 조건(예: <code>AND SAL &gt; 1000</code>)은 전개 과정에서 해당 노드와 <strong>그 하위 노드까지</strong> 제외한다.</li>
+<li>SQL Server는 CONNECT BY가 없고 <strong>재귀 CTE</strong>(<code>WITH ... UNION ALL</code>)로 계층 질의를 한다.</li>
+</ul>
+</aside>
+<h3 id="s40">셀프 조인으로 계층 보기</h3>
+<p>계층형 질의 대신 셀프 조인으로 바로 위 관리자만 볼 수 있다 (조인 장 참고). 여러 단계를 한 번에 보려면 계층형 질의가 편하다.</p>
+<h3 id="s41">PIVOT과 UNPIVOT</h3>
+<h4>PIVOT: 행을 열로</h4>
+<pre><code class="language-sql">SELECT *
+  FROM (SELECT JOB, DEPTNO, SAL FROM EMP)
+ PIVOT (SUM(SAL) FOR DEPTNO IN (10 AS D10, 20 AS D20, 30 AS D30))
+ ORDER BY JOB;
+</code></pre>
+<pre><code class="language-text">JOB         D10   D20   D30
+ANALYST    NULL  6000  NULL
+CLERK      1300  1900   950
+MANAGER    2450  2975  2850
+PRESIDENT  5000  NULL  NULL
+SALESMAN   NULL  NULL  5600
+</code></pre>
+<ul>
+<li>집계 함수(SUM)와 FOR 칼럼(DEPTNO)에 쓰지 않은 칼럼(JOB)이 <strong>자동으로 그룹 기준</strong>이 된다. 그래서 인라인 뷰에서 필요한 칼럼만 고르는 것이 중요하다</li>
+<li>IN 목록에 없는 값(40번 부서)은 결과에 나오지 않는다</li>
+</ul>
+<h4>UNPIVOT: 열을 행으로</h4>
+<pre><code class="language-sql">SELECT *
+  FROM T_PIVOT
+UNPIVOT (SAL FOR DEPTNO IN (D10 AS 10, D20 AS 20, D30 AS 30));
+</code></pre>
+<p>UNPIVOT은 기본적으로 <strong>NULL 행을 제외</strong>한다. 포함하려면 <code>UNPIVOT INCLUDE NULLS</code>.</p>
+<h3 id="s42">정규 표현식</h3>
+<p>문자열 패턴을 표현하는 형식 언어. 오라클은 <code>REGEXP_</code> 함수를 제공한다.</p>
+<h4>주요 메타 문자</h4>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>문자</th>
+<th>의미</th>
+<th>예</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.</code></td>
+<td>임의의 한 문자</td>
+<td><code>a.c</code> → abc, a1c</td>
+</tr>
+<tr>
+<td><code>*</code></td>
+<td>앞 문자 0회 이상</td>
+<td><code>ab*</code> → a, ab, abb</td>
+</tr>
+<tr>
+<td><code>+</code></td>
+<td>앞 문자 1회 이상</td>
+<td><code>ab+</code> → ab, abb</td>
+</tr>
+<tr>
+<td><code>?</code></td>
+<td>앞 문자 0 또는 1회</td>
+<td><code>colou?r</code> → color, colour</td>
+</tr>
+<tr>
+<td><code>{m}</code>, <code>{m,}</code>, <code>{m,n}</code></td>
+<td>정확히 m회, m회 이상, m~n회</td>
+<td><code>[0-9]{3}</code> → 숫자 3개</td>
+</tr>
+<tr>
+<td><code>^</code></td>
+<td>문자열 시작</td>
+<td><code>^A</code> → A로 시작</td>
+</tr>
+<tr>
+<td><code>$</code></td>
+<td>문자열 끝</td>
+<td><code>N$</code> → N으로 끝</td>
+</tr>
+<tr>
+<td><code>[abc]</code></td>
+<td>괄호 안 문자 중 하나</td>
+<td><code>[aeiou]</code> 모음</td>
+</tr>
+<tr>
+<td><code>[^abc]</code></td>
+<td>괄호 안 문자를 제외한 하나</td>
+<td><code>[^0-9]</code> 숫자가 아닌 것</td>
+</tr>
+<tr>
+<td><code>a|b</code></td>
+<td>a 또는 b</td>
+<td><code>cat|dog</code></td>
+</tr>
+<tr>
+<td><code>( )</code></td>
+<td>그룹</td>
+<td><code>(ab)+</code></td>
+</tr>
+<tr>
+<td><code>\d</code>, <code>\D</code></td>
+<td>숫자, 숫자 아닌 것</td>
+<td></td>
+</tr>
+<tr>
+<td><code>\w</code>, <code>\W</code></td>
+<td>단어 문자(영숫자·_), 아닌 것</td>
+<td></td>
+</tr>
+<tr>
+<td><code>\s</code>, <code>\S</code></td>
+<td>공백, 공백 아닌 것</td>
+<td></td>
+</tr>
+<tr>
+<td><code>[:digit:]</code>, <code>[:alpha:]</code>, <code>[:space:]</code></td>
+<td>POSIX 문자 클래스 (<code>[[:digit:]]</code>처럼 대괄호 안에 씀)</td>
+<td></td>
+</tr>
+</tbody>
+</table></div>
+<h4>정규 표현식 함수</h4>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>함수</th>
+<th>예</th>
+<th>결과</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>REGEXP_LIKE(문자열, 패턴)</code></td>
+<td><code>WHERE REGEXP_LIKE(ENAME, '^[AB]')</code></td>
+<td>A 또는 B로 시작하는 이름 (조건식)</td>
+</tr>
+<tr>
+<td><code>REGEXP_REPLACE(문자열, 패턴, 바꿀값)</code></td>
+<td><code>REGEXP_REPLACE('010-1234-5678', '[0-9]', '*')</code></td>
+<td><code>***-****-****</code></td>
+</tr>
+<tr>
+<td><code>REGEXP_SUBSTR(문자열, 패턴)</code></td>
+<td><code>REGEXP_SUBSTR('abc123def456', '[0-9]+')</code></td>
+<td><code>123</code> (첫 번째 일치)</td>
+</tr>
+<tr>
+<td></td>
+<td><code>REGEXP_SUBSTR('abc123def456', '[0-9]+', 1, 2)</code></td>
+<td><code>456</code> (두 번째 일치)</td>
+</tr>
+<tr>
+<td><code>REGEXP_INSTR(문자열, 패턴)</code></td>
+<td><code>REGEXP_INSTR('abc123', '[0-9]')</code></td>
+<td><code>4</code> (위치)</td>
+</tr>
+<tr>
+<td><code>REGEXP_COUNT(문자열, 패턴)</code></td>
+<td><code>REGEXP_COUNT('banana', 'a')</code></td>
+<td><code>3</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>매치 파라미터: <code>'i'</code> 대소문자 무시, <code>'c'</code> 대소문자 구분(기본), <code>'m'</code> 다중 행, <code>'n'</code> <code>.</code>이 줄바꿈도 일치.</p>
+<ol class="quiz">
+<li class="q" data-ans="3"><div class="q-text"><p>오라클에서 다음 중 결과가 0건인 SQL은? (EMP 14건)</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>SELECT * FROM EMP WHERE ROWNUM = 1;</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>SELECT * FROM EMP WHERE ROWNUM &lt;= 5;</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>SELECT * FROM EMP WHERE ROWNUM = 3;</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>SELECT * FROM EMP WHERE ROWNUM &lt; 2;</span></button></li>
+</ol><div class="ans"><p><b>정답 ③</b> ROWNUM은 1부터 차례로 부여되므로 = 3이나 &gt; 1 같은 조건은 만족하는 행이 없다.</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>계층형 질의에서 상위 관리자부터 하위 사원 방향(순방향)으로 전개하는 CONNECT BY 조건은? (EMPNO: 사원번호, MGR: 관리자번호)</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>CONNECT BY PRIOR MGR = EMPNO</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>CONNECT BY PRIOR EMPNO = MGR</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>CONNECT BY EMPNO = MGR</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>CONNECT BY PRIOR EMPNO = EMPNO</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> 이전 행(부모)의 EMPNO가 다음 행(자식)의 MGR과 같다 → 부모에서 자식으로.</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>계층형 질의에서 루트 노드의 LEVEL 값은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>0</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>1</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>NULL</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>−1</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> LEVEL은 루트가 1부터 시작한다.</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>계층형 질의에서 자식이 없는 노드를 1로 표시하는 가상 칼럼은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>CONNECT_BY_ROOT</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>CONNECT_BY_ISLEAF</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>CONNECT_BY_ISCYCLE</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>SYS_CONNECT_BY_PATH</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> 리프 노드면 1, 아니면 0.</p></div></li>
+<li class="q" data-ans="3"><div class="q-text"><p><code>REGEXP_SUBSTR('A1B22C333', '[0-9]+', 1, 3)</code>의 결과는?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>1</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>22</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>333</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>NULL</span></button></li>
+</ol><div class="ans"><p><b>정답 ③</b> 숫자 1개 이상 연속 패턴의 세 번째 일치는 333.</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>정규 표현식 <code>^[0-9]{3}-[0-9]{4}$</code>와 일치하는 문자열은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>02-1234</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>010-1234</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>010-12345</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>a10-1234</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> 숫자 3개, 하이픈, 숫자 4개로 시작과 끝이 맞아야 한다.</p></div></li>
+<li class="q" data-ans="1"><div class="q-text"><p>SQL Server에서 동점자를 포함해 상위 N건을 조회할 때 사용하는 옵션은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>TOP(N) WITH TIES</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>TOP(N) ONLY</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>FETCH FIRST N</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>ROWNUM &lt;= N</span></button></li>
+</ol><div class="ans"><p><b>정답 ①</b> WITH TIES는 마지막 순위와 같은 값을 가진 행을 함께 반환한다. ORDER BY가 필요하다.</p></div></li>
+<li class="q" data-ans="3"><div class="q-text"><p>PIVOT 절에 대한 설명으로 옳지 않은 것은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>행 데이터를 열로 바꾼다</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>집계 함수를 함께 사용한다</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>FOR 절의 IN 목록에 없는 값도 자동으로 열이 만들어진다</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>집계·FOR 절에 사용되지 않은 칼럼은 그룹 기준이 된다</span></button></li>
+</ol><div class="ans"><p><b>정답 ③</b> IN 목록에 지정한 값만 열로 만들어진다.</p></div></li>
+</ol>
+  </div>
+</section>
+
+<section class="chapter" id="ch10" data-title="DML, TCL, DDL, DCL" data-group="2과목 · SQL 기본과 활용">
+  <header class="ch-head reveal">
+    <p class="ch-group">2과목 · SQL 기본과 활용</p>
+    <h2>DML, TCL, DDL, DCL</h2>
+    <button type="button" class="ch-pdf" data-ch="ch10"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 1.5h5.5L12.5 4.5V14.5h-8.5z M9.5 1.5v3h3 M6 9.5l2 2 2-2 M8 6.5v5"/></svg>이 장만 PDF로</button>
+  </header>
+  <div class="ch-body">
+<h3 id="s43">DML: 데이터 조작</h3>
+<pre><code class="language-sql">-- INSERT
+INSERT INTO DEPT (DEPTNO, DNAME, LOC) VALUES (50, 'DEV', 'SEOUL');
+INSERT INTO DEPT VALUES (60, 'HR', 'BUSAN');          -- 모든 칼럼을 순서대로
+INSERT INTO DEPT_BAK SELECT * FROM DEPT;              -- 서브쿼리로 여러 행
+
+-- UPDATE
+UPDATE EMP SET SAL = SAL * 1.1, COMM = 100 WHERE DEPTNO = 20;
+
+-- DELETE
+DELETE FROM EMP WHERE DEPTNO = 40;
+DELETE EMP;          -- 오라클은 FROM 생략 가능. WHERE 없으면 전체 삭제
+</code></pre>
+<ul>
+<li>INSERT에서 칼럼 목록을 생략하면 테이블의 <strong>모든 칼럼에 순서대로</strong> 값을 넣어야 한다</li>
+<li>NOT NULL·PK 칼럼은 값을 반드시 넣어야 한다</li>
+<li>문자형 칼럼에 넣는 빈 문자열 ''은 오라클에서 NULL이 된다</li>
+</ul>
+<h4>MERGE</h4>
+<p>조건에 따라 있으면 UPDATE, 없으면 INSERT를 한 번에 수행한다.</p>
+<pre><code class="language-sql">MERGE INTO DEPT_BAK T
+USING DEPT S
+   ON (T.DEPTNO = S.DEPTNO)
+ WHEN MATCHED THEN
+      UPDATE SET T.DNAME = S.DNAME, T.LOC = S.LOC
+ WHEN NOT MATCHED THEN
+      INSERT (DEPTNO, DNAME, LOC) VALUES (S.DEPTNO, S.DNAME, S.LOC);
+</code></pre>
+<h4>DELETE, TRUNCATE, DROP 비교</h4>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>구분</th>
+<th>DROP</th>
+<th>TRUNCATE</th>
+<th>DELETE</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>분류</td>
+<td>DDL</td>
+<td>DDL (일부 DBMS는 DML로 분류)</td>
+<td>DML</td>
+</tr>
+<tr>
+<td>삭제 대상</td>
+<td>테이블 구조와 데이터 모두</td>
+<td>데이터 전체 (구조는 남음)</td>
+<td>데이터 (WHERE로 일부 가능)</td>
+</tr>
+<tr>
+<td>저장 공간</td>
+<td>해제</td>
+<td>최초 상태로 초기화</td>
+<td>사용했던 공간 유지</td>
+</tr>
+<tr>
+<td>롤백</td>
+<td>불가 (오라클 자동 커밋)</td>
+<td>불가 (오라클)</td>
+<td><strong>가능</strong> (커밋 전)</td>
+</tr>
+<tr>
+<td>로그</td>
+<td></td>
+<td>남기지 않음 → 빠름</td>
+<td>행마다 남김 → 느림</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="s44">TCL: 트랜잭션 제어</h3>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>명령</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>COMMIT</code></td>
+<td>변경 내용을 DB에 영구 반영. 이전 상태로 되돌릴 수 없음</td>
+</tr>
+<tr>
+<td><code>ROLLBACK</code></td>
+<td>마지막 COMMIT 이후 변경 내용을 취소</td>
+</tr>
+<tr>
+<td><code>SAVEPOINT 이름</code></td>
+<td>트랜잭션 중간에 저장점 지정 → <code>ROLLBACK TO 이름</code>으로 그 지점까지만 취소</td>
+</tr>
+</tbody>
+</table></div>
+<pre><code class="language-sql">UPDATE EMP SET SAL = 1000 WHERE EMPNO = 7369;
+SAVEPOINT SV1;
+DELETE FROM EMP WHERE EMPNO = 7369;
+ROLLBACK TO SV1;     -- DELETE만 취소, UPDATE는 유지
+COMMIT;
+</code></pre>
+<p>SQL Server는 <code>SAVE TRANSACTION SV1</code>, <code>ROLLBACK TRANSACTION SV1</code>.</p>
+<p>COMMIT이나 ROLLBACK 전에는: 변경 이전 상태로 복구할 수 있고, <strong>현재 사용자는 변경 결과를 볼 수 있지만 다른 사용자는 볼 수 없으며</strong>, 변경된 행은 <strong>잠금(Lock)</strong>이 걸려 다른 사용자가 변경할 수 없다.</p>
+<h4>오라클 vs SQL Server 트랜잭션</h4>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>구분</th>
+<th>오라클</th>
+<th>SQL Server</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>기본 방식</td>
+<td>DML 후 <strong>COMMIT을 직접 해야</strong> 반영 (암시적 트랜잭션)</td>
+<td><strong>AUTO COMMIT</strong> (각 문장이 자동 커밋)</td>
+</tr>
+<tr>
+<td>DDL</td>
+<td>실행 시 <strong>자동 커밋</strong> (그 이전 DML까지 함께 커밋됨)</td>
+<td>명시적 트랜잭션 안에서는 DDL도 롤백 가능</td>
+</tr>
+<tr>
+<td>정상 종료</td>
+<td>자동 COMMIT</td>
+<td></td>
+</tr>
+<tr>
+<td>비정상 종료</td>
+<td>자동 ROLLBACK</td>
+<td></td>
+</tr>
+</tbody>
+</table></div>
+<aside class="box box-warn">
+<p class="box-t">자주 나오는 함정</p>
+<p>오라클에서 <code>INSERT</code> → <code>CREATE TABLE</code> → <code>ROLLBACK</code> 순서로 실행하면, CREATE(DDL)가 실행되는 순간 앞의 INSERT까지 <strong>자동 커밋</strong>되므로 ROLLBACK해도 INSERT는 취소되지 않는다.</p>
+</aside>
+<h3 id="s45">DDL: 데이터 정의</h3>
+<h4>CREATE TABLE</h4>
+<pre><code class="language-sql">CREATE TABLE PLAYER (
+    PLAYER_ID   CHAR(7)       NOT NULL,
+    PLAYER_NAME VARCHAR2(20)  NOT NULL,
+    TEAM_ID     CHAR(3),
+    HEIGHT      NUMBER(3),
+    JOIN_DATE   DATE          DEFAULT SYSDATE,
+    CONSTRAINT PLAYER_PK PRIMARY KEY (PLAYER_ID),
+    CONSTRAINT PLAYER_FK FOREIGN KEY (TEAM_ID) REFERENCES TEAM(TEAM_ID)
+);
+</code></pre>
+<ul>
+<li>테이블명·칼럼명은 문자로 시작, 영숫자와 <code>_</code>, <code>$</code>, <code>#</code>만 사용, 예약어 사용 불가, 같은 이름 중복 불가</li>
+<li>칼럼 정의는 콤마로 구분, 마지막 칼럼 뒤에는 콤마 없음</li>
+</ul>
+<h4>주요 데이터 타입</h4>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>타입</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>CHAR(n)</code></td>
+<td><strong>고정 길이</strong> 문자. 남는 공간은 공백으로 채움. 비교 시 짧은 쪽에 공백을 채워 비교 ('AA' = 'AA  ')</td>
+</tr>
+<tr>
+<td><code>VARCHAR2(n)</code> (SQL Server <code>VARCHAR</code>)</td>
+<td><strong>가변 길이</strong> 문자. 입력한 길이만큼 저장. 공백도 문자로 취급해 비교</td>
+</tr>
+<tr>
+<td><code>NUMBER(p, s)</code></td>
+<td>숫자. 전체 p자리, 소수 s자리 (SQL Server: <code>INT</code>, <code>NUMERIC</code>, <code>DECIMAL</code>)</td>
+</tr>
+<tr>
+<td><code>DATE</code></td>
+<td>날짜·시간 (오라클 초 단위, SQL Server <code>DATETIME</code>은 3.33ms 단위)</td>
+</tr>
+</tbody>
+</table></div>
+<h4>제약조건</h4>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>제약조건</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PRIMARY KEY</td>
+<td>기본키. <strong>UNIQUE + NOT NULL</strong>. 테이블에 <strong>하나만</strong>. 자동으로 인덱스 생성</td>
+</tr>
+<tr>
+<td>UNIQUE</td>
+<td>중복 불가. <strong>NULL은 허용</strong> (오라클은 여러 개 NULL 허용)</td>
+</tr>
+<tr>
+<td>NOT NULL</td>
+<td>NULL 불가</td>
+</tr>
+<tr>
+<td>CHECK</td>
+<td>입력 값의 범위·조건 제한 (<code>CHECK (HEIGHT &gt; 0)</code>)</td>
+</tr>
+<tr>
+<td>FOREIGN KEY</td>
+<td>다른 테이블의 PK·UNIQUE 칼럼을 참조. <strong>NULL 허용</strong>. 여러 개 가능</td>
+</tr>
+<tr>
+<td>DEFAULT</td>
+<td>값을 넣지 않았을 때 기본값 (엄밀히는 제약조건이 아니지만 함께 다룸)</td>
+</tr>
+</tbody>
+</table></div>
+<h4>참조 무결성 옵션 (FK)</h4>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>옵션</th>
+<th>부모 행 삭제(또는 수정) 시 자식 행</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ON DELETE CASCADE</code></td>
+<td>자식 행도 <strong>함께 삭제</strong></td>
+</tr>
+<tr>
+<td><code>ON DELETE SET NULL</code></td>
+<td>자식의 FK 칼럼을 <strong>NULL</strong>로</td>
+</tr>
+<tr>
+<td><code>SET DEFAULT</code></td>
+<td>기본값으로</td>
+</tr>
+<tr>
+<td><code>RESTRICT</code> / <code>NO ACTION</code> (기본)</td>
+<td>자식이 있으면 부모 <strong>삭제 불가</strong></td>
+</tr>
+</tbody>
+</table></div>
+<p>입력 시: 부모에 없는 값을 자식 FK에 넣으면 오류(자식 입력 제한). <code>ON INSERT AUTOMATIC</code>은 부모가 없으면 부모를 생성 후 자식 입력.</p>
+<h4>ALTER, RENAME, DROP</h4>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>작업</th>
+<th>오라클</th>
+<th>SQL Server</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>칼럼 추가</td>
+<td><code>ALTER TABLE T ADD (C1 VARCHAR2(10));</code></td>
+<td><code>ALTER TABLE T ADD C1 VARCHAR(10);</code></td>
+</tr>
+<tr>
+<td>칼럼 삭제</td>
+<td><code>ALTER TABLE T DROP COLUMN C1;</code></td>
+<td>같음</td>
+</tr>
+<tr>
+<td>칼럼 수정</td>
+<td><code>ALTER TABLE T MODIFY (C1 VARCHAR2(30) NOT NULL);</code></td>
+<td><code>ALTER TABLE T ALTER COLUMN C1 VARCHAR(30) NOT NULL;</code></td>
+</tr>
+<tr>
+<td>칼럼명 변경</td>
+<td><code>ALTER TABLE T RENAME COLUMN C1 TO C2;</code></td>
+<td><code>sp_rename 'T.C1', 'C2', 'COLUMN';</code></td>
+</tr>
+<tr>
+<td>제약조건 추가</td>
+<td><code>ALTER TABLE T ADD CONSTRAINT T_PK PRIMARY KEY (ID);</code></td>
+<td>같음</td>
+</tr>
+<tr>
+<td>제약조건 삭제</td>
+<td><code>ALTER TABLE T DROP CONSTRAINT T_PK;</code></td>
+<td>같음</td>
+</tr>
+<tr>
+<td>테이블명 변경</td>
+<td><code>RENAME T TO T2;</code></td>
+<td><code>sp_rename 'T', 'T2';</code></td>
+</tr>
+<tr>
+<td>테이블 삭제</td>
+<td><code>DROP TABLE T [CASCADE CONSTRAINT];</code></td>
+<td><code>DROP TABLE T;</code></td>
+</tr>
+</tbody>
+</table></div>
+<ul>
+<li>칼럼 추가 시 <strong>위치를 지정할 수 없다</strong> (항상 맨 뒤)</li>
+<li>칼럼 크기 축소: 데이터가 없거나 모두 NULL이면 가능, 데이터가 있으면 기존 값보다 작게 줄일 수 없다</li>
+<li>DEFAULT 값 변경은 <strong>이후 입력되는 행부터</strong> 적용된다</li>
+<li><code>DROP TABLE ... CASCADE CONSTRAINT</code>: 참조하는 FK 제약조건도 함께 삭제</li>
+</ul>
+<h4>CTAS (Create Table As Select)</h4>
+<pre><code class="language-sql">CREATE TABLE EMP_BAK AS SELECT * FROM EMP;                -- 구조 + 데이터
+CREATE TABLE EMP_EMPTY AS SELECT * FROM EMP WHERE 1 = 2;  -- 구조만
+-- SQL Server: SELECT * INTO EMP_BAK FROM EMP;
+</code></pre>
+<p>CTAS로 만든 테이블은 <strong>NOT NULL 제약조건만 복사</strong>되고 PK, UNIQUE, FK, CHECK, DEFAULT는 복사되지 않는다.</p>
+<h3 id="s46">DCL: 권한 제어</h3>
+<pre><code class="language-sql">GRANT SELECT, INSERT ON EMP TO SCOTT;                    -- 객체 권한 부여
+GRANT SELECT ON EMP TO SCOTT WITH GRANT OPTION;          -- 받은 권한을 다른 사람에게 줄 수 있게
+GRANT CREATE TABLE TO SCOTT WITH ADMIN OPTION;           -- 시스템 권한 재부여 가능
+REVOKE INSERT ON EMP FROM SCOTT;                         -- 회수
+</code></pre>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>구분</th>
+<th>WITH GRANT OPTION (객체 권한)</th>
+<th>WITH ADMIN OPTION (시스템 권한)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>재부여</td>
+<td>가능</td>
+<td>가능</td>
+</tr>
+<tr>
+<td>원 부여자가 회수하면</td>
+<td>재부여받은 사용자의 권한도 <strong>연쇄 회수</strong></td>
+<td>재부여받은 사용자의 권한은 <strong>유지</strong></td>
+</tr>
+</tbody>
+</table></div>
+<h4>역할 (ROLE)</h4>
+<p>여러 권한을 묶은 것. 사용자마다 권한을 일일이 주지 않고 ROLE을 부여한다.</p>
+<pre><code class="language-sql">CREATE ROLE LOGIN_TABLE;
+GRANT CREATE SESSION, CREATE TABLE TO LOGIN_TABLE;
+GRANT LOGIN_TABLE TO SCOTT;
+</code></pre>
+<p>오라클 기본 롤: <strong>CONNECT</strong>(CREATE SESSION 등 접속), <strong>RESOURCE</strong>(CREATE TABLE, CREATE SEQUENCE 등 객체 생성), DBA.</p>
+<aside class="box box-warn">
+<p class="box-t">소유자와 권한</p>
+<p>다른 사용자의 테이블은 <code>소유자.테이블명</code>으로 접근하며 SELECT 권한이 있어야 한다. 사용자를 삭제할 때 그 사용자가 소유한 객체가 있으면 <code>DROP USER 이름 CASCADE</code>로 함께 삭제해야 한다.</p>
+</aside>
+<ol class="quiz">
+<li class="q" data-ans="2"><div class="q-text"><p>테이블 구조는 남기고 데이터만 모두 삭제하며, 저장 공간을 초기화하고 오라클에서 롤백이 불가능한 명령은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>DELETE</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>TRUNCATE</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>DROP</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>REVOKE</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> TRUNCATE는 DDL로, 구조는 남기고 데이터 전체를 빠르게 삭제한다.</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>오라클에서 다음 순서로 실행했을 때 최종적으로 DEPT에 남는 50번 부서 행 수는?</p>
+<pre><code class="language-sql">INSERT INTO DEPT VALUES (50, 'A', 'X');
+CREATE TABLE TMP (ID NUMBER);
+INSERT INTO DEPT VALUES (50, 'B', 'Y');   -- DEPTNO에 PK가 없다고 가정
+ROLLBACK;
+</code></pre></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>0</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>1</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>2</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>오류</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> CREATE TABLE(DDL) 실행 시 첫 INSERT가 자동 커밋된다. ROLLBACK은 두 번째 INSERT만 취소한다.</p></div></li>
+<li class="q" data-ans="4"><div class="q-text"><p>PRIMARY KEY 제약조건에 대한 설명으로 옳지 않은 것은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>NULL을 허용하지 않는다</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>테이블당 하나만 정의할 수 있다</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>여러 칼럼을 묶어 정의할 수 있다</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>UNIQUE와 마찬가지로 NULL을 허용한다</span></button></li>
+</ol><div class="ans"><p><b>정답 ④</b> PK = UNIQUE + NOT NULL. UNIQUE는 NULL을 허용하지만 PK는 허용하지 않는다.</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>부모 테이블의 행을 삭제할 때 참조하는 자식 테이블의 행도 함께 삭제되는 옵션은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>ON DELETE SET NULL</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>ON DELETE CASCADE</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>ON DELETE RESTRICT</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>ON DELETE NO ACTION</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> CASCADE는 자식 행을 함께 삭제한다.</p></div></li>
+<li class="q" data-ans="3"><div class="q-text"><p>CTAS(CREATE TABLE AS SELECT)로 테이블을 만들 때 복사되는 제약조건은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>PRIMARY KEY</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>FOREIGN KEY</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>NOT NULL</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>CHECK</span></button></li>
+</ol><div class="ans"><p><b>정답 ③</b> NOT NULL만 복사된다.</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>SQL Server에서 칼럼의 데이터 타입을 변경하는 구문은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>ALTER TABLE T MODIFY C1 VARCHAR(30);</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>ALTER TABLE T ALTER COLUMN C1 VARCHAR(30);</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>ALTER TABLE T CHANGE C1 VARCHAR(30);</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>MODIFY TABLE T C1 VARCHAR(30);</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> 오라클은 MODIFY, SQL Server는 ALTER COLUMN.</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>A가 B에게 WITH GRANT OPTION으로 객체 권한을 주고, B가 다시 C에게 권한을 주었다. A가 B의 권한을 회수하면?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>B만 권한이 회수된다</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>B와 C의 권한이 모두 회수된다</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>C의 권한만 회수된다</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>아무 권한도 회수되지 않는다</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> WITH GRANT OPTION은 연쇄 회수된다. WITH ADMIN OPTION(시스템 권한)은 C의 권한이 유지된다.</p></div></li>
+<li class="q" data-ans="1"><div class="q-text"><p>'AA'(CHAR(4))와 'AA'(VARCHAR2(4))를 비교할 때에 대한 설명으로 옳은 것은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>CHAR는 'AA  '로 저장되어 고정 길이다</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>VARCHAR2는 남는 공간을 공백으로 채운다</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>CHAR끼리 비교할 때 공백은 무시되지 않는다</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>두 타입 모두 가변 길이다</span></button></li>
+</ol><div class="ans"><p><b>정답 ①</b> CHAR는 고정 길이로 남는 공간을 공백으로 채운다. CHAR끼리 비교 시 짧은 쪽에 공백을 채워 비교한다.</p></div></li>
+</ol>
+  </div>
+</section>
+
+<section class="chapter" id="ch11" data-title="실전 모의 문제" data-group="마무리">
+  <header class="ch-head reveal">
+    <p class="ch-group">마무리</p>
+    <h2>실전 모의 문제</h2>
+    <button type="button" class="ch-pdf" data-ch="ch11"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 1.5h5.5L12.5 4.5V14.5h-8.5z M9.5 1.5v3h3 M6 9.5l2 2 2-2 M8 6.5v5"/></svg>이 장만 PDF로</button>
+  </header>
+  <div class="ch-body">
+<h3 id="s47">과목 섞어 풀기</h3>
+<p>시험처럼 1과목과 2과목을 섞었다. SQL 문제는 반드시 예제 테이블을 보면서 결과를 직접 계산해 보자.</p>
+<ol class="quiz">
+<li class="q" data-ans="2"><div class="q-text"><p>데이터 모델링 3단계 중 특정 DBMS에 독립적이며 정규화를 수행하는 단계는?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>개념적 모델링</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>논리적 모델링</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>물리적 모델링</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>요구사항 분석</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> (데이터 모델링의 이해)</p></div></li>
+<li class="q" data-ans="3"><div class="q-text"><p>다음 중 개념 엔터티의 예로 가장 적절한 것은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>사원</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>주문</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>보험상품</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>물품</span></button></li>
+</ol><div class="ans"><p><b>정답 ③</b> 물리적 형태가 없는 개념적 정보. 사원·물품은 유형, 주문은 사건 엔터티. (엔터티)</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>관계형 테이블에서 'M:N' 관계를 구현하는 일반적인 방법은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>두 테이블을 하나로 합친다</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>관계 엔터티(교차 엔터티)를 추가해 1:M, M:1로 해소한다</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>양쪽에 FK를 서로 둔다</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>구현할 수 없으므로 무시한다</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> (관계)</p></div></li>
+<li class="q" data-ans="3"><div class="q-text"><p>주문(주문번호, 고객번호, 고객명)에서 고객명이 고객번호에 종속될 때 해당하는 정규화 단계는?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>1정규화</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>2정규화</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>3정규화</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>반정규화</span></button></li>
+</ol><div class="ans"><p><b>정답 ③</b> 주문번호 → 고객번호 → 고객명 이행 종속 제거 = 3정규화. (데이터 모델과 SQL)</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>분산 데이터베이스의 투명성 중 데이터가 저장된 장소를 몰라도 되는 것은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>분할 투명성</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>위치 투명성</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>중복 투명성</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>장애 투명성</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> (데이터 모델과 SQL)</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>다음 SQL의 결과는?</p>
+<pre><code class="language-sql">SELECT NVL2(NULL, 'A', 'B'), COALESCE(NULL, NULL, 'C', 'D') FROM DUAL;
+</code></pre></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>'A', 'C'</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>'B', 'C'</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>'B', 'D'</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>NULL, 'C'</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> NVL2는 첫 인수가 NULL이면 세 번째 값. COALESCE는 NULL이 아닌 첫 값. (SELECT와 함수)</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>다음 SQL의 결과 행 수는? (예제 EMP 기준)</p>
+<pre><code class="language-sql">SELECT DEPTNO, COUNT(*) FROM EMP GROUP BY DEPTNO HAVING COUNT(*) &gt;= 5;
+</code></pre></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>1</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>2</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>3</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>0</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> 10번 3명, 20번 5명, 30번 6명 → 20, 30번 2행. (GROUP BY)</p></div></li>
+<li class="q" data-ans="3"><div class="q-text"><p>다음 중 ORDER BY 절에 대한 설명으로 옳지 않은 것은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>SELECT 절의 별칭을 사용할 수 있다</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>SELECT 목록의 위치 번호를 사용할 수 있다</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>가장 먼저 실행된다</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>SELECT에 없는 칼럼으로도 정렬할 수 있다</span></button></li>
+</ol><div class="ans"><p><b>정답 ③</b> ORDER BY는 가장 마지막에 실행된다. (ORDER BY)</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>DEPT(4행)와 EMP를 DEPTNO로 LEFT OUTER JOIN(FROM DEPT LEFT JOIN EMP)할 때 결과 행 수는? (40번 부서에는 사원이 없다)</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>14</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>15</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>4</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>56</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> 14명 사원 모두 매칭 + 사원 없는 40번 부서 1행 = 15행. (조인)</p></div></li>
+<li class="q" data-ans="3"><div class="q-text"><p>다음 중 SQL Server에서 지원하지 않는 것은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>INNER JOIN</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>FULL OUTER JOIN</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>USING 조건절</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>CROSS JOIN</span></button></li>
+</ol><div class="ans"><p><b>정답 ③</b> USING은 SQL Server에서 지원하지 않는다. (조인)</p></div></li>
+<li class="q" data-ans="3"><div class="q-text"><p>서브쿼리 결과가 한 건이라도 존재하면 참이 되는 연산자는?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>IN</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>ANY</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>EXISTS</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>ALL</span></button></li>
+</ol><div class="ans"><p><b>정답 ③</b> (서브쿼리)</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>다음 SQL의 결과 행 수는?</p>
+<pre><code class="language-sql">SELECT JOB FROM EMP WHERE DEPTNO = 10
+UNION ALL
+SELECT JOB FROM EMP WHERE DEPTNO = 20;
+</code></pre></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>5</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>8</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>6</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>3</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> 10번 3명 + 20번 5명 = 8행. UNION ALL은 중복을 제거하지 않는다. (집합 연산자)</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p><code>ROLLUP(A, B, C)</code>가 만드는 그룹 수는?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>3</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>4</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>6</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>8</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> n + 1 = 4: (A,B,C), (A,B), (A), (). (그룹 함수)</p></div></li>
+<li class="q" data-ans="1"><div class="q-text"><p>급여 (3000, 3000, 2000)에 RANK, ROW_NUMBER를 내림차순으로 적용한 결과로 옳은 것은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>RANK 1,1,3 / ROW_NUMBER 1,2,3</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>RANK 1,1,2 / ROW_NUMBER 1,2,3</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>RANK 1,2,3 / ROW_NUMBER 1,1,3</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>RANK 1,1,3 / ROW_NUMBER 1,1,2</span></button></li>
+</ol><div class="ans"><p><b>정답 ①</b> (윈도우 함수)</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>LAST_VALUE로 파티션의 진짜 마지막 값을 얻기 위한 윈도우 범위는?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>ROWS BETWEEN 1 PRECEDING AND 1 FOLLOWING</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>RANGE BETWEEN CURRENT ROW AND CURRENT ROW</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> 기본 범위는 현재 행까지라 현재 행 값이 나온다. 끝까지 범위를 넓혀야 한다. (윈도우 함수)</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>오라클에서 급여 상위 5명을 정확히 구하는 SQL은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>SELECT * FROM EMP WHERE ROWNUM &lt;= 5 ORDER BY SAL DESC;</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>SELECT * FROM (SELECT * FROM EMP ORDER BY SAL DESC) WHERE ROWNUM &lt;= 5;</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>SELECT * FROM EMP WHERE ROWNUM BETWEEN 1 AND 5;</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>SELECT TOP(5) * FROM EMP ORDER BY SAL DESC;</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> 인라인 뷰에서 먼저 정렬한 뒤 ROWNUM을 붙여야 한다. ④는 SQL Server 문법. (Top-N)</p></div></li>
+<li class="q" data-ans="3"><div class="q-text"><p>계층형 질의에서 WHERE 절 조건의 적용 시점은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>START WITH보다 먼저</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>CONNECT BY보다 먼저</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>계층 전개가 모두 끝난 후</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>ORDER SIBLINGS BY 후</span></button></li>
+</ol><div class="ans"><p><b>정답 ③</b> WHERE는 계층 구조를 다 만든 뒤 결과 행을 거른다. (계층형 질의)</p></div></li>
+<li class="q" data-ans="4"><div class="q-text"><p>다음 중 DDL에 해당하지 않는 것은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>CREATE</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>ALTER</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>TRUNCATE</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>MERGE</span></button></li>
+</ol><div class="ans"><p><b>정답 ④</b> MERGE는 DML이다. (DML·DDL)</p></div></li>
+<li class="q" data-ans="3"><div class="q-text"><p>오라클에서 COMMIT이나 ROLLBACK 전의 상태에 대한 설명으로 옳지 않은 것은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>변경 이전 상태로 복구할 수 있다</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>현재 사용자는 변경된 결과를 볼 수 있다</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>다른 사용자도 변경된 결과를 볼 수 있다</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>변경된 행은 잠금이 걸린다</span></button></li>
+</ol><div class="ans"><p><b>정답 ③</b> 다른 사용자는 커밋 전 변경 내용을 볼 수 없다. (TCL)</p></div></li>
+<li class="q" data-ans="3"><div class="q-text"><p>UNIQUE 제약조건에 대한 설명으로 옳은 것은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>NULL을 허용하지 않는다</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>테이블에 하나만 만들 수 있다</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>중복 값은 허용하지 않지만 NULL은 허용한다</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>다른 테이블의 PK를 참조한다</span></button></li>
+</ol><div class="ans"><p><b>정답 ③</b> ④는 FOREIGN KEY. (DDL)</p></div></li>
+</ol>
+
+<aside class="box box-tip">
+<p class="box-t">시험 직전 체크리스트</p>
+<ul>
+<li>엔터티 분류(유형·개념·사건 / 기본·중심·행위), 속성 분류(기본·설계·파생), 주식별자 4특징</li>
+<li>식별 관계 실선 / 비식별 관계 점선, 정규화 단계별 제거 대상</li>
+<li>NULL: 산술 → NULL, 비교 → UNKNOWN, 집계 → 제외, NOT IN에 NULL → 0건</li>
+<li>실행 순서 FROM → WHERE → GROUP BY → HAVING → SELECT → ORDER BY</li>
+<li>오라클 NULL 정렬 마지막 / SQL Server 처음, 오라클 '' = NULL</li>
+<li>OUTER JOIN에서 ON 조건과 WHERE 조건의 차이, (+)는 NULL이 채워질 쪽</li>
+<li>ROLLUP n+1, CUBE 2ⁿ, GROUPING SETS 총계 없음</li>
+<li>RANK / DENSE_RANK / ROW_NUMBER 차이, 범위 생략 시 RANGE ~ CURRENT ROW</li>
+<li>ROWNUM = 2는 0건, 계층형 질의 PRIOR 방향과 LEVEL 1</li>
+<li>DDL 자동 커밋, TRUNCATE vs DELETE vs DROP, CTAS는 NOT NULL만 복사</li>
+</ul>
+</aside>
+  </div>
+</section>
+    <footer class="end">
+      <p><b>SQLD SQL 개발자 교본</b> · 2026년 11월 기준. 시험 일정·응시료·출제 기준은 바뀔 수 있으니 접수 전 공식 사이트 공지를 확인하세요.</p>
+    </footer>
+  </main>
+</div>
+
+<div class="modal" id="pdfModal" role="dialog" aria-modal="true" aria-labelledby="pdfTitle" hidden>
+  <div class="modal-back" data-close></div>
+  <div class="modal-box">
+    <div class="modal-head">
+      <h2 id="pdfTitle">PDF로 저장할 단원</h2>
+      <button type="button" class="x" data-close aria-label="닫기"><svg viewBox="0 0 16 16"><path d="M3 3l10 10M13 3L3 13"/></svg></button>
+    </div>
+    <div class="pick-tools">
+      <button type="button" class="link" data-all="1">전체 선택</button>
+      <button type="button" class="link" data-all="0">전체 해제</button>
+      <label class="switch"><input type="checkbox" id="optAns" checked> 정답·해설 함께 인쇄</label>
+    </div>
+    <div class="pick-list"><label class="pick"><input type="checkbox" value="ch0" checked><span class="pick-g">시작하기</span><span class="pick-t">시험 구성과 공부 순서</span></label>
+<label class="pick"><input type="checkbox" value="ch1" checked><span class="pick-g">1과목 · 데이터 모델링의 이해</span><span class="pick-t">데이터 모델링의 이해</span></label>
+<label class="pick"><input type="checkbox" value="ch2" checked><span class="pick-g">1과목 · 데이터 모델링의 이해</span><span class="pick-t">엔터티, 속성, 관계, 식별자</span></label>
+<label class="pick"><input type="checkbox" value="ch3" checked><span class="pick-g">1과목 · 데이터 모델링의 이해</span><span class="pick-t">데이터 모델과 SQL</span></label>
+<label class="pick"><input type="checkbox" value="ch4" checked><span class="pick-g">2과목 · SQL 기본과 활용</span><span class="pick-t">SELECT와 함수</span></label>
+<label class="pick"><input type="checkbox" value="ch5" checked><span class="pick-g">2과목 · SQL 기본과 활용</span><span class="pick-t">GROUP BY, HAVING, ORDER BY</span></label>
+<label class="pick"><input type="checkbox" value="ch6" checked><span class="pick-g">2과목 · SQL 기본과 활용</span><span class="pick-t">조인</span></label>
+<label class="pick"><input type="checkbox" value="ch7" checked><span class="pick-g">2과목 · SQL 기본과 활용</span><span class="pick-t">서브쿼리, 집합 연산자, 뷰</span></label>
+<label class="pick"><input type="checkbox" value="ch8" checked><span class="pick-g">2과목 · SQL 기본과 활용</span><span class="pick-t">그룹 함수와 윈도우 함수</span></label>
+<label class="pick"><input type="checkbox" value="ch9" checked><span class="pick-g">2과목 · SQL 기본과 활용</span><span class="pick-t">Top-N, 계층형 질의, PIVOT, 정규표현식</span></label>
+<label class="pick"><input type="checkbox" value="ch10" checked><span class="pick-g">2과목 · SQL 기본과 활용</span><span class="pick-t">DML, TCL, DDL, DCL</span></label>
+<label class="pick"><input type="checkbox" value="ch11" checked><span class="pick-g">마무리</span><span class="pick-t">실전 모의 문제</span></label></div>
+    <div class="modal-foot">
+      <p class="hint">인쇄 창에서 <b>대상: PDF로 저장</b>, 용지 <b>A4</b>를 고르세요. 단원마다 새 페이지에서 시작하고, 표·코드·문제는 페이지 경계에서 잘리지 않게 넘어갑니다.</p>
+      <button type="button" class="btn btn-solid" id="doPrint">선택한 단원 PDF로 저장</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  var $ = function(s, r){ return (r||document).querySelector(s); };
+  var $$ = function(s, r){ return Array.prototype.slice.call((r||document).querySelectorAll(s)); };
+  var body = document.body;
+
+  /* ---- reveal on scroll ---- */
+  var revs = $$('.reveal');
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function(es){
+      es.forEach(function(e){ if (e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, {rootMargin:'0px 0px -8% 0px'});
+    revs.forEach(function(el){ io.observe(el); });
+  } else revs.forEach(function(el){ el.classList.add('in'); });
+
+  /* ---- progress bar + toc spy ---- */
+  var bar = $('.progress i');
+  var chs = $$('.chapter');
+  var subs = $$('.ch-body h3[id]');
+  var tocCh = {}; $$('.toc-ch').forEach(function(a){ tocCh[a.dataset.ch] = a; });
+  var tocSub = {}; $$('.toc ol a').forEach(function(a){ tocSub[a.getAttribute('href').slice(1)] = a; });
+  var curCh = null, curSub = null, ticking = false;
+  function spy(){
+    ticking = false;
+    var h = document.documentElement, max = h.scrollHeight - innerHeight;
+    if (bar) bar.style.transform = 'scaleX(' + (max > 0 ? Math.min(1, scrollY / max) : 0) + ')';
+    var line = 140, c = null, s = null;
+    for (var i = 0; i < chs.length; i++) { if (chs[i].getBoundingClientRect().top - line < 0) c = chs[i]; else break; }
+    for (var j = 0; j < subs.length; j++) { if (subs[j].getBoundingClientRect().top - line < 0) s = subs[j]; else break; }
+    if (c !== curCh) {
+      if (curCh && tocCh[curCh.id]) { tocCh[curCh.id].classList.remove('on'); tocCh[curCh.id].parentNode.classList.remove('open'); }
+      curCh = c;
+      if (c && tocCh[c.id]) { tocCh[c.id].classList.add('on'); tocCh[c.id].parentNode.classList.add('open'); }
+    }
+    if (s !== curSub) {
+      if (curSub && tocSub[curSub.id]) tocSub[curSub.id].classList.remove('on');
+      curSub = s;
+      if (s && tocSub[s.id] && c && c.contains(s)) tocSub[s.id].classList.add('on');
+    }
+  }
+  addEventListener('scroll', function(){ if (!ticking){ ticking = true; requestAnimationFrame(spy); } }, {passive:true});
+  spy();
+
+  /* ---- mobile toc ---- */
+  var tg = $('.toc-toggle');
+  if (tg) tg.addEventListener('click', function(){
+    var open = body.classList.toggle('toc-open'); tg.setAttribute('aria-expanded', open);
+  });
+  $$('.toc a').forEach(function(a){ a.addEventListener('click', function(){ body.classList.remove('toc-open'); if (tg) tg.setAttribute('aria-expanded', false); }); });
+
+  /* ---- quiz ---- */
+  document.addEventListener('click', function(e){
+    var b = e.target.closest && e.target.closest('.opt');
+    if (!b) return;
+    var q = b.closest('.q'); if (q.classList.contains('done')) return;
+    var ans = +q.dataset.ans, pick = +b.dataset.i;
+    q.classList.add('done');
+    $$('.opt', q).forEach(function(o){ if (+o.dataset.i === ans) o.classList.add('right'); });
+    if (pick !== ans) b.classList.add('wrong');
+  });
+  $$('.q').forEach(function(q){
+    var t = document.createElement('button'); t.type = 'button'; t.className = 'ans-toggle'; t.textContent = '정답만 보기';
+    t.addEventListener('click', function(){
+      q.classList.add('done'); $$('.opt', q).forEach(function(o){ if (+o.dataset.i === +q.dataset.ans) o.classList.add('right'); });
+      t.remove();
+    });
+    q.appendChild(t);
+  });
+
+  /* ---- PDF (print) ---- */
+  var modal = $('#pdfModal'), lastFocus = null;
+  function openModal(){ lastFocus = document.activeElement; modal.hidden = false; $('#doPrint').focus(); }
+  function closeModal(){ modal.hidden = true; if (lastFocus) lastFocus.focus(); }
+  $$('.open-pdf').forEach(function(b){ b.addEventListener('click', openModal); });
+  $$('[data-close]', modal).forEach(function(b){ b.addEventListener('click', closeModal); });
+  addEventListener('keydown', function(e){ if (e.key === 'Escape' && !modal.hidden) closeModal(); });
+  $$('[data-all]', modal).forEach(function(b){ b.addEventListener('click', function(){
+    var v = b.dataset.all === '1'; $$('.pick input', modal).forEach(function(i){ i.checked = v; });
+  }); });
+
+  var cover = $('.pc-list');
+  function fillCover(ids){
+    cover.innerHTML = '';
+    chs.forEach(function(c){
+      if (ids && ids.indexOf(c.id) < 0) return;
+      var li = document.createElement('li'), g = c.dataset.group;
+      li.innerHTML = (g ? '<span>' + g + '</span>' : '') + c.dataset.title;
+      cover.appendChild(li);
+    });
+  }
+  function printChapters(ids, withAns){
+    if (!ids.length) { alert('저장할 단원을 하나 이상 고르세요.'); return; }
+    var all = ids.length === chs.length;
+    chs.forEach(function(c){ c.classList.toggle('pr', ids.indexOf(c.id) > -1); });
+    body.classList.toggle('pick-mode', !all);
+    body.classList.toggle('no-ans', !withAns);
+    fillCover(ids);
+    revs.forEach(function(el){ el.classList.add('in'); });
+    var t = document.title;
+    if (!all && ids.length === 1) document.title = t.replace(' 교본', '') + ' - ' + $('#' + ids[0]).dataset.title;
+    modal.hidden = true;
+    setTimeout(function(){
+      window.print();
+      setTimeout(function(){ document.title = t; }, 500);
+    }, 60);
+  }
+  $('#doPrint').addEventListener('click', function(){
+    var ids = $$('.pick input:checked', modal).map(function(i){ return i.value; });
+    printChapters(ids, $('#optAns').checked);
+  });
+  $$('.ch-pdf').forEach(function(b){ b.addEventListener('click', function(){ printChapters([b.dataset.ch], true); }); });
+  addEventListener('afterprint', function(){
+    body.classList.remove('pick-mode', 'no-ans'); chs.forEach(function(c){ c.classList.remove('pr'); });
+    fillCover(null);
+  });
+  addEventListener('beforeprint', function(){ revs.forEach(function(el){ el.classList.add('in'); }); });
+  /* 브라우저 메뉴(Ctrl+P)로 바로 인쇄해도 표지 목록이 채워지도록 */
+  fillCover(null);
+
+  /* figures: run once when visible */
+  window.__onSeen = function(el, fn){
+    if (!el) return;
+    if (!('IntersectionObserver' in window)) { fn(); return; }
+    var o = new IntersectionObserver(function(es){ es.forEach(function(e){ if (e.isIntersecting){ o.disconnect(); fn(); } }); }, {threshold:.35});
+    o.observe(el);
+  };
+})();
+
+
+(function(){
+  /* hero: 조인 행 연결 애니메이션 */
+  var h = document.getElementById('hero-sqld');
+  if (h) {
+    var er = h.querySelectorAll('.er'), dr = h.querySelectorAll('.dr'), jl = h.querySelector('.jl');
+    var map = [1, 2, 1, 0], k = 0; // EMP행 -> DEPT행 인덱스 (20,30,20,10)
+    function yE(r){ return 60 + 34 + r*36 + 18; } function yD(r){ return 78 + 34 + r*36 + 18; }
+    function tick(){
+      er.forEach(function(g){ g.classList.remove('on'); }); dr.forEach(function(g){ g.classList.remove('on'); });
+      var r = k % 4, d = map[r]; er[r].classList.add('on'); dr[d].classList.add('on');
+      jl.setAttribute('d', 'M240 ' + yE(r) + ' C290 ' + yE(r) + ' 290 ' + yD(d) + ' 340 ' + yD(d)); k++;
+    }
+    if (!matchMedia('(prefers-reduced-motion: reduce)').matches) { tick(); setInterval(tick, 1500); } else tick();
+  }
+  /* 실행 순서 */
+  var o = document.getElementById('fig-order');
+  if (o) {
+    var w = o.querySelectorAll('li'), s = 0;
+    function st(){ s = s % 6 + 1; w.forEach(function(li){ var n = +li.dataset.s; li.classList.toggle('on', n === s); li.classList.toggle('done', n < s); }); }
+    __onSeen(o, function(){ st(); setInterval(st, 1400); });
+  }
+  /* 조인 시각화 */
+  var j = document.getElementById('fig-join');
+  if (j) {
+    var A = [['SMITH',20],['ALLEN',30],['KING',10],['SCOTT',null]];
+    var B = [[10,'ACCOUNTING'],[20,'RESEARCH'],[40,'OPERATIONS']];
+    var SQL = {
+      inner:'SELECT E.ENAME, E.DEPTNO, D.DEPTNO, D.DNAME\n  FROM EMP E INNER JOIN DEPT D\n    ON E.DEPTNO = D.DEPTNO;',
+      left:'SELECT E.ENAME, E.DEPTNO, D.DEPTNO, D.DNAME\n  FROM EMP E LEFT OUTER JOIN DEPT D\n    ON E.DEPTNO = D.DEPTNO;',
+      right:'SELECT E.ENAME, E.DEPTNO, D.DEPTNO, D.DNAME\n  FROM EMP E RIGHT OUTER JOIN DEPT D\n    ON E.DEPTNO = D.DEPTNO;',
+      full:'SELECT E.ENAME, E.DEPTNO, D.DEPTNO, D.DNAME\n  FROM EMP E FULL OUTER JOIN DEPT D\n    ON E.DEPTNO = D.DEPTNO;',
+      cross:'SELECT E.ENAME, E.DEPTNO, D.DEPTNO, D.DNAME\n  FROM EMP E CROSS JOIN DEPT D;'
+    };
+    function cell(v){ return v === null ? '<td class="nul">NULL</td>' : '<td>' + v + '</td>'; }
+    function run(t){
+      var res = [], ma = {}, mb = {};
+      if (t === 'cross') { A.forEach(function(a){ B.forEach(function(b){ res.push([a[0],a[1],b[0],b[1]]); }); }); }
+      else {
+        A.forEach(function(a, i){ B.forEach(function(b, k){ if (a[1] !== null && a[1] === b[0]) { res.push([a[0],a[1],b[0],b[1]]); ma[i]=1; mb[k]=1; } }); });
+        if (t === 'left' || t === 'full') A.forEach(function(a, i){ if (!ma[i]) res.push([a[0],a[1],null,null]); });
+        if (t === 'right' || t === 'full') B.forEach(function(b, k){ if (!mb[k]) res.push([null,null,b[0],b[1]]); });
+      }
+      j.querySelector('.j-a tbody').innerHTML = A.map(function(a,i){ return '<tr' + (ma[i]||t==='cross' ? ' class="m"' : '') + '>' + cell(a[0]) + cell(a[1]) + '</tr>'; }).join('');
+      j.querySelector('.j-b tbody').innerHTML = B.map(function(b,k){ return '<tr' + (mb[k]||t==='cross' ? ' class="m"' : '') + '>' + cell(b[0]) + cell(b[1]) + '</tr>'; }).join('');
+      j.querySelector('.j-r tbody').innerHTML = res.map(function(r,i){ return '<tr style="animation-delay:' + (i*35) + 'ms">' + r.map(cell).join('') + '</tr>'; }).join('');
+      j.querySelector('.j-n').textContent = res.length + '행';
+      j.querySelector('.j-sql code').textContent = SQL[t];
+    }
+    j.querySelectorAll('.chip').forEach(function(b){ b.addEventListener('click', function(){
+      j.querySelectorAll('.chip').forEach(function(x){ x.setAttribute('aria-pressed', x === b); }); run(b.dataset.j); }); });
+    run('inner');
+  }
+})();
+
+</script>
+</body>
+</html>
