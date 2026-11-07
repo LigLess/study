@@ -1,0 +1,4722 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>프로그래밍기능사 교본</title>
+<meta name="description" content="처음 코드를 배우는 사람을 위한, 개편된 기능사 시험 범위 교본.">
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pretendard@1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+:root{--accent:#2b3640;--accent-2:#e8ecef;--accent-ink:#ffffff;}
+:root{
+  --bg:#ffffff; --surface:#f3f5f7; --surface-2:#e8ecf0; --line:#d6dce2;
+  --text:#121a22; --text-2:#4f5d6b; --code-bg:#11161b; --code-text:#e4eaf0; --code-dim:#8b97a3;
+  --ok:#0d7a4f; --ok-bg:#e2f3ea; --bad:#b42318; --bad-bg:#fcebe9;
+  --ease-out:cubic-bezier(.23,1,.32,1); --ease-io:cubic-bezier(.77,0,.175,1);
+  --font:"Pretendard Variable",Pretendard,-apple-system,"Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
+  --mono:ui-monospace,"SF Mono","D2Coding",Consolas,"Liberation Mono",monospace;
+  --top:60px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:calc(var(--top) + 20px);-webkit-text-size-adjust:100%;font-family:var(--font);overflow-x:clip}
+button,input,select,textarea{font-family:inherit}
+body{margin:0;overflow-x:clip;background:var(--bg);color:var(--text);font-family:var(--font);font-size:17px;line-height:1.75;
+  word-break:keep-all;overflow-wrap:anywhere;-webkit-font-smoothing:antialiased}
+::selection{background:var(--accent);color:var(--accent-ink)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:2px}
+a{color:var(--accent);text-underline-offset:3px;text-decoration-thickness:1px}
+h1,h2,h3,h4{text-wrap:balance;line-height:1.25;margin:0}
+img,svg{max-width:100%}
+html{scrollbar-color:var(--line) transparent}
+
+/* progress */
+.progress{position:fixed;inset:0 0 auto 0;height:3px;z-index:60;pointer-events:none}
+.progress i{display:block;height:100%;background:var(--accent);transform-origin:0 50%;transform:scaleX(0)}
+
+/* top bar */
+.topbar{position:sticky;top:0;z-index:50;background:var(--bg);border-bottom:1px solid var(--line)}
+.topbar-in{max-width:1320px;margin:0 auto;height:var(--top);display:flex;align-items:center;gap:28px;padding:0 28px}
+.brand{color:var(--text);text-decoration:none;font-size:16px;white-space:nowrap}
+.brand b{font-weight:700;margin-left:4px}
+.guides{display:flex;gap:22px;margin-left:auto}
+.guides a{color:var(--text-2);text-decoration:none;font-size:15px;padding:6px 0;border-bottom:2px solid transparent}
+.guides a[aria-current]{color:var(--text);border-bottom-color:var(--accent);font-weight:600}
+.toc-toggle{display:none}
+.btn{font:inherit;font-size:15px;font-weight:600;border-radius:999px;padding:10px 20px;cursor:pointer;border:1px solid transparent;
+  text-decoration:none;display:inline-flex;align-items:center;gap:8px;line-height:1.2;
+  transition:transform 160ms var(--ease-out),background-color 160ms var(--ease-out)}
+.btn:active{transform:scale(.97)}
+.btn-solid{background:var(--accent);color:var(--accent-ink)}
+.btn-light{background:#fff;color:var(--accent)}
+.btn-line-light{background:transparent;color:#fff;border-color:rgba(255,255,255,.55)}
+@media (hover:hover) and (pointer:fine){
+  .btn-solid:hover{background:color-mix(in srgb,var(--accent) 86%,#000)}
+  .btn-line-light:hover{background:rgba(255,255,255,.12)}
+  .guides a:hover{color:var(--text)}
+}
+
+/* hero: solid accent plane */
+.hero{background:var(--accent);color:#fff}
+.hero-in{max-width:1320px;margin:0 auto;padding:96px 28px 104px;display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:56px;align-items:center}
+.hero h1{font-size:clamp(40px,5.4vw,76px);letter-spacing:-.035em;line-height:1.08;font-weight:800}
+.hero-tag{font-size:clamp(18px,1.6vw,22px);margin:24px 0 0;max-width:30em;color:rgba(255,255,255,.9);line-height:1.6}
+.hero-stats{display:flex;gap:44px;margin:48px 0 0;padding:0}
+.hero-stats div{margin:0}
+.hero-stats dt{font-size:14px;color:rgba(255,255,255,.75)}
+.hero-stats dd{margin:2px 0 0;font-size:40px;font-weight:700;letter-spacing:-.02em;font-variant-numeric:tabular-nums;line-height:1.1}
+.hero-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:44px}
+.hero-fig svg{display:block;width:100%;height:auto}
+
+/* layout */
+.layout{max-width:1320px;margin:0 auto;display:grid;grid-template-columns:290px minmax(0,1fr);gap:64px;padding:0 28px}
+.sidebar{position:relative}
+.sidebar-in{position:sticky;top:calc(var(--top) + 0px);max-height:calc(100vh - var(--top));overflow:auto;padding:48px 8px 48px 0;scrollbar-width:thin}
+.toc-title{font-size:14px;color:var(--text-2);margin:0 0 12px}
+.toc,.toc ol{list-style:none;margin:0;padding:0}
+.toc>li{margin:0 0 4px}
+.toc-ch{display:block;color:var(--text);text-decoration:none;font-size:15px;font-weight:600;padding:8px 10px;border-radius:4px;line-height:1.4}
+.toc-g{display:block;font-size:13px;font-weight:500;color:var(--text-2)}
+.toc ol{display:none;padding:2px 0 8px 10px}
+.toc li.open>ol{display:block}
+.toc ol a{display:block;color:var(--text-2);text-decoration:none;font-size:14px;padding:4px 10px;line-height:1.45;border-radius:4px}
+.toc a.on{background:var(--accent-2);color:var(--text)}
+@media (hover:hover) and (pointer:fine){ .toc a:hover{background:var(--surface)} }
+
+.content{min-width:0;max-width:800px;padding:0 0 120px}
+
+/* chapter */
+.chapter{padding-top:120px}
+.ch-head{padding-bottom:36px;margin-bottom:44px;border-bottom:1px solid var(--line);position:relative}
+.ch-group{margin:0 0 12px;font-size:16px;color:var(--accent);font-weight:600}
+.ch-head h2{font-size:clamp(32px,4vw,50px);letter-spacing:-.03em;font-weight:800}
+.ch-pdf{margin-top:22px;font:inherit;font-size:14px;color:var(--text-2);background:var(--surface);border:0;border-radius:999px;padding:7px 14px 7px 11px;
+  display:inline-flex;align-items:center;gap:7px;cursor:pointer;transition:transform 160ms var(--ease-out),background-color 160ms var(--ease-out)}
+.ch-pdf svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.3;stroke-linejoin:round;stroke-linecap:round}
+.ch-pdf:active{transform:scale(.97)}
+@media (hover:hover) and (pointer:fine){ .ch-pdf:hover{background:var(--surface-2);color:var(--text)} }
+
+.ch-body h3{font-size:28px;letter-spacing:-.02em;font-weight:750;margin:80px 0 20px}
+.ch-body h3:first-child{margin-top:0}
+.ch-body h4{font-size:20px;font-weight:700;margin:44px 0 12px;letter-spacing:-.01em}
+.ch-body p{margin:0 0 16px}
+.ch-body ul,.ch-body ol{margin:0 0 18px;padding-left:1.4em}
+.ch-body li{margin:4px 0}
+.ch-body li>ul,.ch-body li>ol{margin:4px 0}
+.ch-body strong{font-weight:700}
+.ch-body hr{border:0;border-top:1px solid var(--line);margin:48px 0}
+
+/* inline code & blocks */
+code{font-family:var(--mono);font-size:.88em;background:var(--surface);padding:.12em .4em;border-radius:3px}
+pre{background:var(--code-bg);color:var(--code-text);border-radius:6px;padding:18px 20px;overflow:auto;margin:0 0 20px;line-height:1.6;font-size:14.5px}
+pre code{background:none;padding:0;font-size:inherit;color:inherit;white-space:pre}
+
+/* tables */
+.tw{overflow-x:auto;margin:0 0 22px}
+table{border-collapse:collapse;width:100%;font-size:15.5px;line-height:1.55;font-variant-numeric:tabular-nums}
+th,td{text-align:left;vertical-align:top;padding:10px 12px;border-bottom:1px solid var(--line)}
+thead th{background:var(--surface);font-weight:650;border-bottom:1px solid var(--text-2)}
+td code{white-space:nowrap}
+
+/* boxes */
+.box{margin:28px 0;padding:22px 24px 8px;background:var(--surface);border-radius:6px}
+.box-t{font-weight:700;margin:0 0 8px !important;font-size:16px}
+.box-exam{background:var(--accent-2)}
+.box-exam .box-t{color:var(--accent)}
+.box-warn{background:#fdf3e4}
+.box-warn .box-t{color:#8a4b00}
+.box-ex{background:transparent;border:1px solid var(--line)}
+.box table{background:#fff}
+
+/* quiz */
+.quiz{list-style:none;padding:0 !important;margin:32px 0 !important;counter-reset:q}
+.q{counter-increment:q;margin:0 0 18px !important;padding:22px 24px;background:var(--surface);border-radius:6px}
+.q-text{font-weight:600}
+.q-text p:first-child::before{content:"문제 " counter(q) ". ";color:var(--accent);font-weight:700}
+.q-text p{margin:0 0 10px}
+.q-text pre{font-weight:400;font-size:14px}
+.opts{list-style:none;padding:0 !important;margin:6px 0 0 !important;display:grid;gap:6px}
+.opts li{margin:0}
+.opt{all:unset;box-sizing:border-box;width:100%;display:flex;gap:10px;align-items:flex-start;padding:10px 14px;background:#fff;border:1px solid var(--line);
+  border-radius:4px;cursor:pointer;font-size:16px;line-height:1.55;transition:transform 140ms var(--ease-out),border-color 140ms var(--ease-out),background-color 140ms var(--ease-out)}
+.opt .n{flex:none;color:var(--text-2)}
+.opt:active{transform:scale(.99)}
+.opt:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+@media (hover:hover) and (pointer:fine){ .q:not(.done) .opt:hover{border-color:var(--text-2)} }
+.q.done .opt{cursor:default}
+.opt.right{border-color:var(--ok);background:var(--ok-bg)}
+.opt.wrong{border-color:var(--bad);background:var(--bad-bg)}
+.ans{display:none;margin-top:12px;padding-top:12px;border-top:1px solid var(--line);font-size:15.5px}
+.ans p{margin:0}
+.ans b{color:var(--ok);margin-right:6px}
+.q.done .ans{display:block}
+.no-js .ans{display:block}
+.ans-toggle{all:unset;cursor:pointer;font-size:14px;color:var(--text-2);margin-top:10px;display:inline-block;text-decoration:underline;text-underline-offset:3px}
+
+/* figures */
+.fig{margin:36px 0;padding:28px;background:var(--surface);border-radius:6px}
+.fig svg{display:block;width:100%;height:auto}
+.fig figcaption{font-size:15px;color:var(--text-2);margin-top:14px;line-height:1.6}
+.fig-ctrl{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px}
+.chip{font:inherit;font-size:14px;padding:6px 14px;border-radius:999px;border:1px solid var(--line);background:#fff;color:var(--text);cursor:pointer;
+  transition:transform 140ms var(--ease-out),background-color 140ms var(--ease-out),color 140ms var(--ease-out)}
+.chip:active{transform:scale(.97)}
+.chip[aria-pressed="true"]{background:var(--text);color:#fff;border-color:var(--text)}
+.term{background:var(--code-bg);color:var(--code-text);font-family:var(--mono);font-size:14px;border-radius:6px;padding:16px 18px;line-height:1.65;min-height:3em;white-space:pre-wrap}
+.term .p{color:#7ee2a8}
+.term .d{color:var(--code-dim)}
+
+/* reveal */
+.js .reveal{opacity:0;transform:translateY(22px);transition:opacity 520ms var(--ease-out),transform 520ms var(--ease-out)}
+.js .reveal.in{opacity:1;transform:none}
+
+.end{margin-top:140px;padding-top:28px;border-top:1px solid var(--line);color:var(--text-2);font-size:15px}
+
+/* modal */
+.modal[hidden]{display:none}
+.modal{position:fixed;inset:0;z-index:100;display:grid;place-items:center;padding:20px}
+.modal-back{position:absolute;inset:0;background:rgba(10,14,18,.5);animation:fade 180ms var(--ease-out)}
+.modal-box{position:relative;background:#fff;border-radius:10px;width:min(620px,100%);max-height:min(86vh,820px);display:flex;flex-direction:column;
+  box-shadow:0 24px 60px rgba(0,0,0,.25);animation:pop 220ms var(--ease-out)}
+@keyframes fade{from{opacity:0}}
+@keyframes pop{from{opacity:0;transform:scale(.96) translateY(8px)}}
+.modal-head{display:flex;align-items:center;justify-content:space-between;padding:22px 24px 10px}
+.modal-head h2{font-size:22px;letter-spacing:-.02em}
+.x{all:unset;cursor:pointer;width:36px;height:36px;display:grid;place-items:center;border-radius:999px}
+.x svg{width:16px;height:16px;stroke:var(--text);stroke-width:1.6}
+.x:hover{background:var(--surface)}
+.pick-tools{display:flex;gap:16px;align-items:center;padding:0 24px 12px;border-bottom:1px solid var(--line);font-size:14px;flex-wrap:wrap}
+.link{all:unset;cursor:pointer;color:var(--accent);font-weight:600}
+.switch{margin-left:auto;display:flex;gap:6px;align-items:center;color:var(--text-2);cursor:pointer}
+.pick-list{overflow:auto;padding:8px 14px}
+.pick{display:grid;grid-template-columns:22px 1fr;column-gap:10px;padding:9px 10px;border-radius:4px;cursor:pointer;line-height:1.4}
+.pick:hover{background:var(--surface)}
+.pick input{grid-row:span 2;margin-top:3px;accent-color:var(--accent);width:16px;height:16px}
+.pick-g{font-size:13px;color:var(--text-2)}
+.pick-t{font-size:16px;font-weight:600}
+.modal-foot{padding:16px 24px 22px;border-top:1px solid var(--line)}
+.hint{font-size:14px;color:var(--text-2);margin:0 0 14px;line-height:1.6}
+#doPrint{width:100%;justify-content:center;padding:13px}
+
+.print-cover{display:none}
+
+/* responsive */
+@media (max-width:1080px){
+  .layout{grid-template-columns:1fr;gap:0}
+  .sidebar{position:fixed;inset:var(--top) 0 0 auto;width:min(360px,88vw);background:#fff;z-index:45;border-left:1px solid var(--line);
+    transform:translateX(100%);visibility:hidden;transition:transform 260ms var(--ease-io),visibility 0s linear 260ms}
+  body.toc-open .sidebar{transform:none;visibility:visible;transition:transform 260ms var(--ease-io),visibility 0s;box-shadow:-20px 0 40px rgba(0,0,0,.12)}
+  .sidebar-in{position:static;max-height:100%;height:100%;padding:24px 20px}
+  .toc-toggle{display:inline-flex;font:inherit;font-size:15px;background:none;border:1px solid var(--line);border-radius:999px;padding:8px 16px;cursor:pointer;color:var(--text)}
+  .guides{display:none}
+  .topbar-in{gap:10px}
+  .toc-toggle{margin-left:auto}
+  .content{max-width:760px;width:100%;margin:0 auto}
+  .hero-in{grid-template-columns:1fr;padding:72px 28px 80px}
+  .hero-fig{max-width:560px}
+}
+@media (max-width:600px){
+  body{font-size:16px}
+  .topbar-in{padding:0 16px}
+  .layout{padding:0 18px}
+  .hero-in{padding:56px 20px 64px;gap:40px}
+  .hero-stats{gap:28px}
+  .hero-stats dd{font-size:32px}
+  .topbar .btn-solid{padding:8px 14px;font-size:14px}
+  .chapter{padding-top:88px}
+  .ch-body h3{font-size:24px;margin-top:64px}
+  .box,.q,.fig{padding-left:16px;padding-right:16px;margin-left:-4px;margin-right:-4px}
+  pre{font-size:13px;padding:14px;margin-left:-4px;margin-right:-4px}
+  table{font-size:14.5px}
+  th,td{padding:8px 9px}
+  .switch{margin-left:0}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .js .reveal{transform:none;transition:opacity 300ms linear}
+  *,*::before,*::after{animation-duration:1ms !important;animation-iteration-count:1 !important}
+  .sidebar{transition:none}
+}
+
+/* ============ PRINT ============ */
+@page{size:A4;margin:16mm 15mm 17mm}
+@media print{
+  :root{--surface:#f2f4f6}
+  *{-webkit-print-color-adjust:exact !important;print-color-adjust:exact !important;animation:none !important;transition:none !important}
+  html,body{background:#fff;font-size:10pt;line-height:1.62;scroll-behavior:auto}
+  .topbar,.progress,.sidebar,.hero,.ch-pdf,.modal,.fig-ctrl,.ans-toggle,.no-print,.end{display:none !important}
+  .layout{display:block;padding:0;max-width:none}
+  .content{max-width:none;padding:0}
+  .js .reveal{opacity:1 !important;transform:none !important}
+  body.pick-mode .chapter:not(.pr){display:none !important}
+
+  .print-cover{display:flex;flex-direction:column;justify-content:flex-start;min-height:250mm;break-after:page;padding-top:40mm}
+  .pc-kind{font-size:12pt;color:var(--accent);font-weight:700;margin:0 0 6mm}
+  .print-cover h1{font-size:34pt;letter-spacing:-.03em;line-height:1.15}
+  .pc-tag{font-size:13pt;color:var(--text-2);margin:6mm 0 18mm}
+  .pc-list{margin:0;padding:8mm 0 0 1.2em;border-top:1.5pt solid var(--accent);font-size:11pt;line-height:1.9}
+  .pc-list span{color:var(--text-2);margin-right:3mm}
+  .pc-date{margin-top:auto;font-size:9pt;color:var(--text-2)}
+
+  .chapter{padding-top:0;break-before:page}
+  .ch-head{padding-bottom:5mm;margin-bottom:7mm;break-after:avoid;break-inside:avoid}
+  .ch-group{font-size:10pt;margin-bottom:2mm}
+  .ch-head h2{font-size:22pt}
+  .ch-body h3{font-size:15pt;margin:9mm 0 3mm;break-after:avoid;break-inside:avoid}
+  .ch-body h4{font-size:12pt;margin:6mm 0 2mm;break-after:avoid;break-inside:avoid}
+  .keep{break-inside:avoid}
+  p{orphans:3;widows:3}
+  .ch-body p{margin-bottom:2.5mm}
+  pre{font-size:8.6pt;padding:3.5mm 4mm;line-height:1.5;white-space:pre-wrap;break-inside:avoid;overflow:visible;
+      background:#f4f6f8 !important;color:#14202b !important;border:.6pt solid #d6dce2}
+  pre code{white-space:pre-wrap}
+  .term{background:#f4f6f8 !important;color:#14202b !important;border:.6pt solid #d6dce2}
+  .term .p{color:#0d7a4f}
+  .tw{overflow:visible}
+  table{font-size:9pt;break-inside:auto}
+  thead{display:table-header-group}
+  tr,th,td{break-inside:avoid}
+  th,td{padding:1.6mm 2.2mm}
+  .tw.small-table, table.small{break-inside:avoid}
+  .box{break-inside:avoid;padding:4mm 5mm 1.5mm;margin:5mm 0}
+  .fig{break-inside:avoid;padding:4mm;margin:5mm 0}
+  .fig svg{max-height:120mm}
+  .quiz{margin:5mm 0 !important;display:block}
+  .opts{display:block !important}
+  .opts li{margin:0}
+  .opt{display:flex;border:0 !important;padding:.5mm 0 !important;background:transparent !important}
+  .q{break-inside:avoid;padding:3.2mm 4.5mm;margin-bottom:2.5mm !important}
+  .q-text p{margin-bottom:1.5mm}
+  .opt{padding:1.4mm 3mm;font-size:9.5pt;border-color:#d6dce2;background:#fff !important}
+  .opt.right,.opt.wrong{background:#fff !important;border-color:#d6dce2}
+  .ans{display:block !important;font-size:9.3pt;margin-top:2.5mm;padding-top:2.5mm}
+  body.no-ans .ans{display:none !important}
+  a{color:inherit;text-decoration:none}
+}
+
+/* hero svg animations */
+.hero-svg .pt{opacity:0;transform-box:fill-box;transform-origin:center;animation:ptIn 420ms var(--ease-out) forwards}
+@keyframes ptIn{from{opacity:0;transform:scale(.6)}to{opacity:.95;transform:none}}
+.hero-svg .reg{stroke-dasharray:500;stroke-dashoffset:500;animation:draw 1100ms var(--ease-io) 1400ms forwards}
+.hero-svg .rs{opacity:0;animation:fadeIn 300ms var(--ease-out) forwards}
+.hero-svg .eq{opacity:0;animation:fadeIn 500ms var(--ease-out) 2300ms forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+@keyframes fadeIn{to{opacity:1}}
+#hero-sqld .er rect,#hero-sqld .dr rect{transition:fill 260ms var(--ease-out)}
+#hero-sqld .on rect{fill:rgba(255,255,255,.2)}
+#hero-sqld .jl{transition:opacity 200ms var(--ease-out)}
+.hero-term{min-height:300px;font-size:15px;background:#0b0f12}
+.hero-term .cur{display:inline-block;width:.6em;height:1.1em;background:#7ee2a8;vertical-align:-.15em;animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+
+/* DIKW */
+.js #fig-dikw:not(.play) .lay{opacity:0}
+#fig-dikw.play .lay{animation:rise 620ms var(--ease-out) both;animation-delay:var(--d)}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+
+/* CRISP */
+#fig-crisp .ph rect{fill:#fff;stroke:var(--line);stroke-width:1.5;transition:fill 300ms var(--ease-out),stroke 300ms var(--ease-out)}
+#fig-crisp .ph text{fill:var(--text);transition:fill 300ms var(--ease-out)}
+#fig-crisp .ph.on rect{fill:var(--accent);stroke:var(--accent)}
+#fig-crisp .ph.on text{fill:#fff}
+#fig-crisp .orbit{transition:transform 900ms var(--ease-io)}
+
+/* CM */
+.cm{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:28px;align-items:start}
+.cm-grid{display:grid;grid-template-columns:auto 1fr 1fr;gap:6px;font-size:14px}
+.cm-h{font-weight:600;color:var(--text-2);text-align:center;align-self:end;padding-bottom:2px}
+.cm-v{writing-mode:horizontal-tb;text-align:right;align-self:center;padding-right:6px}
+.cm-c{display:flex;flex-direction:column;gap:4px;padding:12px;border-radius:4px;font-weight:700;font-size:14px;background:#fff;border:1px solid var(--line)}
+.cm-c.tp,.cm-c.tn{background:var(--accent-2);border-color:transparent}
+.cm-c input{font:inherit;font-size:24px;font-weight:700;width:100%;border:0;background:transparent;padding:0;color:var(--text);font-variant-numeric:tabular-nums}
+.cm-c input:focus{outline:none}
+.cm-c:focus-within{outline:2px solid var(--accent);outline-offset:1px}
+.cm-out{display:grid;grid-template-columns:1fr 1fr;gap:14px 18px;margin:0}
+.cm-out div{margin:0}
+.cm-out dt{font-size:13.5px;color:var(--text-2)}
+.cm-out dd{margin:0;font-size:26px;font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:-.01em;line-height:1.25}
+.cm-out p{margin:0 !important;font-size:14px;color:var(--text-2)}
+
+/* ORDER */
+.ord{display:grid;grid-template-columns:1fr 1.4fr;gap:28px}
+.ord-h{font-size:14px;color:var(--text-2);margin:0 0 8px !important;font-weight:600}
+.ord ol{list-style:none;padding:0 !important;margin:0 !important;display:grid;gap:6px}
+.ord li{margin:0;padding:10px 14px;background:#fff;border:1px solid var(--line);border-radius:4px;font-family:var(--mono);font-size:15px;
+  transition:background-color 260ms var(--ease-out),color 260ms var(--ease-out),border-color 260ms var(--ease-out),transform 260ms var(--ease-out)}
+.ord-x li{display:flex;justify-content:space-between;gap:12px}
+.ord-x li span{font-family:var(--font);color:var(--text-2);font-size:14px}
+.ord-x li::before{content:attr(data-s);font-family:var(--font);font-weight:700;color:var(--accent);margin-right:-4px;min-width:1.2em}
+.ord-x li b{flex:1}
+.ord li.on{background:var(--accent);border-color:var(--accent);color:#fff;transform:translateX(4px)}
+.ord li.on span,.ord-x li.on::before{color:#fff}
+.ord li.done{border-color:var(--accent)}
+
+/* JOIN */
+.j-sql{margin-bottom:16px}
+.j-wrap{display:grid;grid-template-columns:.8fr .8fr 1.4fr;gap:16px;align-items:start}
+.j-t{font-size:14px;font-weight:700;margin:0 0 6px !important}
+.j-n{color:var(--accent);font-weight:600;margin-left:6px}
+.j-wrap table{font-size:13.5px;background:#fff}
+.j-wrap th,.j-wrap td{padding:6px 8px;font-family:var(--mono);white-space:nowrap}
+.j-wrap tr.m td{background:var(--accent-2)}
+.j-wrap td.nul{color:var(--text-2);font-style:italic}
+.j-r tbody tr{animation:rowIn 260ms var(--ease-out) both}
+@keyframes rowIn{from{opacity:0;transform:translateY(6px)}}
+
+/* BOOT */
+.boot{list-style:none;padding:0 !important;margin:0 0 14px !important;display:grid;grid-template-columns:repeat(6,1fr);gap:6px}
+.boot li{margin:0;padding:12px 10px;background:#fff;border:1px solid var(--line);border-radius:4px;display:flex;flex-direction:column;
+  transition:background-color 300ms var(--ease-out),color 300ms var(--ease-out),border-color 300ms var(--ease-out)}
+.boot b{font-size:15px}
+.boot span{font-size:12.5px;color:var(--text-2);line-height:1.4;margin-top:2px}
+.boot li.on{background:var(--accent);border-color:var(--accent);color:#fff}
+.boot li.on span{color:rgba(255,255,255,.85)}
+.boot li.done{border-color:var(--accent)}
+.boot-bar{height:4px;background:var(--surface-2);border-radius:2px;overflow:hidden}
+.boot-bar i{display:block;height:100%;background:var(--accent);transform-origin:0 50%;transform:scaleX(0);transition:transform 900ms var(--ease-io)}
+.boot-desc{min-height:3.4em;margin:14px 0 0 !important;font-size:15.5px}
+
+/* CHMOD */
+.perm{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:24px;align-items:start}
+.perm-grid{display:grid;grid-template-columns:auto repeat(3,1fr);gap:6px;font-size:13.5px;align-items:center}
+.perm-grid>b{color:var(--text-2);font-weight:600;text-align:center}
+.perm-grid>b.perm-who{text-align:right;padding-right:6px;color:var(--text)}
+.perm-grid button{font:inherit;font-family:var(--mono);font-size:20px;font-weight:700;height:52px;border-radius:4px;border:1px solid var(--line);background:#fff;color:var(--text-2);cursor:pointer;
+  transition:background-color 160ms var(--ease-out),color 160ms var(--ease-out),transform 140ms var(--ease-out)}
+.perm-grid button:active{transform:scale(.96)}
+.perm-grid button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+.perm-grid button[aria-pressed="false"]{text-decoration:line-through;text-decoration-thickness:1px}
+.perm-out label{display:flex;flex-direction:column;font-size:13.5px;color:var(--text-2);gap:4px;margin-bottom:10px}
+.perm-num{font:inherit;font-family:var(--mono);font-size:30px;font-weight:700;width:5em;padding:4px 10px;border:1px solid var(--line);border-radius:4px;color:var(--text);letter-spacing:.08em}
+.perm-term{font-size:13.5px;min-height:7.5em}
+
+@media (max-width:720px){
+  .cm,.perm,.ord{grid-template-columns:1fr}
+  .j-wrap{grid-template-columns:1fr 1fr}
+  .j-res{grid-column:1/-1;overflow-x:auto}
+  .boot{grid-template-columns:repeat(3,1fr)}
+}
+@media print{
+  .hero-term{display:none}
+  #fig-dikw .lay{opacity:1 !important}
+  #fig-crisp .orbit{display:none}
+  #fig-crisp .ph rect{fill:#fff !important;stroke:var(--accent) !important}
+  #fig-crisp .ph text{fill:var(--text) !important}
+  .ord li.on,.boot li.on{background:#fff !important;color:var(--text) !important;border-color:var(--accent) !important;transform:none}
+  .ord li.on span,.boot li.on span{color:var(--text-2) !important}
+  .ord-x li.on::before{color:var(--accent) !important}
+  .boot-bar,.boot-desc{display:none}
+  .boot{grid-template-columns:repeat(6,1fr)}
+  .perm-grid button{height:9mm;font-size:12pt}
+  .cm-c input{font-size:14pt}
+  .j-wrap{grid-template-columns:.8fr .8fr 1.4fr}
+}
+
+/* SUBNET */
+.sn-in{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:14px}
+.sn-in label,.pg-in{display:flex;flex-direction:column;font-size:13.5px;color:var(--text-2);gap:4px}
+.sn-in input,.pg-in input{font:inherit;font-family:var(--mono);font-size:18px;padding:6px 10px;border:1px solid var(--line);border-radius:4px;color:var(--text);background:#fff}
+.sn-ip{width:11em}.sn-px{width:5em}
+.sn-bits{display:grid;grid-template-columns:repeat(32,1fr);gap:2px;margin-bottom:16px}
+.sn-bits i{height:26px;border-radius:2px;background:var(--surface-2);font-style:normal;font-family:var(--mono);font-size:11px;display:grid;place-items:center;color:var(--text-2);
+  transition:background-color 200ms var(--ease-out),color 200ms var(--ease-out)}
+.sn-bits i.n{background:var(--accent);color:#fff}
+.sn-bits i.g{margin-right:5px}
+.sn-out{display:grid;grid-template-columns:repeat(3,1fr);gap:12px 18px;margin:0}
+.sn-out div{margin:0}.sn-out dt{font-size:13.5px;color:var(--text-2)}
+.sn-out dd{margin:0;font-family:var(--mono);font-size:17px;font-weight:700;font-variant-numeric:tabular-nums}
+/* TCP3 */
+.js #fig-tcp3:not(.play) .tm{opacity:0}
+#fig-tcp3.play .tm{animation:rise 520ms var(--ease-out) both;animation-delay:var(--d)}
+/* PAGING */
+.pg-in{flex-direction:row;align-items:center;margin-left:8px}
+.pg-in input{font-size:14px;padding:4px 8px}
+.pg-ref{width:14em}.pg-fr{width:4em}
+.pg-wrap{overflow-x:auto}
+.pg td,.pg th{text-align:center;font-family:var(--mono);padding:6px 8px;min-width:34px;border:1px solid var(--line)}
+.pg th{background:#fff}
+.pg td.f{background:var(--accent);color:#fff;font-weight:700}
+.pg td.h{background:#fff}
+.pg-sum{margin:12px 0 0 !important;font-weight:600}
+@media (max-width:720px){ .sn-out{grid-template-columns:1fr 1fr} .sn-bits i{font-size:0;height:18px} }
+@media print{ .js #fig-tcp3 .tm{opacity:1 !important} .sn-in input,.pg-in input{border-color:#d6dce2} }
+
+</style>
+<script>document.documentElement.classList.add('js')</script>
+</head>
+<body data-guide="programming">
+<div class="progress" aria-hidden="true"><i></i></div>
+<header class="topbar">
+  <div class="topbar-in">
+    <a class="brand" href="index.html">교본 <b>프로그래밍기능사</b></a>
+    <nav class="guides" aria-label="다른 교본"><a href="index.html">전체 교본 목록</a></nav>
+    <button type="button" class="toc-toggle" aria-expanded="false" aria-controls="toc">목차</button>
+    <button type="button" class="btn btn-solid open-pdf">PDF로 저장</button>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="hero-in">
+    <div class="hero-text">
+      <h1>프로그래밍기능사</h1>
+      <p class="hero-tag">처음 코드를 배우는 사람을 위한, 개편된 기능사 시험 범위 교본.</p>
+      <dl class="hero-stats">
+        <div><dt>단원</dt><dd>12</dd></div>
+        <div><dt>주제</dt><dd>63</dd></div>
+        <div><dt>확인 문제</dt><dd>81</dd></div>
+      </dl>
+      <div class="hero-actions">
+        <a class="btn btn-light" href="#ch0">처음부터 읽기</a>
+        <button type="button" class="btn btn-line-light open-pdf">원하는 단원만 PDF로</button>
+      </div>
+    </div>
+    <div class="hero-fig"><div class="term hero-term gen-term" data-prompt="$ python3 hello.py" data-lines='[["$ ", "python3 -c \"print(&#39;Hello, &#39; + &#39;World&#39;)\"", "Hello, World"], ["$ ", "java Main", "합계: 55"], ["$ ", "./a.out", "1 2 3 4 5"]]' aria-label="실행 예시"><span class="d">$ python3 hello.py</span></div></div>
+  </div>
+</section>
+
+<div class="print-cover" aria-hidden="true">
+  <p class="pc-kind">교본</p>
+  <h1>프로그래밍기능사</h1>
+  <p class="pc-tag">처음 코드를 배우는 사람을 위한, 개편된 기능사 시험 범위 교본.</p>
+  <ol class="pc-list"></ol>
+  <p class="pc-date">2026년 11월 기준으로 정리 · 시험 일정과 세부 규정은 접수 전 공식 사이트에서 다시 확인하세요.</p>
+</div>
+
+<div class="layout">
+  <aside class="sidebar" id="toc" aria-label="목차">
+    <div class="sidebar-in">
+      <p class="toc-title">목차</p>
+      <ol class="toc"><li><a href="#ch0" class="toc-ch" data-ch="ch0"><span class="toc-g">시작하기</span>시험 구성과 공부 순서</a>
+<ol><li><a href="#s1">프로그래밍기능사는 어떤 시험인가</a></li><li><a href="#s2">공부 순서</a></li></ol>
+</li>
+<li><a href="#ch1" class="toc-ch" data-ch="ch1"><span class="toc-g">1과목 · 프로그래밍 언어</span>언어 공통 개념</a>
+<ol><li><a href="#s3">프로그래밍 언어의 분류</a></li><li><a href="#s4">데이터 타입과 변수</a></li><li><a href="#s5">연산자</a></li><li><a href="#s6">제어문 공통</a></li><li><a href="#s7">라이브러리와 예외 처리</a></li></ol>
+</li>
+<li><a href="#ch2" class="toc-ch" data-ch="ch2"><span class="toc-g">1과목 · 프로그래밍 언어</span>Python</a>
+<ol><li><a href="#s8">Python 기본 문법</a></li><li><a href="#s9">자료형</a></li><li><a href="#s10">제어문과 반복</a></li><li><a href="#s11">함수</a></li><li><a href="#s12">클래스</a></li><li><a href="#s13">문자열 메서드</a></li></ol>
+</li>
+<li><a href="#ch3" class="toc-ch" data-ch="ch3"><span class="toc-g">1과목 · 프로그래밍 언어</span>C 언어</a>
+<ol><li><a href="#s14">C 언어 기본 구조와 입출력</a></li><li><a href="#s15">제어문 따라가기</a></li><li><a href="#s16">배열과 문자열</a></li><li><a href="#s17">포인터</a></li><li><a href="#s18">구조체</a></li><li><a href="#s19">재귀 함수</a></li><li><a href="#s20">static 변수와 메모리 영역</a></li></ol>
+</li>
+<li><a href="#ch4" class="toc-ch" data-ch="ch4"><span class="toc-g">1과목 · 프로그래밍 언어</span>Java</a>
+<ol><li><a href="#s21">Java 기본 구조</a></li><li><a href="#s22">객체지향의 핵심 개념</a></li><li><a href="#s23">클래스와 생성자</a></li><li><a href="#s24">상속과 오버라이딩 — 출력 문제의 핵심</a></li><li><a href="#s25">추상 클래스와 인터페이스</a></li><li><a href="#s26">배열, 문자열, 컬렉션</a></li><li><a href="#s27">예외와 스레드 (개념)</a></li></ol>
+</li>
+<li><a href="#ch5" class="toc-ch" data-ch="ch5"><span class="toc-g">1과목 · 프로그래밍 언어</span>웹 언어 HTML · CSS · JavaScript</a>
+<ol><li><a href="#s28">웹의 구조</a></li><li><a href="#s29">HTML</a></li><li><a href="#s30">CSS</a></li><li><a href="#s31">JavaScript</a></li></ol>
+</li>
+<li><a href="#ch6" class="toc-ch" data-ch="ch6"><span class="toc-g">2과목 · 응용 SW 기초 기술</span>네트워크 기초</a>
+<ol><li><a href="#s32">네트워크 기초</a></li><li><a href="#s33">OSI 7계층</a></li><li><a href="#s34">TCP/IP 4계층</a></li><li><a href="#s35">IP 주소와 서브네팅</a></li><li><a href="#s36">네트워크 장비</a></li><li><a href="#s37">흐름 제어·오류 제어·다중화</a></li><li><a href="#s38">무선·최신 네트워크 용어</a></li></ol>
+</li>
+<li><a href="#ch7" class="toc-ch" data-ch="ch7"><span class="toc-g">2과목 · 응용 SW 기초 기술</span>데이터베이스 기초</a>
+<ol><li><a href="#s39">데이터베이스와 DBMS</a></li><li><a href="#s40">데이터 모델과 E-R 모델</a></li><li><a href="#s41">관계형 데이터 모델</a></li><li><a href="#s42">관계 대수와 관계 해석</a></li><li><a href="#s43">정규화</a></li><li><a href="#s44">트랜잭션</a></li><li><a href="#s45">인덱스, 뷰, 시스템 카탈로그</a></li><li><a href="#s46">파티셔닝, 분산 DB, 데이터 전환</a></li></ol>
+</li>
+<li><a href="#ch8" class="toc-ch" data-ch="ch8"><span class="toc-g">2과목 · 응용 SW 기초 기술</span>SQL</a>
+<ol><li><a href="#s47">SQL의 분류</a></li><li><a href="#s48">DDL</a></li><li><a href="#s49">DML: 조회 (SELECT)</a></li><li><a href="#s50">조인</a></li><li><a href="#s51">서브쿼리와 집합 연산</a></li><li><a href="#s52">DML: 삽입·수정·삭제</a></li><li><a href="#s53">DCL과 TCL</a></li><li><a href="#s54">절차형 SQL</a></li></ol>
+</li>
+<li><a href="#ch9" class="toc-ch" data-ch="ch9"><span class="toc-g">2과목 · 응용 SW 기초 기술</span>자료구조</a>
+<ol><li><a href="#s55">자료구조의 분류</a></li><li><a href="#s56">트리</a></li><li><a href="#s57">그래프</a></li><li><a href="#s58">정렬</a></li><li><a href="#s59">검색과 해싱</a></li></ol>
+</li>
+<li><a href="#ch10" class="toc-ch" data-ch="ch10"><span class="toc-g">2과목 · 응용 SW 기초 기술</span>개발 환경과 UI 테스트</a>
+<ol><li><a href="#s60">개발 환경 구축</a></li><li><a href="#s61">오류의 종류</a></li><li><a href="#s62">UI 설계와 UI 테스트</a></li></ol>
+</li>
+<li><a href="#ch11" class="toc-ch" data-ch="ch11"><span class="toc-g">마무리</span>실전 모의 문제</a>
+<ol><li><a href="#s63">과목 섞어 풀기</a></li></ol>
+</li></ol>
+    </div>
+  </aside>
+  <main class="content">
+
+<section class="chapter" id="ch0" data-title="시험 구성과 공부 순서" data-group="시작하기">
+  <header class="ch-head reveal">
+    <p class="ch-group">시작하기</p>
+    <h2>시험 구성과 공부 순서</h2>
+    <button type="button" class="ch-pdf" data-ch="ch0"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 1.5h5.5L12.5 4.5V14.5h-8.5z M9.5 1.5v3h3 M6 9.5l2 2 2-2 M8 6.5v5"/></svg>이 장만 PDF로</button>
+  </header>
+  <div class="ch-body">
+<h3 id="s1">프로그래밍기능사는 어떤 시험인가</h3>
+<p><strong>2026년부터 정보처리기능사가 '프로그래밍기능사'로 이름과 출제기준이 전면 개편</strong>되었다. 한국산업인력공단이 시행하는 국가기술자격으로, 응시 자격 제한이 없어 고등학생·비전공자가 개발 공부를 시작하며 처음 따는 자격증으로 많이 선택한다.</p>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>항목</th>
+<th>내용</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>시행</td>
+<td>한국산업인력공단 (큐넷 q-net.or.kr)</td>
+</tr>
+<tr>
+<td>응시 자격</td>
+<td>제한 없음</td>
+</tr>
+<tr>
+<td>필기</td>
+<td>객관식 4지 택일, CBT. 100점 만점 60점 이상</td>
+</tr>
+<tr>
+<td>필기 범위</td>
+<td><strong>프로그래밍 언어</strong>(C·Java·Python 문법과 활용, 웹 언어) / <strong>응용 소프트웨어 기초 기술</strong>(네트워크, 데이터베이스, 자료구조, 개발 환경, UI 테스트, HTML·CSS)</td>
+</tr>
+<tr>
+<td>실기</td>
+<td>프로그래밍 언어 활용 중심. 100점 만점 60점 이상</td>
+</tr>
+<tr>
+<td>시행</td>
+<td>상시·정기 (기능사 등급)</td>
+</tr>
+</tbody>
+</table></div>
+<aside class="box box-warn">
+<p class="box-t">개편 첫해 시험이라 꼭 확인할 것</p>
+<p>2026년에 새로 바뀐 시험이라 기출문제가 적다. 문항 수, 시험 시간, 실기 방식(필답형인지 작업형인지)은 큐넷의 <strong>프로그래밍기능사 출제기준과 공개 예시문제</strong>를 꼭 확인하자. 이 교본은 시중 수험서들이 공통으로 다루는 개편 범위를 기준으로 정리했다.</p>
+</aside>
+<h3 id="s2">공부 순서</h3>
+<ol>
+<li><strong>1~2주</strong> — 언어 공통 개념과 Python: 문법이 가장 쉬워 코드 읽는 감을 잡기 좋다</li>
+<li><strong>3주</strong> — C 언어: 포인터·배열이 가장 어렵다. 변수표를 그리며 따라간다</li>
+<li><strong>4주</strong> — Java: 클래스·상속·오버라이딩</li>
+<li><strong>5주</strong> — 웹(HTML·CSS·JavaScript)과 네트워크</li>
+<li><strong>6주</strong> — 데이터베이스·SQL, 자료구조, 모의 문제</li>
+</ol>
+<aside class="box box-tip">
+<p class="box-t">코드를 직접 실행해 보자</p>
+<p>설치가 부담되면 웹 브라우저에서 바로 돌려 볼 수 있는 온라인 컴파일러(C, Java, Python 모두 지원)를 쓰면 된다. 이 교본의 코드 예제를 그대로 붙여 넣고 결과를 확인하는 것이 가장 빠른 공부법이다.</p>
+</aside>
+  </div>
+</section>
+
+<section class="chapter" id="ch1" data-title="언어 공통 개념" data-group="1과목 · 프로그래밍 언어">
+  <header class="ch-head reveal">
+    <p class="ch-group">1과목 · 프로그래밍 언어</p>
+    <h2>언어 공통 개념</h2>
+    <button type="button" class="ch-pdf" data-ch="ch1"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 1.5h5.5L12.5 4.5V14.5h-8.5z M9.5 1.5v3h3 M6 9.5l2 2 2-2 M8 6.5v5"/></svg>이 장만 PDF로</button>
+  </header>
+  <div class="ch-body">
+<h3 id="s3">프로그래밍 언어의 분류</h3>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>분류</th>
+<th>특징</th>
+<th>대표 언어</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>절차적(구조적) 언어</td>
+<td>순서대로 명령을 실행. 순차·선택·반복 3가지 구조로 작성. 함수 단위</td>
+<td>C, Pascal, FORTRAN, COBOL</td>
+</tr>
+<tr>
+<td>객체지향 언어</td>
+<td>데이터와 기능을 객체로 묶어 설계. 캡슐화·상속·다형성</td>
+<td>Java, C++, C#, Python, Smalltalk</td>
+</tr>
+<tr>
+<td>스크립트 언어</td>
+<td>컴파일 없이 인터프리터로 바로 실행. 서버 측(PHP, Python), 클라이언트 측(JavaScript)</td>
+<td>Python, JavaScript, PHP, Perl, Ruby, Shell</td>
+</tr>
+<tr>
+<td>선언형 언어</td>
+<td>"어떻게"가 아니라 "무엇을" 원하는지 기술. 함수형(LISP, Haskell), 논리형(Prolog), 질의어(SQL)</td>
+<td>SQL, HTML, LISP, Prolog</td>
+</tr>
+</tbody>
+</table></div>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>실행 방식</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>컴파일러</td>
+<td>전체 소스를 기계어(목적 코드)로 한 번에 번역 후 실행. 실행 빠름. C, C++</td>
+</tr>
+<tr>
+<td>인터프리터</td>
+<td>한 줄씩 번역하며 바로 실행. 실행 느리지만 수정·디버깅이 쉬움. Python, JavaScript</td>
+</tr>
+<tr>
+<td>혼합(바이트코드)</td>
+<td>컴파일해서 중간 코드(바이트코드)를 만들고 가상 머신이 실행. Java(JVM)</td>
+</tr>
+</tbody>
+</table></div>
+<p>번역 과정: 소스 코드 → <strong>컴파일러</strong> → 목적 코드 → <strong>링커</strong>(라이브러리 연결) → 실행 파일 → <strong>로더</strong>(메모리 적재) → 실행. 전처리기(<code>#include</code>, <code>#define</code>)는 컴파일 전에 동작한다.</p>
+<h3 id="s4">데이터 타입과 변수</h3>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>구분</th>
+<th>C</th>
+<th>Java</th>
+<th>Python</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>정수</td>
+<td><code>char</code>(1B), <code>short</code>(2B), <code>int</code>(4B), <code>long</code>(4/8B)</td>
+<td><code>byte</code>(1B), <code>short</code>(2B), <code>int</code>(4B), <code>long</code>(8B)</td>
+<td><code>int</code> (크기 제한 없음)</td>
+</tr>
+<tr>
+<td>실수</td>
+<td><code>float</code>(4B), <code>double</code>(8B)</td>
+<td><code>float</code>(4B), <code>double</code>(8B)</td>
+<td><code>float</code></td>
+</tr>
+<tr>
+<td>문자</td>
+<td><code>char</code>(1B, 아스키)</td>
+<td><code>char</code>(2B, 유니코드)</td>
+<td>문자열 <code>str</code>만 존재</td>
+</tr>
+<tr>
+<td>논리</td>
+<td>없음 (0은 거짓, 나머지 참)</td>
+<td><code>boolean</code> (true/false)</td>
+<td><code>bool</code> (True/False)</td>
+</tr>
+<tr>
+<td>문자열</td>
+<td>문자 배열 <code>char s[10]</code></td>
+<td><code>String</code> (클래스)</td>
+<td><code>str</code></td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>변수 이름 규칙</strong> (공통): 영문자·숫자·밑줄(<code>_</code>) 사용, <strong>숫자로 시작 불가</strong>, 공백·특수문자 불가, 예약어 불가, 대소문자 구분. Java는 <code>$</code>도 허용.</p>
+<ul>
+<li><strong>상수</strong>: 값을 바꿀 수 없음. C <code>const int A = 5;</code> / <code>#define A 5</code>, Java <code>final int A = 5;</code></li>
+<li><strong>형 변환</strong>: 자동(묵시적) 변환은 작은 타입 → 큰 타입. 강제(명시적) 변환은 <code>(int)3.7</code> → 3 (소수점 버림)</li>
+</ul>
+<h3 id="s5">연산자</h3>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>우선순위</th>
+<th>연산자</th>
+<th>결합 방향</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1 (높음)</td>
+<td><code>()</code> <code>[]</code> <code>.</code> <code>-&gt;</code> 후위 <code>++</code> <code>--</code></td>
+<td>→</td>
+</tr>
+<tr>
+<td>2</td>
+<td>단항: <code>!</code> <code>~</code> 전위 <code>++</code> <code>--</code> <code>+</code> <code>-</code> <code>(형변환)</code> <code>sizeof</code></td>
+<td>←</td>
+</tr>
+<tr>
+<td>3</td>
+<td>산술: <code>*</code> <code>/</code> <code>%</code></td>
+<td>→</td>
+</tr>
+<tr>
+<td>4</td>
+<td>산술: <code>+</code> <code>-</code></td>
+<td>→</td>
+</tr>
+<tr>
+<td>5</td>
+<td>시프트: <code>&lt;&lt;</code> <code>&gt;&gt;</code></td>
+<td>→</td>
+</tr>
+<tr>
+<td>6</td>
+<td>관계: <code>&lt;</code> <code>&lt;=</code> <code>&gt;</code> <code>&gt;=</code></td>
+<td>→</td>
+</tr>
+<tr>
+<td>7</td>
+<td>관계: <code>==</code> <code>!=</code></td>
+<td>→</td>
+</tr>
+<tr>
+<td>8</td>
+<td>비트: <code>&amp;</code> → <code>^</code> → <code>|</code></td>
+<td>→</td>
+</tr>
+<tr>
+<td>9</td>
+<td>논리: <code>&amp;&amp;</code> → <code>||</code></td>
+<td>→</td>
+</tr>
+<tr>
+<td>10</td>
+<td>조건(삼항): <code>조건 ? 참 : 거짓</code></td>
+<td>←</td>
+</tr>
+<tr>
+<td>11 (낮음)</td>
+<td>대입: <code>=</code> <code>+=</code> <code>-=</code> <code>*=</code> 등</td>
+<td>←</td>
+</tr>
+</tbody>
+</table></div>
+<p>외우는 순서: <strong>단항 → 산술 → 시프트 → 관계 → 비트 → 논리 → 조건 → 대입</strong> ("단산시관비논조대").</p>
+<aside class="box box-exam">
+<p class="box-t">자주 나오는 연산</p>
+<ul>
+<li>정수끼리 나누면 몫만 남는다: <code>7 / 2</code> = 3 (Python은 <code>7 // 2</code> = 3, <code>7 / 2</code> = 3.5)</li>
+<li><code>%</code>는 나머지: <code>7 % 3</code> = 1, <code>-7 % 3</code>은 C·Java에서 −1, Python에서 2</li>
+<li>전위 <code>++a</code>는 증가 후 사용, 후위 <code>a++</code>는 사용 후 증가</li>
+<li>비트 연산: <code>5 &amp; 3</code> = 1 (101 &amp; 011 = 001), <code>5 | 3</code> = 7, <code>5 ^ 3</code> = 6, <code>~5</code> = −6, <code>5 &lt;&lt; 1</code> = 10, <code>5 &gt;&gt; 1</code> = 2</li>
+<li>단락 평가: <code>A &amp;&amp; B</code>에서 A가 거짓이면 B는 실행하지 않는다. <code>A || B</code>에서 A가 참이면 B는 실행하지 않는다</li>
+</ul>
+</aside>
+<h3 id="s6">제어문 공통</h3>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>구조</th>
+<th>형태</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>선택</td>
+<td><code>if</code>, <code>if-else</code>, <code>else if</code>, <code>switch-case</code> (C·Java: <code>break</code> 없으면 아래 case로 계속 실행 — fall through)</td>
+</tr>
+<tr>
+<td>반복</td>
+<td><code>for</code>, <code>while</code>(조건 먼저 검사), <code>do-while</code>(최소 1번 실행 후 검사)</td>
+</tr>
+<tr>
+<td>분기</td>
+<td><code>break</code>(반복 탈출), <code>continue</code>(다음 반복으로), <code>return</code>, <code>goto</code></td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="s7">라이브러리와 예외 처리</h3>
+<p><strong>라이브러리</strong>는 자주 쓰는 함수·클래스를 모아 둔 것이다.</p>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>언어</th>
+<th>표준 라이브러리 예</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>C</td>
+<td><code>stdio.h</code>(입출력: printf, scanf), <code>stdlib.h</code>(malloc, free, atoi, rand), <code>string.h</code>(strlen, strcpy, strcmp, strcat), <code>math.h</code>(sqrt, pow), <code>time.h</code></td>
+</tr>
+<tr>
+<td>Java</td>
+<td><code>java.lang</code>(자동 import: String, Math, System), <code>java.util</code>(List, ArrayList, HashMap, Scanner), <code>java.io</code>(파일 입출력), <code>java.net</code></td>
+</tr>
+<tr>
+<td>Python</td>
+<td>내장 함수(print, len, range, input), <code>math</code>, <code>random</code>, <code>datetime</code>, <code>os</code>, <code>sys</code>, <code>re</code></td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>예외(Exception)</strong>는 실행 중 발생하는 오류다. Java·Python은 예외 처리 구문을 제공한다.</p>
+<pre><code class="language-java">try {
+    int x = 10 / 0;                    // ArithmeticException
+} catch (ArithmeticException e) {
+    System.out.println(&quot;0으로 나눌 수 없음&quot;);
+} finally {
+    System.out.println(&quot;항상 실행&quot;);
+}
+</code></pre>
+<pre><code class="language-python">try:
+    x = int(&quot;abc&quot;)                     # ValueError
+except ValueError as e:
+    print(&quot;숫자가 아님&quot;)
+else:
+    print(&quot;예외가 없을 때만 실행&quot;)
+finally:
+    print(&quot;항상 실행&quot;)
+</code></pre>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>대표 예외 (Java)</th>
+<th>원인</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ArithmeticException</code></td>
+<td>0으로 나눔</td>
+</tr>
+<tr>
+<td><code>NullPointerException</code></td>
+<td>null 객체 참조</td>
+</tr>
+<tr>
+<td><code>ArrayIndexOutOfBoundsException</code></td>
+<td>배열 범위 초과</td>
+</tr>
+<tr>
+<td><code>NumberFormatException</code></td>
+<td>숫자로 바꿀 수 없는 문자열</td>
+</tr>
+<tr>
+<td><code>ClassCastException</code></td>
+<td>잘못된 형 변환</td>
+</tr>
+<tr>
+<td><code>FileNotFoundException</code>, <code>IOException</code></td>
+<td>파일 없음, 입출력 오류 (<strong>검사 예외</strong> — 반드시 처리)</td>
+</tr>
+</tbody>
+</table></div>
+<ol class="quiz">
+<li class="q" data-ans="2"><div class="q-text"><p>C 언어에서 <code>int a = 7, b = 2; printf("%d", a / b * b + a % b);</code>의 출력은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>6</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>7</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>8</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>3</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> 7 / 2 = 3, 3 * 2 = 6, 7 % 2 = 1, 6 + 1 = 7. 몫 × 나누는 수 + 나머지 = 원래 수.</p></div></li>
+<li class="q" data-ans="3"><div class="q-text"><p>다음 연산자 중 우선순위가 가장 높은 것은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span><code>&amp;&amp;</code></span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span><code>==</code></span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span><code>+</code></span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span><code>=</code></span></button></li>
+</ol><div class="ans"><p><b>정답 ③</b> 산술 → 관계 → 논리 → 대입 순이다.</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>소스 코드 전체를 한 번에 번역하여 목적 코드를 만드는 번역기는?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>인터프리터</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>컴파일러</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>어셈블러</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>링커</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> 인터프리터는 한 줄씩 번역·실행한다. 링커는 목적 코드와 라이브러리를 연결한다.</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p><code>5 ^ 3</code>(비트 XOR)의 결과는?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>1</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>6</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>7</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>125</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> 101 XOR 011 = 110 = 6. 같으면 0, 다르면 1.</p></div></li>
+<li class="q" data-ans="3"><div class="q-text"><p>다음 중 변수 이름으로 사용할 수 없는 것은? (C 언어)</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>_count</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>total2</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>2total</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>sumValue</span></button></li>
+</ol><div class="ans"><p><b>정답 ③</b> 숫자로 시작할 수 없다.</p></div></li>
+<li class="q" data-ans="3"><div class="q-text"><p>반복문 중 조건과 상관없이 최소 한 번은 실행되는 것은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>for</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>while</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>do-while</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>foreach</span></button></li>
+</ol><div class="ans"><p><b>정답 ③</b> do-while은 본문을 먼저 실행하고 조건을 검사한다.</p></div></li>
+</ol>
+  </div>
+</section>
+
+<section class="chapter" id="ch2" data-title="Python" data-group="1과목 · 프로그래밍 언어">
+  <header class="ch-head reveal">
+    <p class="ch-group">1과목 · 프로그래밍 언어</p>
+    <h2>Python</h2>
+    <button type="button" class="ch-pdf" data-ch="ch2"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 1.5h5.5L12.5 4.5V14.5h-8.5z M9.5 1.5v3h3 M6 9.5l2 2 2-2 M8 6.5v5"/></svg>이 장만 PDF로</button>
+  </header>
+  <div class="ch-body">
+<h3 id="s8">Python 기본 문법</h3>
+<ul>
+<li>들여쓰기로 블록을 구분한다 (중괄호 없음). 보통 공백 4칸</li>
+<li>변수 선언 시 타입을 쓰지 않는다 (동적 타입)</li>
+<li>주석은 <code>#</code>, 여러 줄 문자열은 <code>"""..."""</code></li>
+</ul>
+<pre><code class="language-python">print(&quot;A&quot;, &quot;B&quot;, sep=&quot;-&quot;, end=&quot;!\n&quot;)   # A-B!
+print(7 / 2, 7 // 2, 7 % 2, 2 ** 10)  # 3.5 3 1 1024
+print(&quot;ab&quot; * 3)                       # ababab
+print(type(3), type(3.0), type(&quot;3&quot;))  # &lt;class 'int'&gt; &lt;class 'float'&gt; &lt;class 'str'&gt;
+x = int(input(&quot;숫자: &quot;))               # input은 항상 문자열을 돌려줌
+</code></pre>
+<h3 id="s9">자료형</h3>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>자료형</th>
+<th>예</th>
+<th>순서</th>
+<th>변경</th>
+<th>중복</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>리스트 <code>list</code></td>
+<td><code>[1, 2, 3]</code></td>
+<td>O</td>
+<td>O</td>
+<td>O</td>
+</tr>
+<tr>
+<td>튜플 <code>tuple</code></td>
+<td><code>(1, 2, 3)</code></td>
+<td>O</td>
+<td>X</td>
+<td>O</td>
+</tr>
+<tr>
+<td>세트 <code>set</code></td>
+<td><code>{1, 2, 3}</code></td>
+<td>X</td>
+<td>O</td>
+<td>X</td>
+</tr>
+<tr>
+<td>딕셔너리 <code>dict</code></td>
+<td><code>{"a": 1, "b": 2}</code></td>
+<td>O (3.7+)</td>
+<td>O</td>
+<td>키 중복 X</td>
+</tr>
+<tr>
+<td>문자열 <code>str</code></td>
+<td><code>"abc"</code></td>
+<td>O</td>
+<td>X</td>
+<td>O</td>
+</tr>
+</tbody>
+</table></div>
+<h4>인덱싱과 슬라이싱</h4>
+<pre><code class="language-python">s = &quot;PYTHON&quot;
+print(s[0], s[-1])      # P N
+print(s[1:4])           # YTH   (1 이상 4 미만)
+print(s[:2], s[3:])     # PY HON
+print(s[::2])           # PTO   (2칸씩)
+print(s[::-1])          # NOHTYP (뒤집기)
+
+a = [10, 20, 30, 40, 50]
+print(a[-2:])           # [40, 50]
+print(a[1:4:2])         # [20, 40]
+</code></pre>
+<h4>리스트 메서드</h4>
+<pre><code class="language-python">a = [3, 1, 2]
+a.append(5)        # [3, 1, 2, 5]      끝에 추가
+a.insert(1, 9)     # [3, 9, 1, 2, 5]   1번 위치에 삽입
+a.remove(9)        # [3, 1, 2, 5]      값 9 삭제 (첫 번째 것)
+x = a.pop()        # x = 5, a = [3, 1, 2]
+a.extend([7, 8])   # [3, 1, 2, 7, 8]
+a.sort()           # [1, 2, 3, 7, 8]   원본 정렬
+a.reverse()        # [8, 7, 3, 2, 1]
+print(a.index(3), a.count(1), len(a))   # 2 1 5
+b = sorted(a)      # 원본은 그대로, 정렬된 새 리스트
+</code></pre>
+<h4>딕셔너리와 세트</h4>
+<pre><code class="language-python">d = {&quot;kim&quot;: 90, &quot;lee&quot;: 80}
+d[&quot;park&quot;] = 70
+print(d.get(&quot;choi&quot;, 0))         # 0 (없으면 기본값)
+for k, v in d.items():
+    print(k, v)
+print(list(d.keys()))           # ['kim', 'lee', 'park']
+
+s1 = {1, 2, 3}; s2 = {2, 3, 4}
+print(s1 &amp; s2, s1 | s2, s1 - s2)   # {2, 3} {1, 2, 3, 4} {1}
+</code></pre>
+<h3 id="s10">제어문과 반복</h3>
+<pre><code class="language-python">for i in range(5):            print(i, end=&quot; &quot;)   # 0 1 2 3 4
+for i in range(1, 10, 3):     print(i, end=&quot; &quot;)   # 1 4 7
+for i in range(5, 0, -2):     print(i, end=&quot; &quot;)   # 5 3 1
+
+for idx, val in enumerate([&quot;a&quot;, &quot;b&quot;]):   # 0 a / 1 b
+    print(idx, val)
+for a, b in zip([1, 2], [&quot;x&quot;, &quot;y&quot;]):     # 1 x / 2 y
+    print(a, b)
+
+n = 0
+while n &lt; 3:
+    n += 1
+else:
+    print(&quot;반복이 break 없이 끝나면 실행&quot;)   # while/for-else
+</code></pre>
+<h4>컴프리헨션</h4>
+<pre><code class="language-python">sq = [x * x for x in range(1, 6)]            # [1, 4, 9, 16, 25]
+ev = [x for x in range(10) if x % 2 == 0]    # [0, 2, 4, 6, 8]
+dic = {x: len(x) for x in [&quot;a&quot;, &quot;bb&quot;]}       # {'a': 1, 'bb': 2}
+</code></pre>
+<h3 id="s11">함수</h3>
+<pre><code class="language-python">def add(a, b=10):            # b는 기본값 10
+    return a + b
+print(add(1), add(1, 2))     # 11 3
+
+def total(*args):            # 가변 인자 → 튜플
+    return sum(args)
+print(total(1, 2, 3))        # 6
+
+def info(**kw):              # 키워드 가변 인자 → 딕셔너리
+    return kw
+print(info(a=1, b=2))        # {'a': 1, 'b': 2}
+
+f = lambda x, y: x * y       # 익명 함수
+print(f(3, 4))               # 12
+print(list(map(lambda x: x * 2, [1, 2, 3])))      # [2, 4, 6]
+print(list(filter(lambda x: x &gt; 1, [1, 2, 3])))   # [2, 3]
+</code></pre>
+<aside class="box box-warn">
+<p class="box-t">가변 객체 공유</p>
+<pre><code class="language-python">a = [1, 2, 3]
+b = a          # 같은 리스트를 가리킴
+b.append(4)
+print(a)       # [1, 2, 3, 4]  ← a도 바뀜
+c = a[:]       # 복사본 (또는 a.copy())
+</code></pre>
+</aside>
+<h3 id="s12">클래스</h3>
+<pre><code class="language-python">class Animal:
+    count = 0                       # 클래스 변수
+    def __init__(self, name):       # 생성자
+        self.name = name            # 인스턴스 변수
+        Animal.count += 1
+    def speak(self):
+        return &quot;...&quot;
+
+class Dog(Animal):                  # 상속
+    def speak(self):                # 오버라이딩
+        return self.name + &quot;: 멍멍&quot;
+
+d = Dog(&quot;바둑이&quot;)
+print(d.speak(), Animal.count)      # 바둑이: 멍멍 1
+print(isinstance(d, Animal))        # True
+</code></pre>
+<h3 id="s13">문자열 메서드</h3>
+<pre><code class="language-python">s = &quot; Hello World &quot;
+print(s.strip())               # 'Hello World'  양쪽 공백 제거
+print(s.split())               # ['Hello', 'World']
+print(&quot;-&quot;.join([&quot;a&quot;, &quot;b&quot;]))    # a-b
+print(&quot;abc&quot;.upper(), &quot;ABC&quot;.lower())
+print(&quot;hello&quot;.replace(&quot;l&quot;, &quot;L&quot;))   # heLLo
+print(&quot;hello&quot;.find(&quot;l&quot;), &quot;hello&quot;.count(&quot;l&quot;))   # 2 2
+print(f&quot;{3.14159:.2f}&quot;, &quot;{}+{}&quot;.format(1, 2))   # 3.14 1+2
+</code></pre>
+<ol class="quiz">
+<li class="q" data-ans="2"><div class="q-text"><p>다음 Python 코드의 출력은?</p>
+<pre><code class="language-python">a = [1, 2, 3, 4, 5]
+print(a[1:4][::-1])
+</code></pre></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>[2, 3, 4]</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>[4, 3, 2]</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>[5, 4, 3]</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>[4, 3, 2, 1]</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> a[1:4] = [2, 3, 4], 뒤집으면 [4, 3, 2].</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>다음 코드의 출력은?</p>
+<pre><code class="language-python">print(17 // 5, 17 % 5, 2 ** 3)
+</code></pre></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>3.4 2 6</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>3 2 8</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>3 2 6</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>4 2 8</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> //는 몫, %는 나머지, **는 거듭제곱.</p></div></li>
+<li class="q" data-ans="3"><div class="q-text"><p>순서가 없고 중복을 허용하지 않는 Python 자료형은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>list</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>tuple</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>set</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>str</span></button></li>
+</ol><div class="ans"><p><b>정답 ③</b> set이다.</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>다음 코드의 출력은?</p>
+<pre><code class="language-python">x = [1, 2]
+y = x
+y.append(3)
+print(len(x))
+</code></pre></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>2</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>3</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>1</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>오류</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> y와 x는 같은 리스트를 가리키므로 x도 길이 3.</p></div></li>
+<li class="q" data-ans="1"><div class="q-text"><p>다음 코드의 출력은?</p>
+<pre><code class="language-python">r = [i * 2 for i in range(5) if i % 2 == 1]
+print(r)
+</code></pre></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>[2, 6]</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>[1, 3]</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>[0, 4, 8]</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>[2, 4, 6]</span></button></li>
+</ol><div class="ans"><p><b>정답 ①</b> i = 1, 3만 조건을 만족하고 2배 하면 [2, 6].</p></div></li>
+<li class="q" data-ans="3"><div class="q-text"><p>다음 코드의 출력은?</p>
+<pre><code class="language-python">d = {&quot;a&quot;: 1, &quot;b&quot;: 2}
+d[&quot;a&quot;] += 10
+print(sum(d.values()))
+</code></pre></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>3</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>12</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>13</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>오류</span></button></li>
+</ol><div class="ans"><p><b>정답 ③</b> a = 11, b = 2, 합 13.</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p><code>"banana".count("a") + "banana".find("n")</code>의 값은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>3</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>5</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>6</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>4</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> count("a") = 3, find("n") = 2 (첫 위치). 3 + 2 = 5.</p></div></li>
+</ol>
+  </div>
+</section>
+
+<section class="chapter" id="ch3" data-title="C 언어" data-group="1과목 · 프로그래밍 언어">
+  <header class="ch-head reveal">
+    <p class="ch-group">1과목 · 프로그래밍 언어</p>
+    <h2>C 언어</h2>
+    <button type="button" class="ch-pdf" data-ch="ch3"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 1.5h5.5L12.5 4.5V14.5h-8.5z M9.5 1.5v3h3 M6 9.5l2 2 2-2 M8 6.5v5"/></svg>이 장만 PDF로</button>
+  </header>
+  <div class="ch-body">
+<h3 id="s14">C 언어 기본 구조와 입출력</h3>
+<pre><code class="language-c">#include &lt;stdio.h&gt;          // 전처리기: 표준 입출력 헤더 포함
+
+int main(void) {            // 프로그램 시작점
+    int age = 20;
+    printf(&quot;나이: %d\n&quot;, age);
+    return 0;               // 0 = 정상 종료
+}
+</code></pre>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>서식 지정자</th>
+<th>의미</th>
+<th>예</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>%d</code></td>
+<td>10진 정수</td>
+<td><code>printf("%d", 10)</code> → 10</td>
+</tr>
+<tr>
+<td><code>%f</code></td>
+<td>실수 (기본 소수점 6자리)</td>
+<td><code>printf("%f", 3.14)</code> → 3.140000</td>
+</tr>
+<tr>
+<td><code>%.2f</code></td>
+<td>소수점 2자리</td>
+<td>3.14</td>
+</tr>
+<tr>
+<td><code>%c</code></td>
+<td>문자 1개</td>
+<td><code>printf("%c", 65)</code> → A</td>
+</tr>
+<tr>
+<td><code>%s</code></td>
+<td>문자열</td>
+<td><code>printf("%s", "hi")</code></td>
+</tr>
+<tr>
+<td><code>%o</code> / <code>%x</code></td>
+<td>8진수 / 16진수</td>
+<td><code>printf("%o %x", 10, 255)</code> → 12 ff</td>
+</tr>
+<tr>
+<td><code>%5d</code> / <code>%-5d</code></td>
+<td>5칸 오른쪽 / 왼쪽 정렬</td>
+<td></td>
+</tr>
+<tr>
+<td><code>%p</code></td>
+<td>포인터 주소</td>
+<td></td>
+</tr>
+</tbody>
+</table></div>
+<p>이스케이프 문자: <code>\n</code> 줄바꿈, <code>\t</code> 탭, <code>\\</code> 역슬래시, <code>\"</code> 큰따옴표, <code>\0</code> 널 문자(문자열 끝).</p>
+<p>입력: <code>scanf("%d", &amp;a);</code> — 변수 앞에 주소 연산자 <code>&amp;</code>. 문자열(배열)은 이름 자체가 주소라 <code>&amp;</code> 없이 <code>scanf("%s", str);</code></p>
+<h3 id="s15">제어문 따라가기</h3>
+<pre><code class="language-c">int i, sum = 0;
+for (i = 1; i &lt;= 10; i++) {
+    if (i % 2 == 0) continue;   // 짝수는 건너뜀
+    if (i &gt; 7) break;           // 7보다 크면 탈출
+    sum += i;
+}
+printf(&quot;%d %d&quot;, i, sum);        // 9 16
+</code></pre>
+<p>i = 1, 3, 5, 7을 더해 sum = 16. i = 8은 짝수라 continue, i = 9에서 break → i는 9.</p>
+<pre><code class="language-c">int n = 2;
+switch (n) {
+    case 1: printf(&quot;A&quot;);
+    case 2: printf(&quot;B&quot;);
+    case 3: printf(&quot;C&quot;); break;
+    default: printf(&quot;D&quot;);
+}
+// 출력: BC  (case 2부터 break를 만날 때까지 실행)
+</code></pre>
+<h3 id="s16">배열과 문자열</h3>
+<pre><code class="language-c">int a[5] = {10, 20, 30};     // 나머지 a[3], a[4]는 0
+int b[] = {1, 2, 3, 4};      // 크기 4로 자동 결정
+int m[2][3] = {{1,2,3},{4,5,6}};  // m[1][2] = 6
+char s[] = &quot;KOREA&quot;;          // 크기 6 (마지막 '\0' 포함)
+printf(&quot;%d %d&quot;, sizeof(s), (int)strlen(s));   // 6 5
+</code></pre>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>문자열 함수 (<code>string.h</code>)</th>
+<th>기능</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>strlen(s)</code></td>
+<td>길이 (<code>\0</code> 제외)</td>
+</tr>
+<tr>
+<td><code>strcpy(d, s)</code></td>
+<td>s를 d에 복사</td>
+</tr>
+<tr>
+<td><code>strcat(d, s)</code></td>
+<td>d 뒤에 s를 붙임</td>
+</tr>
+<tr>
+<td><code>strcmp(a, b)</code></td>
+<td>같으면 0, a가 사전순으로 앞이면 음수</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="s17">포인터</h3>
+<p><strong>포인터</strong>는 메모리 주소를 저장하는 변수다.</p>
+<pre><code class="language-c">int a = 10;
+int *p = &amp;a;        // p에 a의 주소 저장
+printf(&quot;%d\n&quot;, *p); // 10  (* : p가 가리키는 곳의 값)
+*p = 20;            // a를 20으로 바꿈
+printf(&quot;%d\n&quot;, a);  // 20
+</code></pre>
+<h4>배열과 포인터</h4>
+<p>배열 이름은 첫 원소의 주소다. <code>arr[i]</code> ≡ <code>*(arr + i)</code></p>
+<pre><code class="language-c">int arr[] = {10, 20, 30, 40};
+int *p = arr;
+printf(&quot;%d\n&quot;, *(p + 2));   // 30
+printf(&quot;%d\n&quot;, *p + 2);     // 12  (*p 먼저 = 10, 그다음 +2)
+p++;
+printf(&quot;%d\n&quot;, *p);         // 20
+</code></pre>
+<pre><code class="language-c">char *s = &quot;HELLO&quot;;
+printf(&quot;%c %s\n&quot;, *(s + 1), s + 2);   // E LLO
+</code></pre>
+<h4>함수와 포인터: 값 전달 vs 주소 전달</h4>
+<pre><code class="language-c">void swap1(int x, int y) { int t = x; x = y; y = t; }     // 값 복사 → 원본 안 바뀜
+void swap2(int *x, int *y) { int t = *x; *x = *y; *y = t; } // 주소 전달 → 원본 바뀜
+
+int main(void) {
+    int a = 1, b = 2;
+    swap1(a, b); printf(&quot;%d %d\n&quot;, a, b);   // 1 2
+    swap2(&amp;a, &amp;b); printf(&quot;%d %d\n&quot;, a, b); // 2 1
+    return 0;
+}
+</code></pre>
+<h4>2차원 배열과 포인터</h4>
+<pre><code class="language-c">int m[2][3] = {{1,2,3},{4,5,6}};
+printf(&quot;%d\n&quot;, *(*(m + 1) + 2));  // 6  = m[1][2]
+printf(&quot;%d\n&quot;, **m);              // 1  = m[0][0]
+</code></pre>
+<h3 id="s18">구조체</h3>
+<pre><code class="language-c">struct Student {
+    char name[10];
+    int score;
+};
+
+int main(void) {
+    struct Student s[2] = {{&quot;Kim&quot;, 90}, {&quot;Lee&quot;, 80}};
+    struct Student *p = s;
+    printf(&quot;%s %d\n&quot;, p-&gt;name, p-&gt;score);     // Kim 90   (-&gt; : 포인터로 멤버 접근)
+    printf(&quot;%d\n&quot;, (p + 1)-&gt;score);           // 80
+    printf(&quot;%d\n&quot;, s[1].score + p-&gt;score);    // 170
+    return 0;
+}
+</code></pre>
+<h3 id="s19">재귀 함수</h3>
+<pre><code class="language-c">int fact(int n) {
+    if (n &lt;= 1) return 1;
+    return n * fact(n - 1);
+}
+int fib(int n) {
+    if (n &lt;= 1) return n;
+    return fib(n - 1) + fib(n - 2);
+}
+// fact(5) = 120,  fib(6) = 8  (0 1 1 2 3 5 8)
+</code></pre>
+<h3 id="s20">static 변수와 메모리 영역</h3>
+<pre><code class="language-c">void count(void) {
+    static int c = 0;   // 프로그램 끝날 때까지 값 유지, 초기화는 한 번만
+    int d = 0;          // 호출할 때마다 새로 0
+    c++; d++;
+    printf(&quot;%d %d &quot;, c, d);
+}
+// count(); count(); count();  →  1 1 2 1 3 1
+</code></pre>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>영역</th>
+<th>저장 대상</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>코드(텍스트)</td>
+<td>실행할 기계어 코드</td>
+</tr>
+<tr>
+<td>데이터</td>
+<td>전역 변수, static 변수</td>
+</tr>
+<tr>
+<td>힙</td>
+<td><code>malloc</code>으로 동적 할당한 메모리 (<code>free</code>로 해제)</td>
+</tr>
+<tr>
+<td>스택</td>
+<td>지역 변수, 매개변수, 함수 호출 정보</td>
+</tr>
+</tbody>
+</table></div>
+<aside class="box box-tip">
+<p class="box-t">코드 문제 푸는 법</p>
+<ol>
+<li>변수표를 그린다 (변수 이름을 가로로 적고, 값이 바뀔 때마다 아래에 새 값을 적는다).</li>
+<li>반복문은 한 바퀴씩 표에 적는다. 머릿속으로만 돌리면 반드시 틀린다.</li>
+<li>출력 형식(<code>%d</code> 뒤 공백, <code>\n</code>)까지 그대로 적는다. 실기는 띄어쓰기 하나 틀려도 오답이다.</li>
+</ol>
+</aside>
+<ol class="quiz">
+<li class="q" data-ans="3"><div class="q-text"><p>다음 C 코드의 출력은?</p>
+<pre><code class="language-c">int a = 5, b;
+b = a++ + ++a;
+printf(&quot;%d %d&quot;, a, b);
+</code></pre></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>6 11</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>7 11</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>7 12</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>6 12</span></button></li>
+</ol><div class="ans"><p><b>정답 ③</b> a++는 5를 쓰고 a = 6, ++a는 a = 7로 만든 뒤 7을 쓴다. b = 5 + 7 = 12, a = 7. (한 식에서 같은 변수를 두 번 증감하는 것은 C 표준상 정의되지 않은 동작이지만, 시험에서는 왼쪽부터 순서대로 계산한다.)</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>다음 코드의 출력은?</p>
+<pre><code class="language-c">int arr[] = {3, 6, 9, 12};
+int *p = arr + 1;
+printf(&quot;%d&quot;, *p + *(p + 2));
+</code></pre></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>15</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>18</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>21</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>9</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> p는 arr[1] = 6을 가리킨다. *(p + 2)는 arr[3] = 12. 6 + 12 = 18.</p></div></li>
+<li class="q" data-ans="1"><div class="q-text"><p>다음 코드의 출력은?</p>
+<pre><code class="language-c">int i, s = 0;
+for (i = 0; i &lt; 5; i++) {
+    if (i == 3) break;
+    s += i;
+}
+printf(&quot;%d&quot;, s);
+</code></pre></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>3</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>6</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>10</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>0</span></button></li>
+</ol><div class="ans"><p><b>정답 ①</b> i = 0, 1, 2를 더해 3. i = 3에서 탈출.</p></div></li>
+<li class="q" data-ans="3"><div class="q-text"><p><code>char s[] = "ABC";</code>일 때 <code>sizeof(s)</code>의 값은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>2</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>3</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>4</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>8</span></button></li>
+</ol><div class="ans"><p><b>정답 ③</b> 문자열 끝의 널 문자 <code>\0</code>까지 4바이트.</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>구조체 포인터 p로 멤버 score에 접근하는 올바른 표현은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>p.score</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>p-&gt;score</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>*p.score</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>&amp;p.score</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> 포인터는 <code>-&gt;</code> 또는 <code>(*p).score</code>를 쓴다. <code>*p.score</code>는 우선순위 때문에 <code>*(p.score)</code>로 해석되어 오류.</p></div></li>
+<li class="q" data-ans="3"><div class="q-text"><p>다음 재귀 함수에서 f(4)의 값은?</p>
+<pre><code class="language-c">int f(int n) { if (n == 0) return 0; return n + f(n - 1); }
+</code></pre></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>4</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>6</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>10</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>24</span></button></li>
+</ol><div class="ans"><p><b>정답 ③</b> 4 + 3 + 2 + 1 + 0 = 10.</p></div></li>
+<li class="q" data-ans="3"><div class="q-text"><p>다음 코드의 출력은?</p>
+<pre><code class="language-c">int x = 3;
+switch (x) {
+    case 1: x += 1;
+    case 3: x += 3;
+    case 5: x += 5;
+    default: x += 10;
+}
+printf(&quot;%d&quot;, x);
+</code></pre></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>6</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>11</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>21</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>3</span></button></li>
+</ol><div class="ans"><p><b>정답 ③</b> case 3부터 break가 없어 끝까지 실행: 3 + 3 + 5 + 10 = 21.</p></div></li>
+</ol>
+  </div>
+</section>
+
+<section class="chapter" id="ch4" data-title="Java" data-group="1과목 · 프로그래밍 언어">
+  <header class="ch-head reveal">
+    <p class="ch-group">1과목 · 프로그래밍 언어</p>
+    <h2>Java</h2>
+    <button type="button" class="ch-pdf" data-ch="ch4"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 1.5h5.5L12.5 4.5V14.5h-8.5z M9.5 1.5v3h3 M6 9.5l2 2 2-2 M8 6.5v5"/></svg>이 장만 PDF로</button>
+  </header>
+  <div class="ch-body">
+<h3 id="s21">Java 기본 구조</h3>
+<pre><code class="language-java">public class Main {                          // 파일 이름은 public 클래스 이름과 같아야 함 (Main.java)
+    public static void main(String[] args) { // 프로그램 시작점
+        int a = 10;
+        System.out.println(&quot;a = &quot; + a);      // 줄바꿈 출력
+        System.out.print(&quot;no newline &quot;);     // 줄바꿈 없음
+        System.out.printf(&quot;%d %.1f%n&quot;, 3, 2.5); // 서식 출력
+    }
+}
+</code></pre>
+<ul>
+<li>문자열 + 숫자 = 문자열: <code>"a" + 1 + 2</code> → <code>"a12"</code>, <code>1 + 2 + "a"</code> → <code>"3a"</code> (왼쪽부터 계산)</li>
+<li><code>char</code> + 정수 = 정수: <code>'A' + 1</code> → 66, <code>(char)('A' + 1)</code> → 'B'</li>
+<li>정수 나눗셈: <code>7 / 2</code> → 3, <code>7.0 / 2</code> → 3.5</li>
+</ul>
+<h3 id="s22">객체지향의 핵심 개념</h3>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>개념</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>클래스 (Class)</td>
+<td>객체를 만들기 위한 설계도. 속성(필드)과 기능(메서드)</td>
+</tr>
+<tr>
+<td>객체 (Object) / 인스턴스</td>
+<td>클래스로 만든 실체. <code>new</code>로 생성</td>
+</tr>
+<tr>
+<td>캡슐화 (Encapsulation)</td>
+<td>데이터와 메서드를 묶고, 내부를 숨김(정보 은닉). <code>private</code> 필드 + <code>getter/setter</code></td>
+</tr>
+<tr>
+<td>상속 (Inheritance)</td>
+<td>부모 클래스의 속성·메서드를 자식이 물려받음. <code>extends</code>. Java는 <strong>단일 상속</strong>만</td>
+</tr>
+<tr>
+<td>다형성 (Polymorphism)</td>
+<td>같은 이름의 메서드가 객체에 따라 다르게 동작. 오버라이딩·오버로딩</td>
+</tr>
+<tr>
+<td>추상화 (Abstraction)</td>
+<td>공통 특징만 뽑아 표현. 추상 클래스, 인터페이스</td>
+</tr>
+</tbody>
+</table></div>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>구분</th>
+<th>오버로딩 (Overloading)</th>
+<th>오버라이딩 (Overriding)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>의미</td>
+<td>같은 클래스에서 <strong>이름은 같고 매개변수가 다른</strong> 메서드 여러 개</td>
+<td>부모 메서드를 자식이 <strong>같은 형태로 재정의</strong></td>
+</tr>
+<tr>
+<td>조건</td>
+<td>매개변수 개수·타입·순서가 달라야 함 (반환형만 다르면 안 됨)</td>
+<td>이름·매개변수·반환형이 같아야 함</td>
+</tr>
+</tbody>
+</table></div>
+<h4>접근 제어자</h4>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>제어자</th>
+<th>같은 클래스</th>
+<th>같은 패키지</th>
+<th>자식 클래스</th>
+<th>전체</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>public</code></td>
+<td>O</td>
+<td>O</td>
+<td>O</td>
+<td>O</td>
+</tr>
+<tr>
+<td><code>protected</code></td>
+<td>O</td>
+<td>O</td>
+<td>O</td>
+<td></td>
+</tr>
+<tr>
+<td>(default)</td>
+<td>O</td>
+<td>O</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>private</code></td>
+<td>O</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="s23">클래스와 생성자</h3>
+<pre><code class="language-java">class Car {
+    private String name;
+    private int speed;
+    static int count = 0;           // 클래스 변수: 모든 객체가 공유
+
+    Car(String name) {              // 생성자: 클래스 이름과 같고 반환형 없음
+        this(name, 0);              // 다른 생성자 호출
+    }
+    Car(String name, int speed) {
+        this.name = name;           // this: 자기 자신 객체
+        this.speed = speed;
+        count++;
+    }
+    void accel(int v) { speed += v; }
+    int getSpeed() { return speed; }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Car a = new Car(&quot;A&quot;);
+        Car b = new Car(&quot;B&quot;, 30);
+        a.accel(10); b.accel(10);
+        System.out.println(a.getSpeed() + &quot; &quot; + b.getSpeed() + &quot; &quot; + Car.count);  // 10 40 2
+    }
+}
+</code></pre>
+<h3 id="s24">상속과 오버라이딩 — 출력 문제의 핵심</h3>
+<pre><code class="language-java">class Parent {
+    int x = 10;
+    Parent() { System.out.print(&quot;P &quot;); }
+    void show() { System.out.print(&quot;Parent &quot;); }
+    static void st() { System.out.print(&quot;PS &quot;); }
+}
+class Child extends Parent {
+    int x = 20;
+    Child() { super(); System.out.print(&quot;C &quot;); }  // super(): 부모 생성자 (생략해도 자동 호출)
+    @Override
+    void show() { System.out.print(&quot;Child &quot;); }
+    static void st() { System.out.print(&quot;CS &quot;); }
+}
+public class Main {
+    public static void main(String[] args) {
+        Parent p = new Child();   // 출력: P C   (부모 생성자 → 자식 생성자)
+        p.show();                 // Child   (오버라이딩된 메서드는 실제 객체 기준)
+        System.out.print(p.x + &quot; &quot;);  // 10   (필드는 선언된 변수 타입 기준)
+        p.st();                   // PS      (static 메서드는 변수 타입 기준)
+    }
+}
+// 전체 출력: P C Child 10 PS
+</code></pre>
+<aside class="box box-exam">
+<p class="box-t">업캐스팅 규칙 3줄</p>
+<p><code>Parent p = new Child();</code>일 때
+1. <strong>메서드</strong>(인스턴스): 실제 객체(Child)의 오버라이딩된 메서드가 실행된다 — 동적 바인딩
+2. <strong>필드</strong>: 변수 타입(Parent)의 필드가 사용된다
+3. <strong>static 메서드</strong>: 변수 타입(Parent)의 것이 실행된다</p>
+</aside>
+<h3 id="s25">추상 클래스와 인터페이스</h3>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>구분</th>
+<th>추상 클래스 (abstract class)</th>
+<th>인터페이스 (interface)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>키워드</td>
+<td><code>abstract class</code>, 자식은 <code>extends</code></td>
+<td><code>interface</code>, 구현은 <code>implements</code></td>
+</tr>
+<tr>
+<td>객체 생성</td>
+<td>불가</td>
+<td>불가</td>
+</tr>
+<tr>
+<td>내용</td>
+<td>일반 메서드 + 추상 메서드, 필드</td>
+<td>추상 메서드, 상수(<code>public static final</code>), default·static 메서드</td>
+</tr>
+<tr>
+<td>다중</td>
+<td>단일 상속만</td>
+<td><strong>여러 개 구현 가능</strong></td>
+</tr>
+</tbody>
+</table></div>
+<pre><code class="language-java">interface Shape { double area(); }
+class Circle implements Shape {
+    double r; Circle(double r) { this.r = r; }
+    public double area() { return 3.14 * r * r; }
+}
+abstract class Animal {
+    abstract String sound();
+    void speak() { System.out.println(sound()); }
+}
+class Dog extends Animal { String sound() { return &quot;멍멍&quot;; } }
+</code></pre>
+<h3 id="s26">배열, 문자열, 컬렉션</h3>
+<pre><code class="language-java">int[] a = {5, 3, 8};
+int[][] m = new int[2][3];          // 모두 0으로 초기화
+System.out.println(a.length);       // 3 (배열은 length 속성)
+
+String s = &quot;Hello&quot;;
+System.out.println(s.length());     // 5 (문자열은 length() 메서드)
+System.out.println(s.charAt(1));    // e
+System.out.println(s.substring(1, 3)); // el  (1 이상 3 미만)
+System.out.println(s.indexOf(&quot;l&quot;)); // 2
+System.out.println(s.toUpperCase());// HELLO
+
+String x = &quot;java&quot;, y = &quot;java&quot;, z = new String(&quot;java&quot;);
+System.out.println(x == y);         // true  (같은 문자열 상수 풀)
+System.out.println(x == z);         // false (다른 객체 주소)
+System.out.println(x.equals(z));    // true  (내용 비교)
+</code></pre>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>컬렉션</th>
+<th>특징</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ArrayList</code></td>
+<td>순서 있음, 중복 허용, 인덱스 접근</td>
+</tr>
+<tr>
+<td><code>LinkedList</code></td>
+<td>순서 있음, 삽입·삭제 빠름</td>
+</tr>
+<tr>
+<td><code>HashSet</code></td>
+<td>중복 불가, 순서 없음</td>
+</tr>
+<tr>
+<td><code>HashMap</code></td>
+<td>키-값 쌍, 키 중복 불가</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="s27">예외와 스레드 (개념)</h3>
+<ul>
+<li><code>try</code> → 예외 발생 시 해당 <code>catch</code> → <code>finally</code>는 항상 실행</li>
+<li><code>throw</code>: 예외를 직접 발생, <code>throws</code>: 메서드 선언부에서 예외를 호출한 쪽으로 넘김</li>
+<li><strong>스레드</strong>: <code>Thread</code> 클래스 상속 또는 <code>Runnable</code> 인터페이스 구현 후 <code>start()</code> 호출 (<code>run()</code>을 직접 부르면 새 스레드가 아님)</li>
+</ul>
+<ol class="quiz">
+<li class="q" data-ans="2"><div class="q-text"><p>다음 Java 코드의 출력은?</p>
+<pre><code class="language-java">System.out.println(1 + 2 + &quot;3&quot; + 4 + 5);
+</code></pre></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>15</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>3345</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>12345</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>339</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> 왼쪽부터: 1 + 2 = 3, 3 + "3" = "33", "33" + 4 = "334", "3345".</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>다음 코드의 출력은?</p>
+<pre><code class="language-java">class A { void f() { System.out.print(&quot;A&quot;); } }
+class B extends A { void f() { System.out.print(&quot;B&quot;); } }
+public class Main {
+    public static void main(String[] args) {
+        A obj = new B();
+        obj.f();
+    }
+}
+</code></pre></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>A</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>B</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>AB</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>컴파일 오류</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> 오버라이딩된 메서드는 실제 객체(B)를 기준으로 실행된다.</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>같은 클래스 안에서 메서드 이름은 같지만 매개변수의 개수나 타입을 다르게 정의하는 것은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>오버라이딩</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>오버로딩</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>캡슐화</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>추상화</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> 오버로딩이다. 오버라이딩은 상속 관계에서 재정의.</p></div></li>
+<li class="q" data-ans="3"><div class="q-text"><p>다음 중 Java에서 여러 개를 동시에 구현할 수 있는 것은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>class</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>abstract class</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>interface</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>final class</span></button></li>
+</ol><div class="ans"><p><b>정답 ③</b> 클래스 상속은 단일 상속만, 인터페이스는 다중 구현이 가능하다.</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>다음 코드의 출력은?</p>
+<pre><code class="language-java">String a = &quot;hi&quot;;
+String b = new String(&quot;hi&quot;);
+System.out.print((a == b) + &quot; &quot; + a.equals(b));
+</code></pre></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>true true</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>false true</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>true false</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>false false</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> ==는 주소 비교, equals는 내용 비교.</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>다음 코드의 출력은?</p>
+<pre><code class="language-java">class P { P() { System.out.print(&quot;1&quot;); } }
+class C extends P { C() { System.out.print(&quot;2&quot;); } }
+public class Main { public static void main(String[] args) { new C(); new C(); } }
+</code></pre></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>12</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>1212</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>22</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>2121</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> 자식 객체를 만들 때마다 부모 생성자가 먼저 실행된다.</p></div></li>
+<li class="q" data-ans="4"><div class="q-text"><p>접근 제어자 중 같은 클래스에서만 접근할 수 있는 것은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>public</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>protected</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>default</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>private</span></button></li>
+</ol><div class="ans"><p><b>정답 ④</b> private은 클래스 내부에서만 접근할 수 있다.</p></div></li>
+</ol>
+  </div>
+</section>
+
+<section class="chapter" id="ch5" data-title="웹 언어 HTML · CSS · JavaScript" data-group="1과목 · 프로그래밍 언어">
+  <header class="ch-head reveal">
+    <p class="ch-group">1과목 · 프로그래밍 언어</p>
+    <h2>웹 언어 HTML · CSS · JavaScript</h2>
+    <button type="button" class="ch-pdf" data-ch="ch5"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 1.5h5.5L12.5 4.5V14.5h-8.5z M9.5 1.5v3h3 M6 9.5l2 2 2-2 M8 6.5v5"/></svg>이 장만 PDF로</button>
+  </header>
+  <div class="ch-body">
+<h3 id="s28">웹의 구조</h3>
+<p>브라우저(클라이언트)가 <strong>HTTP</strong> 요청을 보내면 웹 서버가 HTML·CSS·JS 파일을 응답한다. 동적인 처리는 <strong>WAS</strong>(Tomcat 등)가 서버 프로그램(Java, Python 등)을 실행해 결과를 만든다.</p>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>기술</th>
+<th>역할</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>HTML</td>
+<td>문서의 <strong>구조</strong>와 내용</td>
+</tr>
+<tr>
+<td>CSS</td>
+<td><strong>모양</strong>(색, 크기, 배치)</td>
+</tr>
+<tr>
+<td>JavaScript</td>
+<td><strong>동작</strong>(클릭 반응, 데이터 요청)</td>
+</tr>
+</tbody>
+</table></div>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>HTTP 메서드</th>
+<th>용도</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GET</td>
+<td>조회. 데이터가 URL에 노출</td>
+</tr>
+<tr>
+<td>POST</td>
+<td>생성·전송. 데이터가 본문에 담김</td>
+</tr>
+<tr>
+<td>PUT / PATCH</td>
+<td>전체 수정 / 일부 수정</td>
+</tr>
+<tr>
+<td>DELETE</td>
+<td>삭제</td>
+</tr>
+</tbody>
+</table></div>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>상태 코드</th>
+<th>의미</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>200</td>
+<td>성공</td>
+</tr>
+<tr>
+<td>301 / 302</td>
+<td>영구 / 임시 이동</td>
+</tr>
+<tr>
+<td>400</td>
+<td>잘못된 요청</td>
+</tr>
+<tr>
+<td>401 / 403</td>
+<td>인증 필요 / 권한 없음</td>
+</tr>
+<tr>
+<td>404</td>
+<td>찾을 수 없음</td>
+</tr>
+<tr>
+<td>500</td>
+<td>서버 내부 오류</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>URL 구조</strong>: <code>https://www.example.com:443/board/list?page=2#top</code> → 프로토콜 / 호스트 / 포트 / 경로 / 쿼리 스트링 / 프래그먼트.</p>
+<h3 id="s29">HTML</h3>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;ko&quot;&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;UTF-8&quot;&gt;
+  &lt;title&gt;제목&lt;/title&gt;
+  &lt;link rel=&quot;stylesheet&quot; href=&quot;style.css&quot;&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1&gt;가장 큰 제목&lt;/h1&gt;
+  &lt;p&gt;문단 &lt;strong&gt;강조&lt;/strong&gt; &lt;a href=&quot;https://example.com&quot;&gt;링크&lt;/a&gt;&lt;/p&gt;
+  &lt;img src=&quot;logo.png&quot; alt=&quot;로고&quot;&gt;
+  &lt;ul&gt;&lt;li&gt;순서 없는 목록&lt;/li&gt;&lt;/ul&gt;
+  &lt;ol&gt;&lt;li&gt;순서 있는 목록&lt;/li&gt;&lt;/ol&gt;
+  &lt;table&gt;
+    &lt;tr&gt;&lt;th&gt;이름&lt;/th&gt;&lt;th&gt;점수&lt;/th&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;td&gt;김&lt;/td&gt;&lt;td&gt;90&lt;/td&gt;&lt;/tr&gt;
+  &lt;/table&gt;
+  &lt;form action=&quot;/login&quot; method=&quot;post&quot;&gt;
+    &lt;input type=&quot;text&quot; name=&quot;id&quot; placeholder=&quot;아이디&quot;&gt;
+    &lt;input type=&quot;password&quot; name=&quot;pw&quot;&gt;
+    &lt;input type=&quot;checkbox&quot;&gt; &lt;input type=&quot;radio&quot;&gt;
+    &lt;select&gt;&lt;option&gt;선택&lt;/option&gt;&lt;/select&gt;
+    &lt;textarea&gt;&lt;/textarea&gt;
+    &lt;button type=&quot;submit&quot;&gt;로그인&lt;/button&gt;
+  &lt;/form&gt;
+  &lt;script src=&quot;app.js&quot;&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>태그</th>
+<th>의미</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>&lt;h1&gt;</code>~<code>&lt;h6&gt;</code></td>
+<td>제목 (h1이 가장 큼)</td>
+</tr>
+<tr>
+<td><code>&lt;p&gt;</code>, <code>&lt;br&gt;</code>, <code>&lt;hr&gt;</code></td>
+<td>문단, 줄바꿈, 가로줄</td>
+</tr>
+<tr>
+<td><code>&lt;a href&gt;</code></td>
+<td>링크</td>
+</tr>
+<tr>
+<td><code>&lt;img src alt&gt;</code></td>
+<td>이미지 (alt: 대체 텍스트, 접근성)</td>
+</tr>
+<tr>
+<td><code>&lt;div&gt;</code> / <code>&lt;span&gt;</code></td>
+<td>블록 영역 / 인라인 영역</td>
+</tr>
+<tr>
+<td>시맨틱 태그</td>
+<td><code>&lt;header&gt;</code>, <code>&lt;nav&gt;</code>, <code>&lt;main&gt;</code>, <code>&lt;section&gt;</code>, <code>&lt;article&gt;</code>, <code>&lt;aside&gt;</code>, <code>&lt;footer&gt;</code> — 의미를 가진 구조</td>
+</tr>
+<tr>
+<td><code>&lt;table&gt;</code>, <code>&lt;tr&gt;</code>, <code>&lt;th&gt;</code>, <code>&lt;td&gt;</code></td>
+<td>표, 행, 제목 칸, 데이터 칸. 병합은 <code>colspan</code>, <code>rowspan</code></td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>블록 요소</strong>(div, p, h1 — 한 줄 전체 차지)와 <strong>인라인 요소</strong>(span, a, img — 내용만큼만).</p>
+<h3 id="s30">CSS</h3>
+<pre><code class="language-css">/* 선택자 { 속성: 값; } */
+h1 { color: #222; font-size: 32px; }
+.box { width: 200px; padding: 10px; margin: 20px; border: 1px solid #ccc; }   /* class */
+#header { background: #f5f5f5; }                                               /* id */
+ul li { list-style: none; }          /* 후손 선택자 */
+ul &gt; li { }                          /* 자식 선택자 */
+a:hover { text-decoration: underline; }   /* 가상 클래스 */
+.row { display: flex; justify-content: space-between; align-items: center; }
+</code></pre>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>선택자</th>
+<th>의미</th>
+<th>우선순위</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>*</code></td>
+<td>전체</td>
+<td>가장 낮음</td>
+</tr>
+<tr>
+<td><code>태그</code></td>
+<td>태그 이름</td>
+<td></td>
+</tr>
+<tr>
+<td><code>.class</code></td>
+<td>클래스 (여러 요소)</td>
+<td></td>
+</tr>
+<tr>
+<td><code>#id</code></td>
+<td>아이디 (문서에 하나)</td>
+<td></td>
+</tr>
+<tr>
+<td><code>style=""</code></td>
+<td>인라인 스타일</td>
+<td></td>
+</tr>
+<tr>
+<td><code>!important</code></td>
+<td>강제</td>
+<td>가장 높음</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>박스 모델</strong>: 안쪽부터 <strong>content → padding → border → margin</strong>.</p>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>속성</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>display</code></td>
+<td>block, inline, inline-block, none, flex, grid</td>
+</tr>
+<tr>
+<td><code>position</code></td>
+<td>static(기본), relative(자기 위치 기준), absolute(가장 가까운 위치 지정 조상 기준), fixed(화면 기준), sticky</td>
+</tr>
+<tr>
+<td><code>float</code></td>
+<td>좌우로 띄워 배치</td>
+</tr>
+<tr>
+<td><code>@media</code></td>
+<td>화면 크기별 스타일 (반응형 웹)</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="s31">JavaScript</h3>
+<pre><code class="language-javascript">let count = 0;                 // 변경 가능 변수
+const PI = 3.14;               // 상수
+var old = 1;                   // 예전 방식 (함수 스코프)
+
+function add(a, b) { return a + b; }
+const mul = (a, b) =&gt; a * b;   // 화살표 함수
+
+const arr = [3, 1, 2];
+arr.push(4);                   // [3, 1, 2, 4]
+console.log(arr.length, arr.map(x =&gt; x * 2), arr.filter(x =&gt; x &gt; 1));
+
+const user = { name: &quot;Kim&quot;, age: 20 };
+console.log(user.name, user[&quot;age&quot;]);
+
+console.log(1 + &quot;2&quot;, &quot;3&quot; * 2, 5 == &quot;5&quot;, 5 === &quot;5&quot;);   // &quot;12&quot; 6 true false
+
+document.querySelector(&quot;#btn&quot;).addEventListener(&quot;click&quot;, () =&gt; {
+  document.querySelector(&quot;#out&quot;).textContent = &quot;클릭!&quot;;
+});
+</code></pre>
+<ul>
+<li><code>==</code>는 값만 비교(형 변환), <code>===</code>는 값과 타입 모두 비교</li>
+<li><strong>DOM</strong>: HTML 문서를 객체 트리로 표현한 것. <code>document.getElementById</code>, <code>querySelector</code>로 접근</li>
+<li>이벤트: <code>click</code>, <code>submit</code>, <code>keydown</code>, <code>load</code>, <code>change</code>, <code>mouseover</code></li>
+<li><strong>AJAX</strong>: 페이지 새로고침 없이 서버와 비동기 통신 (<code>fetch</code>, <code>XMLHttpRequest</code>)</li>
+<li><strong>JSON</strong>: <code>{"name": "Kim", "age": 20}</code> — 자바스크립트 객체 표기 기반 데이터 형식. <code>JSON.parse</code>, <code>JSON.stringify</code></li>
+</ul>
+<h4>기타 웹 기술</h4>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>기술</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>웹 표준</td>
+<td>W3C가 정한 표준을 지켜 어떤 브라우저에서도 같게</td>
+</tr>
+<tr>
+<td>웹 접근성</td>
+<td>장애인·고령자도 이용 가능하게 (alt 속성, 키보드 조작, 명도 대비)</td>
+</tr>
+<tr>
+<td>반응형 웹</td>
+<td>화면 크기에 맞춰 레이아웃 자동 조정 (미디어 쿼리)</td>
+</tr>
+<tr>
+<td>쿠키 / 세션</td>
+<td>클라이언트에 저장 / 서버에 저장하는 상태 정보</td>
+</tr>
+<tr>
+<td>프레임워크</td>
+<td>React, Vue(프론트엔드), Spring, Django, Express(백엔드)</td>
+</tr>
+</tbody>
+</table></div>
+<ol class="quiz">
+<li class="q" data-ans="2"><div class="q-text"><p>웹 문서의 구조를 정의하는 언어는?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>CSS</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>HTML</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>JavaScript</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>JSON</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> HTML은 구조, CSS는 모양, JavaScript는 동작.</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>CSS 박스 모델에서 안쪽부터 바깥쪽 순서로 옳은 것은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>content → border → padding → margin</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>content → padding → border → margin</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>margin → border → padding → content</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>padding → content → border → margin</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> 내용 → 안쪽 여백 → 테두리 → 바깥 여백.</p></div></li>
+<li class="q" data-ans="4"><div class="q-text"><p>CSS 선택자 중 우선순위가 가장 높은 것은? (!important 제외)</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>태그 선택자</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>클래스 선택자</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>아이디 선택자</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>인라인 스타일</span></button></li>
+</ol><div class="ans"><p><b>정답 ④</b> 인라인 &gt; 아이디 &gt; 클래스 &gt; 태그.</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>JavaScript에서 <code>5 === "5"</code>의 결과는?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>true</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>false</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>5</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>오류</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> ===는 타입까지 비교한다. ==는 true.</p></div></li>
+<li class="q" data-ans="3"><div class="q-text"><p>이미지를 볼 수 없는 사용자를 위해 대체 텍스트를 제공하는 속성은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>src</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>href</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>alt</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>title</span></button></li>
+</ol><div class="ans"><p><b>정답 ③</b> alt 속성은 웹 접근성의 기본이다.</p></div></li>
+<li class="q" data-ans="3"><div class="q-text"><p>HTTP 상태 코드 404의 의미는?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>성공</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>권한 없음</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>요청한 자원을 찾을 수 없음</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>서버 내부 오류</span></button></li>
+</ol><div class="ans"><p><b>정답 ③</b> 404 Not Found.</p></div></li>
+<li class="q" data-ans="1"><div class="q-text"><p>페이지 전체를 새로고침하지 않고 서버와 비동기적으로 데이터를 주고받는 기술은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>AJAX</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>DOM</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>CSS</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>SOAP</span></button></li>
+</ol><div class="ans"><p><b>정답 ①</b> Asynchronous JavaScript and XML.</p></div></li>
+</ol>
+  </div>
+</section>
+
+<section class="chapter" id="ch6" data-title="네트워크 기초" data-group="2과목 · 응용 SW 기초 기술">
+  <header class="ch-head reveal">
+    <p class="ch-group">2과목 · 응용 SW 기초 기술</p>
+    <h2>네트워크 기초</h2>
+    <button type="button" class="ch-pdf" data-ch="ch6"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 1.5h5.5L12.5 4.5V14.5h-8.5z M9.5 1.5v3h3 M6 9.5l2 2 2-2 M8 6.5v5"/></svg>이 장만 PDF로</button>
+  </header>
+  <div class="ch-body">
+<h3 id="s32">네트워크 기초</h3>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>구분</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>LAN</td>
+<td>건물·학교 같은 좁은 지역. 이더넷</td>
+</tr>
+<tr>
+<td>MAN</td>
+<td>도시 규모</td>
+</tr>
+<tr>
+<td>WAN</td>
+<td>국가·대륙 간 넓은 지역</td>
+</tr>
+</tbody>
+</table></div>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>토폴로지</th>
+<th>특징</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>성형(Star)</td>
+<td>중앙 장비에 모든 노드 연결. 중앙 고장 시 전체 마비, 관리 쉬움</td>
+</tr>
+<tr>
+<td>버스형(Bus)</td>
+<td>하나의 회선에 여러 노드 연결</td>
+</tr>
+<tr>
+<td>링형(Ring)</td>
+<td>원형으로 연결. 토큰 링</td>
+</tr>
+<tr>
+<td>망형(Mesh)</td>
+<td>모든 노드가 서로 연결. 신뢰성 높음. 링크 수 = n(n−1)/2</td>
+</tr>
+<tr>
+<td>트리형</td>
+<td>계층 구조</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="s33">OSI 7계층</h3>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>계층</th>
+<th>이름</th>
+<th>역할</th>
+<th>데이터 단위</th>
+<th>프로토콜·장비</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>7</td>
+<td>응용 (Application)</td>
+<td>사용자에게 서비스 제공</td>
+<td>데이터</td>
+<td>HTTP, FTP, SMTP, DNS, Telnet, SSH</td>
+</tr>
+<tr>
+<td>6</td>
+<td>표현 (Presentation)</td>
+<td>데이터 형식 변환, <strong>암호화, 압축</strong></td>
+<td>데이터</td>
+<td>JPEG, MPEG, ASCII, SSL 일부</td>
+</tr>
+<tr>
+<td>5</td>
+<td>세션 (Session)</td>
+<td>연결 설정·유지·종료, <strong>동기화(동기점)</strong></td>
+<td>데이터</td>
+<td>NetBIOS, RPC</td>
+</tr>
+<tr>
+<td>4</td>
+<td>전송 (Transport)</td>
+<td>종단 간 신뢰성, 흐름·오류 제어, 포트 번호</td>
+<td><strong>세그먼트</strong></td>
+<td><strong>TCP, UDP</strong></td>
+</tr>
+<tr>
+<td>3</td>
+<td>네트워크 (Network)</td>
+<td>경로 설정(라우팅), 논리 주소(IP)</td>
+<td><strong>패킷</strong></td>
+<td><strong>IP, ICMP, ARP</strong>, OSPF, BGP / <strong>라우터</strong></td>
+</tr>
+<tr>
+<td>2</td>
+<td>데이터 링크 (Data Link)</td>
+<td>인접 노드 간 전송, MAC 주소, 오류 검출</td>
+<td><strong>프레임</strong></td>
+<td>Ethernet, HDLC, PPP / <strong>스위치, 브리지</strong></td>
+</tr>
+<tr>
+<td>1</td>
+<td>물리 (Physical)</td>
+<td>전기 신호 전송</td>
+<td><strong>비트</strong></td>
+<td>RS-232C / <strong>허브, 리피터</strong></td>
+</tr>
+</tbody>
+</table></div>
+<p>외우는 법: 아래부터 <strong>"물데네전세표응"</strong> (Please Do Not Throw Sausage Pizza Away).</p>
+<p><strong>캡슐화</strong>: 송신 측은 위 계층에서 아래로 내려가며 각 계층 헤더를 붙이고, 수신 측은 아래에서 위로 올라가며 헤더를 떼어낸다.</p>
+<h3 id="s34">TCP/IP 4계층</h3>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>TCP/IP 계층</th>
+<th>OSI 대응</th>
+<th>프로토콜</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>응용 계층</td>
+<td>응용·표현·세션</td>
+<td>HTTP(80), HTTPS(443), FTP(20/21), SSH(22), Telnet(23), SMTP(25), DNS(53), DHCP(67/68), TFTP(69), POP3(110), IMAP(143), SNMP(161)</td>
+</tr>
+<tr>
+<td>전송 계층</td>
+<td>전송</td>
+<td>TCP, UDP</td>
+</tr>
+<tr>
+<td>인터넷 계층</td>
+<td>네트워크</td>
+<td>IP, ICMP, IGMP, ARP, RARP</td>
+</tr>
+<tr>
+<td>네트워크 액세스 계층</td>
+<td>데이터 링크·물리</td>
+<td>Ethernet, Wi-Fi(IEEE 802.11)</td>
+</tr>
+</tbody>
+</table></div>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>구분</th>
+<th>TCP</th>
+<th>UDP</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>연결</td>
+<td>연결 지향 (3-way handshake)</td>
+<td>비연결</td>
+</tr>
+<tr>
+<td>신뢰성</td>
+<td>높음 — 순서 보장, 재전송, 흐름·혼잡 제어</td>
+<td>낮음 — 보장 안 함</td>
+</tr>
+<tr>
+<td>속도</td>
+<td>느림</td>
+<td>빠름</td>
+</tr>
+<tr>
+<td>헤더</td>
+<td>20바이트 이상</td>
+<td>8바이트</td>
+</tr>
+<tr>
+<td>용도</td>
+<td>웹, 메일, 파일 전송</td>
+<td>DNS 질의, 실시간 스트리밍, VoIP, 게임</td>
+</tr>
+</tbody>
+</table></div>
+<figure class="fig" id="fig-tcp3">
+<svg viewBox="0 0 640 330" role="img" aria-label="TCP 3방향 핸드셰이크와 4방향 종료">
+<text x="110" y="28" text-anchor="middle" font-size="16" font-weight="700" fill="var(--text)">클라이언트</text>
+<text x="530" y="28" text-anchor="middle" font-size="16" font-weight="700" fill="var(--text)">서버</text>
+<line x1="110" y1="40" x2="110" y2="320" stroke="var(--line)" stroke-width="2"/>
+<line x1="530" y1="40" x2="530" y2="320" stroke="var(--line)" stroke-width="2"/>
+<defs><marker id="ta" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L8 4L0 8z" fill="var(--accent)"/></marker></defs>
+<g class="tm" style="--d:0ms"><line x1="112" y1="60" x2="526" y2="100" stroke="var(--accent)" stroke-width="2" marker-end="url(#ta)"/><text x="320" y="70" text-anchor="middle" font-size="14" fill="var(--text)">① SYN  seq=100</text></g>
+<g class="tm" style="--d:700ms"><line x1="528" y1="110" x2="114" y2="150" stroke="var(--accent)" stroke-width="2" marker-end="url(#ta)"/><text x="320" y="120" text-anchor="middle" font-size="14" fill="var(--text)">② SYN + ACK  seq=300, ack=101</text></g>
+<g class="tm" style="--d:1400ms"><line x1="112" y1="160" x2="526" y2="200" stroke="var(--accent)" stroke-width="2" marker-end="url(#ta)"/><text x="320" y="170" text-anchor="middle" font-size="14" fill="var(--text)">③ ACK  ack=301</text></g>
+<g class="tm" style="--d:2100ms"><rect x="20" y="215" width="600" height="30" rx="4" fill="var(--accent-2)"/><text x="320" y="235" text-anchor="middle" font-size="14" font-weight="700" fill="var(--text)">ESTABLISHED — 데이터 송수신</text></g>
+<g class="tm" style="--d:2800ms" font-size="12.5" fill="var(--text-2)"><text x="20" y="62">SYN_SENT</text><text x="545" y="112">SYN_RECEIVED</text><text x="20" y="152">ESTABLISHED</text><text x="545" y="202">ESTABLISHED</text></g>
+<g class="tm" style="--d:3400ms" font-size="13" fill="var(--text)"><text x="320" y="275" text-anchor="middle">종료는 4단계: FIN → ACK → FIN → ACK</text><text x="320" y="300" text-anchor="middle" fill="var(--text-2)">먼저 끊은 쪽은 TIME_WAIT 상태로 잠시 기다린다</text></g>
+</svg>
+<figcaption>연결할 때 세 번 주고받는다. 상대의 순서번호(seq)에 1을 더해 확인번호(ack)로 돌려주는 것이 핵심이다. SYN만 잔뜩 보내고 ③을 보내지 않는 공격이 SYN 플러딩이다.</figcaption>
+</figure>
+
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>프로토콜</th>
+<th>역할</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>IP</td>
+<td>패킷의 주소 지정·경로 선택. 비연결·비신뢰</td>
+</tr>
+<tr>
+<td>ICMP</td>
+<td>오류 보고·진단 메시지 (ping, traceroute)</td>
+</tr>
+<tr>
+<td>ARP</td>
+<td><strong>IP 주소 → MAC 주소</strong></td>
+</tr>
+<tr>
+<td>RARP</td>
+<td>MAC 주소 → IP 주소</td>
+</tr>
+<tr>
+<td>IGMP</td>
+<td>멀티캐스트 그룹 관리</td>
+</tr>
+<tr>
+<td>DHCP</td>
+<td>IP 주소 자동 할당</td>
+</tr>
+<tr>
+<td>DNS</td>
+<td>도메인 이름 ↔ IP 주소 변환</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="s35">IP 주소와 서브네팅</h3>
+<h4>IPv4 클래스</h4>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>클래스</th>
+<th>첫 옥텟</th>
+<th>기본 마스크</th>
+<th>용도</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A</td>
+<td>0~127</td>
+<td>255.0.0.0 (/8)</td>
+<td>대규모</td>
+</tr>
+<tr>
+<td>B</td>
+<td>128~191</td>
+<td>255.255.0.0 (/16)</td>
+<td>중규모</td>
+</tr>
+<tr>
+<td>C</td>
+<td>192~223</td>
+<td>255.255.255.0 (/24)</td>
+<td>소규모</td>
+</tr>
+<tr>
+<td>D</td>
+<td>224~239</td>
+<td></td>
+<td>멀티캐스트</td>
+</tr>
+<tr>
+<td>E</td>
+<td>240~255</td>
+<td></td>
+<td>연구용</td>
+</tr>
+</tbody>
+</table></div>
+<ul>
+<li>사설 IP: <strong>10.0.0.0/8, 172.16.0.0/12 (172.16~172.31), 192.168.0.0/16</strong></li>
+<li>루프백: 127.0.0.1</li>
+<li><strong>NAT</strong>: 사설 IP를 공인 IP로 변환. 공인 IP 절약, 내부망 숨김</li>
+</ul>
+<h4>서브넷 계산</h4>
+<figure class="fig" id="fig-subnet">
+<div class="sn">
+ <div class="sn-in">
+  <label>IP 주소<input type="text" class="sn-ip" value="192.168.10.70" inputmode="decimal" aria-label="IP 주소"></label>
+  <label>프리픽스 /<input type="number" class="sn-px" value="26" min="0" max="32" aria-label="프리픽스 길이"></label>
+ </div>
+ <div class="sn-bits" aria-hidden="true"></div>
+ <dl class="sn-out">
+  <div><dt>서브넷 마스크</dt><dd data-o="mask"></dd></div>
+  <div><dt>네트워크 주소</dt><dd data-o="net"></dd></div>
+  <div><dt>브로드캐스트 주소</dt><dd data-o="bc"></dd></div>
+  <div><dt>사용 가능 범위</dt><dd data-o="range"></dd></div>
+  <div><dt>호스트 수</dt><dd data-o="hosts"></dd></div>
+  <div><dt>클래스 · 종류</dt><dd data-o="cls"></dd></div>
+ </dl>
+</div>
+<figcaption>IP와 프리픽스를 바꿔 보자. 위 32칸에서 진한 칸이 네트워크 부분, 옅은 칸이 호스트 부분이다. 호스트 부분이 전부 0이면 네트워크 주소, 전부 1이면 브로드캐스트 주소라서 호스트 수는 2^(호스트 비트) − 2다.</figcaption>
+</figure>
+
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>프리픽스</th>
+<th>마스크</th>
+<th>블록 크기</th>
+<th>사용 가능 호스트</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>/24</td>
+<td>255.255.255.0</td>
+<td>256</td>
+<td>254</td>
+</tr>
+<tr>
+<td>/25</td>
+<td>.128</td>
+<td>128</td>
+<td>126</td>
+</tr>
+<tr>
+<td>/26</td>
+<td>.192</td>
+<td>64</td>
+<td>62</td>
+</tr>
+<tr>
+<td>/27</td>
+<td>.224</td>
+<td>32</td>
+<td>30</td>
+</tr>
+<tr>
+<td>/28</td>
+<td>.240</td>
+<td>16</td>
+<td>14</td>
+</tr>
+<tr>
+<td>/29</td>
+<td>.248</td>
+<td>8</td>
+<td>6</td>
+</tr>
+<tr>
+<td>/30</td>
+<td>.252</td>
+<td>4</td>
+<td>2</td>
+</tr>
+</tbody>
+</table></div>
+<aside class="box box-ex">
+<p class="box-t">FLSM 서브넷 나누기</p>
+<p>192.168.1.0/24를 4개의 서브넷으로 똑같이 나누면 → 2비트를 빌려 /26 (블록 64).
+| 서브넷 | 네트워크 | 사용 가능 | 브로드캐스트 |
+|---|---|---|---|
+| 1 | 192.168.1.0 | .1 ~ .62 | .63 |
+| 2 | 192.168.1.64 | .65 ~ .126 | .127 |
+| 3 | 192.168.1.128 | .129 ~ .190 | .191 |
+| 4 | 192.168.1.192 | .193 ~ .254 | .255 |</p>
+</aside>
+<h4>IPv6</h4>
+<ul>
+<li><strong>128비트</strong>, 16비트씩 8부분을 16진수로 콜론 구분 (2001:0db8::1)</li>
+<li>연속된 0은 <code>::</code>로 <strong>한 번만</strong> 생략, 각 부분 앞의 0 생략 가능</li>
+<li><strong>유니캐스트, 멀티캐스트, 애니캐스트</strong> (브로드캐스트 없음)</li>
+<li>자동 주소 설정, IPsec 기본, 헤더 단순화, QoS 향상</li>
+<li>IPv4 → IPv6 전환: <strong>듀얼 스택</strong>, <strong>터널링</strong>, <strong>주소 변환(NAT-PT)</strong></li>
+</ul>
+<h3 id="s36">네트워크 장비</h3>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>장비</th>
+<th>계층</th>
+<th>역할</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>리피터</td>
+<td>1</td>
+<td>신호 증폭·재생</td>
+</tr>
+<tr>
+<td>허브</td>
+<td>1</td>
+<td>여러 장치 연결, 모든 포트로 전달 (더미 허브 / 스위칭 허브)</td>
+</tr>
+<tr>
+<td>브리지</td>
+<td>2</td>
+<td>두 LAN 연결, MAC 주소로 필터링</td>
+</tr>
+<tr>
+<td>스위치</td>
+<td>2</td>
+<td>MAC 주소 테이블로 목적지 포트에만 전달. <strong>VLAN</strong> 지원 (L3 스위치는 라우팅도)</td>
+</tr>
+<tr>
+<td>라우터</td>
+<td>3</td>
+<td>서로 다른 네트워크 연결, <strong>최적 경로</strong> 선택</td>
+</tr>
+<tr>
+<td>게이트웨이</td>
+<td>4~7</td>
+<td>서로 다른 프로토콜의 네트워크 연결</td>
+</tr>
+</tbody>
+</table></div>
+<h4>라우팅 프로토콜</h4>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>구분</th>
+<th>프로토콜</th>
+<th>특징</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>내부 (IGP)</td>
+<td><strong>RIP</strong></td>
+<td>거리 벡터, <strong>홉 수</strong>로 경로 결정, 최대 15홉, 30초마다 갱신</td>
+</tr>
+<tr>
+<td></td>
+<td><strong>OSPF</strong></td>
+<td>링크 상태, <strong>다익스트라</strong> 최단 경로, 대규모 네트워크, 변화 시에만 갱신</td>
+</tr>
+<tr>
+<td></td>
+<td>IGRP / EIGRP</td>
+<td>시스코. 대역폭·지연 등 복합 메트릭</td>
+</tr>
+<tr>
+<td>외부 (EGP)</td>
+<td><strong>BGP</strong></td>
+<td>자치 시스템(AS) 사이 라우팅</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="s37">흐름 제어·오류 제어·다중화</h3>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>기법</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>정지-대기 (Stop-and-Wait)</td>
+<td>한 프레임 보내고 ACK를 받은 뒤 다음 전송</td>
+</tr>
+<tr>
+<td>슬라이딩 윈도우</td>
+<td>ACK 없이 윈도우 크기만큼 연속 전송. TCP 흐름 제어</td>
+</tr>
+<tr>
+<td>Go-Back-N ARQ</td>
+<td>오류 난 프레임부터 그 뒤 전부 재전송</td>
+</tr>
+<tr>
+<td>Selective Repeat ARQ</td>
+<td>오류 난 프레임만 재전송</td>
+</tr>
+<tr>
+<td>패리티·CRC</td>
+<td>오류 <strong>검출</strong></td>
+</tr>
+<tr>
+<td>해밍 코드</td>
+<td>오류 검출 + <strong>정정</strong> (FEC, 전진 오류 수정)</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>다중화</strong>: 하나의 회선을 여러 신호가 나눠 씀. FDM(주파수 분할), TDM(시간 분할), CDM(코드 분할), WDM(파장 분할, 광섬유).</p>
+<p><strong>교환 방식</strong>: 회선 교환(전화, 전용 경로), 패킷 교환(데이터를 패킷으로 나눠 전송 — <strong>가상 회선</strong> 방식과 <strong>데이터그램</strong> 방식).</p>
+<h3 id="s38">무선·최신 네트워크 용어</h3>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>용어</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CSMA/CD</td>
+<td>유선 이더넷. 충돌을 <strong>감지</strong>하면 재전송</td>
+</tr>
+<tr>
+<td>CSMA/CA</td>
+<td>무선 LAN. 충돌을 <strong>회피</strong>하기 위해 전송 전 대기</td>
+</tr>
+<tr>
+<td>Ad-hoc 네트워크</td>
+<td>기지국 없이 단말끼리 구성하는 임시 네트워크</td>
+</tr>
+<tr>
+<td>메시 네트워크</td>
+<td>대규모 디바이스가 그물처럼 연결</td>
+</tr>
+<tr>
+<td>SDN</td>
+<td>소프트웨어로 네트워크를 중앙에서 제어 (제어부와 전달부 분리)</td>
+</tr>
+<tr>
+<td>NFV</td>
+<td>네트워크 장비 기능을 가상화</td>
+</tr>
+<tr>
+<td>피코넷</td>
+<td>블루투스·UWB로 구성된 소규모 무선 네트워크</td>
+</tr>
+<tr>
+<td>VPN</td>
+<td>공중망 위에 암호화된 사설 터널</td>
+</tr>
+<tr>
+<td>MQTT</td>
+<td>IoT용 경량 발행-구독 메시지 프로토콜</td>
+</tr>
+</tbody>
+</table></div>
+<ol class="quiz">
+<li class="q" data-ans="2"><div class="q-text"><p>OSI 7계층 중 데이터의 암호화와 압축을 담당하는 계층은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>세션 계층</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>표현 계층</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>응용 계층</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>전송 계층</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> 표현 계층이다. 세션 계층은 동기화와 대화 관리.</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>IP 주소를 MAC 주소로 변환하는 프로토콜은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>RARP</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>ARP</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>ICMP</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>DNS</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> ARP이다.</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>192.168.10.0/24 네트워크를 /27로 나눌 때 만들어지는 서브넷 수와 서브넷당 사용 가능한 호스트 수는?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>4개, 62</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>8개, 30</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>8개, 32</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>16개, 14</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> 3비트를 빌려 2³ = 8개, 호스트 비트 5개 → 32 − 2 = 30.</p></div></li>
+<li class="q" data-ans="3"><div class="q-text"><p>다음 중 UDP를 사용하는 것으로 가장 적절한 것은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>웹 페이지 전송</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>이메일 전송</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>실시간 음성 통화</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>파일 다운로드</span></button></li>
+</ol><div class="ans"><p><b>정답 ③</b> 실시간 서비스는 속도가 중요해 UDP를 쓴다.</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>링크 상태 방식으로 다익스트라 알고리즘을 사용하는 내부 라우팅 프로토콜은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>RIP</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>OSPF</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>BGP</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>EGP</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> OSPF. RIP는 거리 벡터(홉 수).</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>IPv6에 대한 설명으로 틀린 것은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>128비트 주소를 사용한다</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>브로드캐스트 방식을 사용한다</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>16진수로 표기한다</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>연속된 0은 ::로 한 번 생략할 수 있다</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> IPv6에는 브로드캐스트가 없다.</p></div></li>
+<li class="q" data-ans="3"><div class="q-text"><p>오류를 검출할 뿐 아니라 정정까지 할 수 있는 코드는?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>패리티 비트</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>CRC</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>해밍 코드</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>체크섬</span></button></li>
+</ol><div class="ans"><p><b>정답 ③</b> 해밍 코드는 1비트 오류를 정정할 수 있다.</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>5개의 노드를 망형(Mesh)으로 모두 연결할 때 필요한 회선 수는?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>5</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>10</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>20</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>25</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> n(n−1)/2 = 5 × 4 / 2 = 10.</p></div></li>
+</ol>
+  </div>
+</section>
+
+<section class="chapter" id="ch7" data-title="데이터베이스 기초" data-group="2과목 · 응용 SW 기초 기술">
+  <header class="ch-head reveal">
+    <p class="ch-group">2과목 · 응용 SW 기초 기술</p>
+    <h2>데이터베이스 기초</h2>
+    <button type="button" class="ch-pdf" data-ch="ch7"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 1.5h5.5L12.5 4.5V14.5h-8.5z M9.5 1.5v3h3 M6 9.5l2 2 2-2 M8 6.5v5"/></svg>이 장만 PDF로</button>
+  </header>
+  <div class="ch-body">
+<h3 id="s39">데이터베이스와 DBMS</h3>
+<p><strong>데이터베이스</strong>는 여러 사람이 공유할 목적으로 통합·저장된 운영 데이터의 집합이다.</p>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>정의</th>
+<th>뜻</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>통합된 데이터</td>
+<td>중복 최소화</td>
+</tr>
+<tr>
+<td>저장된 데이터</td>
+<td>컴퓨터 저장 매체에 저장</td>
+</tr>
+<tr>
+<td>운영 데이터</td>
+<td>조직의 업무에 필요한 데이터</td>
+</tr>
+<tr>
+<td>공용 데이터</td>
+<td>여러 응용 프로그램이 공유</td>
+</tr>
+</tbody>
+</table></div>
+<p>특징: <strong>실시간 접근성, 계속적인 변화, 동시 공용, 내용에 의한 참조</strong>.</p>
+<p><strong>DBMS</strong>의 필수 기능: <strong>정의 기능</strong>(구조 정의 — DDL), <strong>조작 기능</strong>(검색·갱신 — DML), <strong>제어 기능</strong>(무결성·보안·병행 제어 — DCL).</p>
+<h4>스키마 3단계</h4>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>스키마</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>외부 스키마</td>
+<td>사용자·응용 프로그래머가 보는 개인적 구조 (서브 스키마, 뷰)</td>
+</tr>
+<tr>
+<td>개념 스키마</td>
+<td>조직 전체 관점의 논리적 구조. 하나만 존재</td>
+</tr>
+<tr>
+<td>내부 스키마</td>
+<td>물리적 저장 구조</td>
+</tr>
+</tbody>
+</table></div>
+<ul>
+<li>논리적 독립성: 개념 스키마가 바뀌어도 외부 스키마·응용 프로그램은 영향 없음</li>
+<li>물리적 독립성: 내부 스키마가 바뀌어도 개념 스키마는 영향 없음</li>
+</ul>
+<h4>데이터베이스 설계 순서</h4>
+<p>요구 조건 분석 → <strong>개념적 설계</strong>(E-R 다이어그램, DBMS 독립) → <strong>논리적 설계</strong>(테이블 변환, 정규화, 특정 DBMS 모델) → <strong>물리적 설계</strong>(저장 구조, 인덱스, 접근 경로) → 구현</p>
+<h3 id="s40">데이터 모델과 E-R 모델</h3>
+<p>데이터 모델의 구성 요소: <strong>개체(Entity)</strong>, <strong>속성(Attribute)</strong>, <strong>관계(Relationship)</strong>. 표시할 요소: <strong>구조, 연산, 제약 조건</strong>.</p>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>E-R 다이어그램 기호 (피터 첸)</th>
+<th>의미</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>사각형</td>
+<td>개체</td>
+</tr>
+<tr>
+<td>마름모</td>
+<td>관계</td>
+</tr>
+<tr>
+<td>타원</td>
+<td>속성</td>
+</tr>
+<tr>
+<td>밑줄 타원</td>
+<td>기본키 속성</td>
+</tr>
+<tr>
+<td>이중 타원</td>
+<td>다중값 속성</td>
+</tr>
+<tr>
+<td>이중 사각형</td>
+<td>약한 개체</td>
+</tr>
+<tr>
+<td>선</td>
+<td>연결</td>
+</tr>
+</tbody>
+</table></div>
+<p>논리적 데이터 모델 종류: <strong>관계형</strong>(테이블), <strong>계층형</strong>(트리, 1:N), <strong>네트워크형</strong>(그래프, N:M — CODASYL).</p>
+<h3 id="s41">관계형 데이터 모델</h3>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>용어</th>
+<th>뜻</th>
+<th>같은 말</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>릴레이션</td>
+<td>테이블</td>
+<td></td>
+</tr>
+<tr>
+<td>튜플</td>
+<td>행</td>
+<td>레코드</td>
+</tr>
+<tr>
+<td>속성</td>
+<td>열</td>
+<td>필드</td>
+</tr>
+<tr>
+<td>도메인</td>
+<td>한 속성이 가질 수 있는 값의 범위</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>차수 (Degree)</strong></td>
+<td><strong>속성(열)의 수</strong></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>카디널리티 (Cardinality)</strong></td>
+<td><strong>튜플(행)의 수</strong></td>
+<td></td>
+</tr>
+</tbody>
+</table></div>
+<p>릴레이션의 특징: 튜플은 모두 다르고(중복 없음), <strong>튜플과 속성 사이에 순서가 없으며</strong>, 속성 값은 원자값이다.</p>
+<h4>키</h4>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>키</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>슈퍼키</td>
+<td>튜플을 유일하게 식별하는 속성(들)의 집합. <strong>유일성</strong>만 만족</td>
+</tr>
+<tr>
+<td>후보키</td>
+<td>슈퍼키 중 <strong>최소성</strong>까지 만족 (유일성 + 최소성)</td>
+</tr>
+<tr>
+<td>기본키 (PK)</td>
+<td>후보키 중 선택한 대표 키. NULL 불가, 중복 불가</td>
+</tr>
+<tr>
+<td>대체키</td>
+<td>기본키가 아닌 나머지 후보키</td>
+</tr>
+<tr>
+<td>외래키 (FK)</td>
+<td>다른 릴레이션의 기본키를 참조하는 속성</td>
+</tr>
+</tbody>
+</table></div>
+<h4>무결성 제약 조건</h4>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>무결성</th>
+<th>규칙</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>개체 무결성</td>
+<td>기본키는 <strong>NULL이나 중복 값</strong>을 가질 수 없다</td>
+</tr>
+<tr>
+<td>참조 무결성</td>
+<td>외래키 값은 참조하는 릴레이션의 기본키 값이거나 NULL이어야 한다</td>
+</tr>
+<tr>
+<td>도메인 무결성</td>
+<td>속성 값은 정의된 도메인에 속해야 한다</td>
+</tr>
+<tr>
+<td>고유 무결성</td>
+<td>UNIQUE 속성은 중복될 수 없다</td>
+</tr>
+<tr>
+<td>NULL 무결성</td>
+<td>NOT NULL 속성은 NULL일 수 없다</td>
+</tr>
+<tr>
+<td>키 무결성</td>
+<td>릴레이션에는 최소 하나의 키가 존재해야 한다</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="s42">관계 대수와 관계 해석</h3>
+<p><strong>관계 대수</strong>: 원하는 정보를 <strong>어떻게</strong> 얻는지 절차를 기술하는 <strong>절차적</strong> 언어.</p>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>구분</th>
+<th>연산</th>
+<th>기호</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>순수 관계 연산</td>
+<td>Select</td>
+<td>σ (시그마)</td>
+<td>조건에 맞는 <strong>행</strong> 선택 (수평 연산)</td>
+</tr>
+<tr>
+<td></td>
+<td>Project</td>
+<td>π (파이)</td>
+<td>원하는 <strong>열</strong> 선택 (수직 연산, 중복 제거)</td>
+</tr>
+<tr>
+<td></td>
+<td>Join</td>
+<td>⋈</td>
+<td>공통 속성으로 두 릴레이션 결합</td>
+</tr>
+<tr>
+<td></td>
+<td>Division</td>
+<td>÷</td>
+<td>B의 모든 값과 관련 있는 A의 튜플</td>
+</tr>
+<tr>
+<td>일반 집합 연산</td>
+<td>합집합</td>
+<td>∪</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>교집합</td>
+<td>∩</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>차집합</td>
+<td>−</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>교차곱</td>
+<td>×</td>
+<td>카티션 곱. 차수는 더하고 카디널리티는 곱함</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>관계 해석</strong>: 원하는 정보가 <strong>무엇</strong>인지만 기술하는 <strong>비절차적</strong> 언어. 코드(Codd)가 제안. 튜플 관계 해석과 도메인 관계 해석. 기호 ∀(전칭 정량자, for all), ∃(존재 정량자, there exists).</p>
+<h3 id="s43">정규화</h3>
+<p><strong>이상(Anomaly)</strong>: 삽입 이상, 삭제 이상, 갱신 이상. 정규화는 이를 없애기 위해 <strong>함수적 종속</strong>에 따라 릴레이션을 분해한다.</p>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>정규형</th>
+<th>조건</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1NF</td>
+<td>모든 속성이 <strong>원자값</strong></td>
+</tr>
+<tr>
+<td>2NF</td>
+<td><strong>부분 함수 종속 제거</strong> (완전 함수 종속)</td>
+</tr>
+<tr>
+<td>3NF</td>
+<td><strong>이행 함수 종속 제거</strong> (A→B, B→C이면 A→C)</td>
+</tr>
+<tr>
+<td>BCNF</td>
+<td><strong>결정자가 모두 후보키</strong></td>
+</tr>
+<tr>
+<td>4NF</td>
+<td><strong>다치 종속 제거</strong></td>
+</tr>
+<tr>
+<td>5NF</td>
+<td><strong>조인 종속 제거</strong> (후보키를 통한 조인 종속만)</td>
+</tr>
+</tbody>
+</table></div>
+<p>외우는 법: "<strong>도부이결다조</strong>" — <strong>도</strong>메인 원자값, <strong>부</strong>분 종속 제거, <strong>이</strong>행 종속 제거, <strong>결</strong>정자 후보키, <strong>다</strong>치 종속 제거, <strong>조</strong>인 종속 제거.</p>
+<ul>
+<li><strong>반정규화</strong>: 성능 향상을 위해 의도적으로 정규화 원칙을 어기는 것. 테이블 병합·분할, 중복 테이블·칼럼 추가, 파생 칼럼, 이력 테이블</li>
+</ul>
+<h3 id="s44">트랜잭션</h3>
+<p><strong>트랜잭션</strong>은 데이터베이스의 상태를 바꾸는 하나의 논리적 작업 단위다.</p>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>특성 (ACID)</th>
+<th>설명</th>
+<th>관련 기능</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>원자성 (Atomicity)</td>
+<td>모두 반영되거나 전혀 반영되지 않음</td>
+<td>Commit / Rollback, 회복</td>
+</tr>
+<tr>
+<td>일관성 (Consistency)</td>
+<td>실행 후에도 일관된 상태</td>
+<td>무결성 제약</td>
+</tr>
+<tr>
+<td>독립성·격리성 (Isolation)</td>
+<td>실행 중 다른 트랜잭션이 끼어들 수 없음</td>
+<td>병행 제어 (로킹)</td>
+</tr>
+<tr>
+<td>영속성·지속성 (Durability)</td>
+<td>완료된 결과는 영구 반영</td>
+<td>회복 기법</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>트랜잭션 상태</strong>: 활동(Active) → 부분 완료(Partially Committed) → 완료(Committed) / 실패(Failed) → 철회(Aborted).</p>
+<h4>회복 기법</h4>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>기법</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>로그 기반 — 즉시 갱신</td>
+<td>변경을 바로 DB에 반영. 장애 시 <strong>Redo와 Undo</strong> 모두 필요</td>
+</tr>
+<tr>
+<td>로그 기반 — 지연 갱신</td>
+<td>부분 완료 후 한꺼번에 반영. 장애 시 <strong>Redo만</strong> 필요 (No-Undo)</td>
+</tr>
+<tr>
+<td>검사점 (Checkpoint)</td>
+<td>일정 시점을 기록해 그 이후만 회복</td>
+</tr>
+<tr>
+<td>그림자 페이징</td>
+<td>갱신 전 페이지 복사본을 두고 장애 시 교체. 로그 불필요</td>
+</tr>
+</tbody>
+</table></div>
+<h4>병행 제어</h4>
+<p>동시에 실행되는 트랜잭션이 서로 간섭하지 않게 한다. 문제: <strong>갱신 분실, 모순성, 연쇄 복귀</strong>.</p>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>기법</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>로킹 (Locking)</td>
+<td>사용 중인 데이터에 잠금. 로킹 단위가 <strong>크면</strong> 병행성 ↓ 관리 쉬움, <strong>작으면</strong> 병행성 ↑ 오버헤드 ↑</td>
+</tr>
+<tr>
+<td>2단계 로킹 (2PL)</td>
+<td>확장 단계(잠금만), 축소 단계(해제만). 직렬성 보장, 교착상태 가능</td>
+</tr>
+<tr>
+<td>타임스탬프 순서</td>
+<td>트랜잭션 시작 시각 순서대로 처리</td>
+</tr>
+<tr>
+<td>낙관적 기법 (검증 기법)</td>
+<td>일단 실행하고 끝날 때 검증</td>
+</tr>
+<tr>
+<td>다중 버전</td>
+<td>여러 버전을 두고 타임스탬프로 접근</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>고립 수준(Isolation Level)</strong>: Read Uncommitted → Read Committed → Repeatable Read → Serializable (뒤로 갈수록 엄격).</p>
+<h3 id="s45">인덱스, 뷰, 시스템 카탈로그</h3>
+<ul>
+<li><strong>인덱스</strong>: 검색 속도를 높이는 자료구조 (B-Tree, B+Tree, 해시). 조회는 빨라지지만 삽입·삭제·수정 시 인덱스도 갱신해야 해 느려짐. <strong>클러스터드 인덱스</strong>는 데이터가 인덱스 순서로 물리 정렬 (테이블당 하나)</li>
+<li><strong>뷰(View)</strong>: 가상 테이블. 논리적 독립성, 보안, 사용 편의. <strong>ALTER로 수정 불가</strong>(DROP 후 CREATE), 뷰 위에 뷰 생성 가능, 뷰를 삭제하면 그 위의 뷰도 삭제, 기본 테이블 기본키를 포함하지 않은 뷰는 삽입·삭제·갱신 제약</li>
+<li><strong>시스템 카탈로그(데이터 사전)</strong>: DB 객체 정보를 저장한 시스템 테이블. 사용자는 <strong>조회만</strong> 가능, DBMS가 자동 갱신. 내용은 <strong>메타데이터</strong></li>
+</ul>
+<h3 id="s46">파티셔닝, 분산 DB, 데이터 전환</h3>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>파티셔닝</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>범위 분할 (Range)</td>
+<td>값의 범위로 (날짜별)</td>
+</tr>
+<tr>
+<td>해시 분할 (Hash)</td>
+<td>해시 함수 값으로 고르게 분산</td>
+</tr>
+<tr>
+<td>조합 분할 (Composite)</td>
+<td>범위 + 해시</td>
+</tr>
+<tr>
+<td>목록 분할 (List)</td>
+<td>지정한 값 목록으로</td>
+</tr>
+<tr>
+<td>라운드 로빈</td>
+<td>차례로 분산</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>분산 데이터베이스 투명성</strong>: 위치 투명성, 복제(중복) 투명성, 병행 투명성, 장애 투명성.</p>
+<p><strong>데이터 전환(ETL)</strong>: 기존 시스템 데이터를 <strong>추출(Extract) → 변환(Transform) → 적재(Load)</strong>. 전환 후 <strong>데이터 정제</strong>(오류 데이터 수정)와 검증.</p>
+<p><strong>저장 장치 구성</strong>: DAS(서버에 직접 연결), NAS(네트워크로 연결된 파일 서버), SAN(광채널 전용 네트워크로 스토리지 공유).</p>
+<ol class="quiz">
+<li class="q" data-ans="2"><div class="q-text"><p>릴레이션에서 튜플(행)의 수를 무엇이라 하는가?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>차수</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>카디널리티</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>도메인</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>스키마</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> 차수(Degree)는 속성의 수, 카디널리티는 튜플의 수.</p></div></li>
+<li class="q" data-ans="3"><div class="q-text"><p>후보키가 만족해야 하는 성질은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>유일성만</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>최소성만</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>유일성과 최소성</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>유일성과 NULL 허용</span></button></li>
+</ol><div class="ans"><p><b>정답 ③</b> 슈퍼키는 유일성만, 후보키는 유일성과 최소성 모두.</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>기본키는 NULL 값이나 중복 값을 가질 수 없다는 무결성은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>참조 무결성</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>개체 무결성</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>도메인 무결성</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>키 무결성</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> 개체 무결성이다.</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>관계 대수에서 릴레이션의 특정 열(속성)만 선택하는 연산은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>Select (σ)</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>Project (π)</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>Join (⋈)</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>Division (÷)</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> Project는 수직 연산, Select는 조건에 맞는 행을 고르는 수평 연산.</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>이행적 함수 종속을 제거하는 정규화 단계는?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>1NF → 2NF</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>2NF → 3NF</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>3NF → BCNF</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>BCNF → 4NF</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> 2NF에서 이행 종속을 제거하면 3NF.</p></div></li>
+<li class="q" data-ans="1"><div class="q-text"><p>트랜잭션의 특성 중, 연산이 모두 반영되거나 전혀 반영되지 않아야 한다는 것은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>원자성</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>일관성</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>독립성</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>영속성</span></button></li>
+</ol><div class="ans"><p><b>정답 ①</b> 원자성(Atomicity).</p></div></li>
+<li class="q" data-ans="3"><div class="q-text"><p>로킹 단위에 대한 설명으로 옳은 것은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>로킹 단위가 크면 병행성 수준이 높아진다</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>로킹 단위가 작으면 로크의 수가 적어진다</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>로킹 단위가 크면 관리가 쉽지만 병행성이 낮아진다</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>로킹 단위는 항상 데이터베이스 전체다</span></button></li>
+</ol><div class="ans"><p><b>정답 ③</b> 크면 로크 수가 적어 관리가 쉽지만 병행성이 떨어진다.</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>지연 갱신 회복 기법에서 장애 발생 시 필요한 연산은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>Undo만</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>Redo만</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>Undo와 Redo</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>필요 없음</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> 커밋 전에는 DB에 반영하지 않으므로 Undo가 필요 없다.</p></div></li>
+<li class="q" data-ans="1"><div class="q-text"><p>차수가 3, 카디널리티가 4인 릴레이션 R과 차수 2, 카디널리티 5인 릴레이션 S의 교차곱(R × S) 결과는?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>차수 5, 카디널리티 20</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>차수 6, 카디널리티 9</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>차수 5, 카디널리티 9</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>차수 6, 카디널리티 20</span></button></li>
+</ol><div class="ans"><p><b>정답 ①</b> 차수는 더하고(3+2) 카디널리티는 곱한다(4×5).</p></div></li>
+</ol>
+  </div>
+</section>
+
+<section class="chapter" id="ch8" data-title="SQL" data-group="2과목 · 응용 SW 기초 기술">
+  <header class="ch-head reveal">
+    <p class="ch-group">2과목 · 응용 SW 기초 기술</p>
+    <h2>SQL</h2>
+    <button type="button" class="ch-pdf" data-ch="ch8"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 1.5h5.5L12.5 4.5V14.5h-8.5z M9.5 1.5v3h3 M6 9.5l2 2 2-2 M8 6.5v5"/></svg>이 장만 PDF로</button>
+  </header>
+  <div class="ch-body">
+<h3 id="s47">SQL의 분류</h3>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>분류</th>
+<th>명령어</th>
+<th>용도</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>DDL (정의어)</td>
+<td>CREATE, ALTER, DROP, TRUNCATE, RENAME</td>
+<td>테이블·뷰·인덱스 등 구조 정의</td>
+</tr>
+<tr>
+<td>DML (조작어)</td>
+<td>SELECT, INSERT, UPDATE, DELETE</td>
+<td>데이터 조회·조작</td>
+</tr>
+<tr>
+<td>DCL (제어어)</td>
+<td>GRANT, REVOKE (+ COMMIT, ROLLBACK, SAVEPOINT를 DCL로 분류하기도)</td>
+<td>권한·트랜잭션 제어</td>
+</tr>
+<tr>
+<td>TCL</td>
+<td>COMMIT, ROLLBACK, SAVEPOINT</td>
+<td>트랜잭션 제어</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="s48">DDL</h3>
+<pre><code class="language-sql">CREATE TABLE 학생 (
+    학번   CHAR(8)     PRIMARY KEY,
+    이름   VARCHAR(20) NOT NULL,
+    학과   VARCHAR(20),
+    학년   INT         CHECK (학년 BETWEEN 1 AND 4),
+    이메일 VARCHAR(50) UNIQUE,
+    지도교수 CHAR(5),
+    FOREIGN KEY (지도교수) REFERENCES 교수(교수번호)
+        ON DELETE SET NULL ON UPDATE CASCADE
+);
+
+ALTER TABLE 학생 ADD 연락처 VARCHAR(15);        -- 열 추가
+ALTER TABLE 학생 MODIFY 이름 VARCHAR(30);       -- 열 변경 (DBMS마다 ALTER COLUMN)
+ALTER TABLE 학생 DROP COLUMN 연락처;            -- 열 삭제
+
+DROP TABLE 학생 CASCADE;    -- 참조하는 객체까지 함께 삭제
+DROP TABLE 학생 RESTRICT;   -- 참조하는 객체가 있으면 삭제 거부
+
+CREATE VIEW 3학년 AS SELECT 학번, 이름 FROM 학생 WHERE 학년 = 3;
+CREATE INDEX idx_이름 ON 학생(이름);
+CREATE UNIQUE INDEX idx_mail ON 학생(이메일);
+</code></pre>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>참조 옵션</th>
+<th>부모 행 삭제·변경 시 자식 행</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CASCADE</td>
+<td>함께 삭제·변경</td>
+</tr>
+<tr>
+<td>SET NULL</td>
+<td>NULL로</td>
+</tr>
+<tr>
+<td>SET DEFAULT</td>
+<td>기본값으로</td>
+</tr>
+<tr>
+<td>RESTRICT / NO ACTION</td>
+<td>자식이 있으면 거부</td>
+</tr>
+</tbody>
+</table></div>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>삭제 명령 비교</th>
+<th>DROP</th>
+<th>TRUNCATE</th>
+<th>DELETE</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>분류</td>
+<td>DDL</td>
+<td>DDL</td>
+<td>DML</td>
+</tr>
+<tr>
+<td>대상</td>
+<td>구조 + 데이터</td>
+<td>데이터 전체 (구조 유지)</td>
+<td>조건에 맞는 행</td>
+</tr>
+<tr>
+<td>롤백</td>
+<td>불가</td>
+<td>불가</td>
+<td>가능</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="s49">DML: 조회 (SELECT)</h3>
+<pre><code class="language-sql">SELECT [DISTINCT] 열 [AS 별칭]
+  FROM 테이블
+ WHERE 조건
+ GROUP BY 열
+HAVING 그룹 조건
+ ORDER BY 열 [ASC | DESC];
+</code></pre>
+<figure class="fig" id="fig-order">
+<div class="ord">
+ <div class="ord-col"><p class="ord-h">작성 순서</p>
+  <ol class="ord-w"><li data-s="5">SELECT</li><li data-s="1">FROM</li><li data-s="2">WHERE</li><li data-s="3">GROUP BY</li><li data-s="4">HAVING</li><li data-s="6">ORDER BY</li></ol></div>
+ <div class="ord-col"><p class="ord-h">실행 순서</p>
+  <ol class="ord-x"><li data-s="1"><b>FROM</b><span>테이블을 가져온다</span></li><li data-s="2"><b>WHERE</b><span>행을 거른다</span></li><li data-s="3"><b>GROUP BY</b><span>그룹으로 묶는다</span></li><li data-s="4"><b>HAVING</b><span>그룹을 거른다</span></li><li data-s="5"><b>SELECT</b><span>보여줄 칼럼을 고른다</span></li><li data-s="6"><b>ORDER BY</b><span>정렬한다</span></li></ol></div>
+</div>
+<figcaption>SELECT는 맨 위에 쓰지만 다섯 번째로 실행된다. 그래서 SELECT에서 붙인 별칭(alias)은 WHERE·GROUP BY에서 쓸 수 없고, 마지막인 ORDER BY에서만 쓸 수 있다.</figcaption>
+</figure>
+
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>조건 연산자</th>
+<th>예</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>비교</td>
+<td><code>학년 &gt;= 3</code>, <code>학과 &lt;&gt; '경영'</code></td>
+</tr>
+<tr>
+<td>BETWEEN</td>
+<td><code>점수 BETWEEN 80 AND 90</code> (양 끝 포함)</td>
+</tr>
+<tr>
+<td>IN</td>
+<td><code>학과 IN ('컴공', '전자')</code></td>
+</tr>
+<tr>
+<td>LIKE</td>
+<td><code>이름 LIKE '김%'</code> (김으로 시작), <code>'_수%'</code> (두 번째 글자가 수)</td>
+</tr>
+<tr>
+<td>IS NULL</td>
+<td><code>이메일 IS NULL</code> (<code>= NULL</code>은 틀림)</td>
+</tr>
+<tr>
+<td>AND, OR, NOT</td>
+<td>NOT → AND → OR 순으로 처리</td>
+</tr>
+</tbody>
+</table></div>
+<pre><code class="language-sql">-- 학과별 평균 점수가 80 이상인 학과, 평균 내림차순
+SELECT 학과, COUNT(*) AS 인원, AVG(점수) AS 평균
+  FROM 성적
+ WHERE 학년 &gt;= 2
+ GROUP BY 학과
+HAVING AVG(점수) &gt;= 80
+ ORDER BY 평균 DESC;
+</code></pre>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>집계 함수</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>COUNT(*)</td>
+<td>행 수 (NULL 포함)</td>
+</tr>
+<tr>
+<td>COUNT(열)</td>
+<td>NULL이 아닌 값의 수</td>
+</tr>
+<tr>
+<td>SUM, AVG, MAX, MIN</td>
+<td>NULL 제외하고 계산</td>
+</tr>
+<tr>
+<td>STDDEV, VARIANCE</td>
+<td>표준편차, 분산</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="s50">조인</h3>
+<figure class="fig" id="fig-join">
+<div class="fig-ctrl" role="group" aria-label="조인 종류">
+ <button type="button" class="chip" data-j="inner" aria-pressed="true">INNER</button>
+ <button type="button" class="chip" data-j="left" aria-pressed="false">LEFT OUTER</button>
+ <button type="button" class="chip" data-j="right" aria-pressed="false">RIGHT OUTER</button>
+ <button type="button" class="chip" data-j="full" aria-pressed="false">FULL OUTER</button>
+ <button type="button" class="chip" data-j="cross" aria-pressed="false">CROSS</button>
+</div>
+<pre class="j-sql"><code></code></pre>
+<div class="j-wrap">
+ <div><p class="j-t">EMP</p><table class="j-a small"><thead><tr><th>ENAME</th><th>DEPTNO</th></tr></thead><tbody></tbody></table></div>
+ <div><p class="j-t">DEPT</p><table class="j-b small"><thead><tr><th>DEPTNO</th><th>DNAME</th></tr></thead><tbody></tbody></table></div>
+ <div class="j-res"><p class="j-t">결과 <span class="j-n"></span></p><table class="j-r small"><thead><tr><th>ENAME</th><th>E.DEPTNO</th><th>D.DEPTNO</th><th>DNAME</th></tr></thead><tbody></tbody></table></div>
+</div>
+<figcaption>버튼을 바꿔 보면 결과 행이 달라진다. 짝이 없는 행은 OUTER 쪽에서만 살아남고, 반대편 칼럼은 NULL로 채워진다. CROSS JOIN은 4 × 3 = 12행이다.</figcaption>
+</figure>
+
+<pre><code class="language-sql">-- 내부 조인 (동등 조인)
+SELECT S.이름, D.학과명
+  FROM 학생 S INNER JOIN 학과 D ON S.학과코드 = D.학과코드;
+-- 같은 의미: FROM 학생 S, 학과 D WHERE S.학과코드 = D.학과코드
+
+-- 자연 조인: 같은 이름의 열로 자동 조인, 중복 열은 하나만
+SELECT * FROM 학생 NATURAL JOIN 학과;
+
+-- 외부 조인: 짝이 없어도 왼쪽(학생)은 모두 출력
+SELECT S.이름, D.학과명
+  FROM 학생 S LEFT OUTER JOIN 학과 D ON S.학과코드 = D.학과코드;
+
+-- 셀프 조인: 같은 테이블끼리
+SELECT A.이름 AS 사원, B.이름 AS 상사
+  FROM 사원 A JOIN 사원 B ON A.상사번호 = B.사원번호;
+
+-- 교차 조인: 모든 조합 (행 수 = 곱)
+SELECT * FROM 학생 CROSS JOIN 과목;
+</code></pre>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>조인 종류</th>
+<th>결과</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>동등 조인 (Equi Join)</td>
+<td><code>=</code> 조건으로 결합</td>
+</tr>
+<tr>
+<td>비동등 조인 (Non-Equi)</td>
+<td><code>&gt;</code>, <code>BETWEEN</code> 등으로 결합</td>
+</tr>
+<tr>
+<td>자연 조인 (Natural)</td>
+<td>동등 조인 결과에서 중복 열 제거</td>
+</tr>
+<tr>
+<td>외부 조인 (Outer)</td>
+<td>LEFT, RIGHT, FULL. 짝 없는 행도 NULL로 포함</td>
+</tr>
+<tr>
+<td>세타 조인 (Theta)</td>
+<td>비교 연산자(=, &lt;, &gt; …)를 사용한 조인의 총칭</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="s51">서브쿼리와 집합 연산</h3>
+<pre><code class="language-sql">-- 단일 행 서브쿼리
+SELECT 이름 FROM 학생 WHERE 점수 &gt; (SELECT AVG(점수) FROM 학생);
+
+-- 다중 행 서브쿼리
+SELECT 이름 FROM 학생 WHERE 학과코드 IN (SELECT 학과코드 FROM 학과 WHERE 건물 = '공학관');
+SELECT 이름 FROM 학생 WHERE 점수 &gt; ALL (SELECT 점수 FROM 학생 WHERE 학과 = '경영');  -- 최댓값보다 큼
+SELECT 이름 FROM 학생 WHERE 점수 &gt; ANY (SELECT 점수 FROM 학생 WHERE 학과 = '경영');  -- 최솟값보다 큼
+
+-- 상관 서브쿼리 + EXISTS
+SELECT D.학과명 FROM 학과 D
+ WHERE EXISTS (SELECT 1 FROM 학생 S WHERE S.학과코드 = D.학과코드);
+</code></pre>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>집합 연산자</th>
+<th>의미</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>UNION</td>
+<td>합집합, 중복 제거</td>
+</tr>
+<tr>
+<td>UNION ALL</td>
+<td>합집합, 중복 포함</td>
+</tr>
+<tr>
+<td>INTERSECT</td>
+<td>교집합</td>
+</tr>
+<tr>
+<td>EXCEPT (MINUS)</td>
+<td>차집합</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="s52">DML: 삽입·수정·삭제</h3>
+<pre><code class="language-sql">INSERT INTO 학생 (학번, 이름, 학과, 학년) VALUES ('20260001', '홍길동', '컴공', 1);
+INSERT INTO 졸업생 SELECT * FROM 학생 WHERE 학년 = 4;      -- 서브쿼리로 여러 행
+
+UPDATE 학생 SET 학년 = 학년 + 1 WHERE 학과 = '컴공';
+DELETE FROM 학생 WHERE 학번 = '20260001';
+</code></pre>
+<aside class="box box-warn">
+<p class="box-t">시험에 자주 나오는 문법 함정</p>
+<ul>
+<li><code>UPDATE 테이블 **SET** 열 = 값</code> — SET 빠뜨리기</li>
+<li><code>DELETE **FROM** 테이블</code> — 표준 SQL은 FROM 필요</li>
+<li><code>INSERT INTO 테이블(열) **VALUES** (값)</code> — VALUES 철자</li>
+<li>문자열은 작은따옴표 <code>'홍길동'</code>, 숫자는 따옴표 없이</li>
+<li>WHERE 없는 UPDATE·DELETE는 <strong>모든 행</strong>에 적용</li>
+</ul>
+</aside>
+<h3 id="s53">DCL과 TCL</h3>
+<pre><code class="language-sql">GRANT SELECT, INSERT ON 학생 TO kim;                    -- 권한 부여
+GRANT ALL ON 학생 TO lee WITH GRANT OPTION;             -- 받은 권한을 남에게 줄 수 있음
+REVOKE INSERT ON 학생 FROM kim;                         -- 권한 회수
+REVOKE ALL ON 학생 FROM lee CASCADE;                    -- lee가 준 권한까지 연쇄 회수
+
+COMMIT;                -- 확정
+SAVEPOINT A;           -- 저장점
+ROLLBACK TO A;         -- 저장점까지 취소
+ROLLBACK;              -- 마지막 COMMIT 이후 전체 취소
+</code></pre>
+<h3 id="s54">절차형 SQL</h3>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>종류</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>프로시저 (Procedure)</td>
+<td>일련의 SQL 작업을 묶어 저장. <code>EXECUTE</code>(CALL)로 호출. 반환값 없음(출력 매개변수 가능)</td>
+</tr>
+<tr>
+<td>사용자 정의 함수 (Function)</td>
+<td>결과 값을 <strong>반드시 RETURN</strong>. SQL 문 안에서 호출 가능</td>
+</tr>
+<tr>
+<td>트리거 (Trigger)</td>
+<td>삽입·갱신·삭제 같은 <strong>이벤트가 발생하면 자동 실행</strong>. 트리거 안에서는 <strong>DCL(COMMIT, ROLLBACK) 사용 불가</strong></td>
+</tr>
+<tr>
+<td>커서 (Cursor)</td>
+<td>쿼리 결과 행을 하나씩 처리하기 위한 포인터. 선언(DECLARE) → OPEN → FETCH → CLOSE</td>
+</tr>
+</tbody>
+</table></div>
+<pre><code class="language-sql">CREATE OR REPLACE PROCEDURE 학년올리기 (p_학과 IN VARCHAR2)
+IS
+BEGIN
+    UPDATE 학생 SET 학년 = 학년 + 1 WHERE 학과 = p_학과;
+    COMMIT;
+EXCEPTION
+    WHEN OTHERS THEN ROLLBACK;
+END;
+
+CREATE OR REPLACE TRIGGER trg_로그
+AFTER INSERT ON 학생
+FOR EACH ROW
+BEGIN
+    INSERT INTO 로그 VALUES (:NEW.학번, SYSDATE);
+END;
+</code></pre>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>쿼리 성능</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>옵티마이저</td>
+<td>SQL 실행 계획을 세움. 규칙 기반(RBO), 비용 기반(CBO)</td>
+</tr>
+<tr>
+<td>힌트 (Hint)</td>
+<td>옵티마이저에게 실행 방법을 지시</td>
+</tr>
+<tr>
+<td>실행 계획 (Explain Plan)</td>
+<td>쿼리가 어떤 순서·방법으로 실행되는지 확인</td>
+</tr>
+</tbody>
+</table></div>
+<ol class="quiz">
+<li class="q" data-ans="4"><div class="q-text"><p>다음 중 DDL에 해당하지 않는 것은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>CREATE</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>ALTER</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>DROP</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>UPDATE</span></button></li>
+</ol><div class="ans"><p><b>정답 ④</b> UPDATE는 DML이다.</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>학생 테이블에서 이름이 '이'로 시작하는 학생을 조회하는 조건은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>이름 = '이%'</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>이름 LIKE '이%'</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>이름 LIKE '%이'</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>이름 IN '이%'</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> %는 0개 이상 임의 문자. '%이'는 이로 끝나는 이름.</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>다음 SQL에서 빈칸에 들어갈 키워드는?</p>
+<pre><code class="language-sql">SELECT 학과, AVG(점수) FROM 성적 GROUP BY 학과 (    ) AVG(점수) &gt;= 80;
+</code></pre></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>WHERE</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>HAVING</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>ORDER BY</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>ON</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> 그룹에 대한 조건은 HAVING에 쓴다.</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>권한을 회수할 때 사용하는 명령은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>GRANT</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>REVOKE</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>DELETE</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>ROLLBACK</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> REVOKE ... FROM 사용자.</p></div></li>
+<li class="q" data-ans="3"><div class="q-text"><p>이벤트가 발생할 때 자동으로 실행되며, 내부에서 COMMIT·ROLLBACK을 사용할 수 없는 절차형 SQL은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>프로시저</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>사용자 정의 함수</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>트리거</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>커서</span></button></li>
+</ol><div class="ans"><p><b>정답 ③</b> 트리거다.</p></div></li>
+<li class="q" data-ans="4"><div class="q-text"><p>다음 SQL의 실행 결과 행 수는? (학생 5행, 과목 4행)</p>
+<pre><code class="language-sql">SELECT * FROM 학생 CROSS JOIN 과목;
+</code></pre></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>4</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>5</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>9</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>20</span></button></li>
+</ol><div class="ans"><p><b>정답 ④</b> 교차 조인은 5 × 4 = 20행.</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>테이블의 구조는 유지하면서 모든 행을 삭제하고, 롤백할 수 없는 명령은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>DROP</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>TRUNCATE</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>DELETE</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>ALTER</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> TRUNCATE. DELETE는 롤백 가능, DROP은 구조까지 삭제.</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>다음 SQL에서 문법 오류가 있는 부분은?</p>
+<pre><code class="language-sql">UPDATE 학생 학년 = 2 WHERE 학번 = '1001';
+</code></pre></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>UPDATE 학생</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>학년 = 2 앞에 SET이 없음</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>WHERE 학번 = '1001'</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>오류 없음</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> <code>UPDATE 학생 SET 학년 = 2 ...</code>가 맞다.</p></div></li>
+</ol>
+  </div>
+</section>
+
+<section class="chapter" id="ch9" data-title="자료구조" data-group="2과목 · 응용 SW 기초 기술">
+  <header class="ch-head reveal">
+    <p class="ch-group">2과목 · 응용 SW 기초 기술</p>
+    <h2>자료구조</h2>
+    <button type="button" class="ch-pdf" data-ch="ch9"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 1.5h5.5L12.5 4.5V14.5h-8.5z M9.5 1.5v3h3 M6 9.5l2 2 2-2 M8 6.5v5"/></svg>이 장만 PDF로</button>
+  </header>
+  <div class="ch-body">
+<h3 id="s55">자료구조의 분류</h3>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>선형 구조</th>
+<th>비선형 구조</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>배열, 선형 리스트(연결 리스트), <strong>스택, 큐, 데크</strong></td>
+<td><strong>트리, 그래프</strong></td>
+</tr>
+</tbody>
+</table></div>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>구조</th>
+<th>특징</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>배열</td>
+<td>같은 타입을 연속 저장. 인덱스로 바로 접근, 삽입·삭제 느림</td>
+</tr>
+<tr>
+<td>연결 리스트</td>
+<td>노드가 포인터로 연결. 삽입·삭제 쉬움, 접근 느림, 포인터 공간 필요</td>
+</tr>
+<tr>
+<td><strong>스택 (Stack)</strong></td>
+<td><strong>LIFO</strong> (후입선출). 한쪽 끝(Top)에서만 삽입(Push)·삭제(Pop). 함수 호출, 수식 계산, 되돌리기, 재귀, DFS</td>
+</tr>
+<tr>
+<td><strong>큐 (Queue)</strong></td>
+<td><strong>FIFO</strong> (선입선출). 뒤(Rear)에서 삽입, 앞(Front)에서 삭제. 운영체제 작업 스케줄링, 버퍼, BFS</td>
+</tr>
+<tr>
+<td>데크 (Deque)</td>
+<td>양쪽 끝에서 삽입·삭제. 입력 제한 데크(Scroll), 출력 제한 데크(Shelf)</td>
+</tr>
+</tbody>
+</table></div>
+<aside class="box box-ex">
+<p class="box-t">스택 연산</p>
+<p>A, B, C, D 순서로 들어올 때 Push A, Push B, Pop, Push C, Pop, Push D, Pop, Pop → 출력 순서 <strong>B C D A</strong>.
+입력 순서가 1, 2, 3일 때 출력이 <strong>3, 1, 2</strong>는 불가능하다 (3을 먼저 꺼내려면 1, 2가 쌓여 있어 2가 먼저 나와야 함).</p>
+</aside>
+<h3 id="s56">트리</h3>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>용어</th>
+<th>뜻</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>루트 노드</td>
+<td>맨 위 노드</td>
+</tr>
+<tr>
+<td>단말 노드 (Leaf)</td>
+<td>자식이 없는 노드</td>
+</tr>
+<tr>
+<td>차수 (Degree)</td>
+<td>노드의 자식 수. <strong>트리의 차수</strong>는 가장 큰 노드 차수</td>
+</tr>
+<tr>
+<td>레벨 / 깊이</td>
+<td>루트가 레벨 1(또는 0)</td>
+</tr>
+<tr>
+<td>형제 노드</td>
+<td>같은 부모를 가진 노드</td>
+</tr>
+</tbody>
+</table></div>
+<ul>
+<li><strong>이진 트리</strong>: 자식이 최대 2개. 레벨 k의 최대 노드 수 2^(k−1), 깊이 k인 트리의 최대 노드 수 2^k − 1</li>
+<li><strong>포화 이진 트리</strong>: 모든 레벨이 꽉 참 / <strong>완전 이진 트리</strong>: 마지막 레벨을 왼쪽부터 채움 / <strong>편향 트리</strong>: 한쪽으로만</li>
+</ul>
+<h4>이진 트리 순회</h4>
+<pre><code class="language-text">        A
+      /   \
+     B     C
+    / \     \
+   D   E     F
+</code></pre>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>순회</th>
+<th>순서</th>
+<th>결과</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>전위 (Preorder)</td>
+<td><strong>루트</strong> → 왼쪽 → 오른쪽</td>
+<td>A B D E C F</td>
+</tr>
+<tr>
+<td>중위 (Inorder)</td>
+<td>왼쪽 → <strong>루트</strong> → 오른쪽</td>
+<td>D B E A C F</td>
+</tr>
+<tr>
+<td>후위 (Postorder)</td>
+<td>왼쪽 → 오른쪽 → <strong>루트</strong></td>
+<td>D E B F C A</td>
+</tr>
+</tbody>
+</table></div>
+<h4>수식 표기법</h4>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>표기</th>
+<th>예</th>
+<th>변환 방법</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>중위 (Infix)</td>
+<td><code>A + B * C</code></td>
+<td>일반 수식</td>
+</tr>
+<tr>
+<td>전위 (Prefix)</td>
+<td><code>+ A * B C</code></td>
+<td>괄호를 치고 연산자를 괄호 앞으로</td>
+</tr>
+<tr>
+<td>후위 (Postfix)</td>
+<td><code>A B C * +</code></td>
+<td>괄호를 치고 연산자를 괄호 뒤로</td>
+</tr>
+</tbody>
+</table></div>
+<aside class="box box-ex">
+<p class="box-t">중위 → 후위 변환</p>
+<p><code>(A + B) * (C − D)</code> → 괄호: <code>((A + B) * (C − D))</code> → 연산자를 각 괄호 뒤로: <code>((A B +) (C D −) *)</code> → <code>A B + C D − *</code></p>
+</aside>
+<h3 id="s57">그래프</h3>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>구분</th>
+<th>최대 간선 수 (정점 n개)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>무방향 그래프</td>
+<td>n(n−1)/2</td>
+</tr>
+<tr>
+<td>방향 그래프</td>
+<td>n(n−1)</td>
+</tr>
+</tbody>
+</table></div>
+<ul>
+<li>표현: 인접 행렬, 인접 리스트</li>
+<li>탐색: <strong>DFS</strong>(깊이 우선, 스택), <strong>BFS</strong>(너비 우선, 큐)</li>
+<li><strong>신장 트리</strong>: 모든 정점을 연결하는 사이클 없는 부분 그래프 (간선 n−1개). <strong>최소 비용 신장 트리</strong>: 크루스칼(간선 가중치 작은 것부터), 프림(정점에서 확장)</li>
+<li><strong>최단 경로</strong>: 다익스트라</li>
+</ul>
+<h3 id="s58">정렬</h3>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>정렬</th>
+<th>방식</th>
+<th>평균 시간</th>
+<th>최악</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>삽입 정렬</td>
+<td>앞의 정렬된 부분에 알맞은 자리로 삽입</td>
+<td>O(n²)</td>
+<td>O(n²)</td>
+</tr>
+<tr>
+<td>선택 정렬</td>
+<td>최솟값을 골라 맨 앞과 교환</td>
+<td>O(n²)</td>
+<td>O(n²)</td>
+</tr>
+<tr>
+<td>버블 정렬</td>
+<td>인접한 두 값을 비교·교환</td>
+<td>O(n²)</td>
+<td>O(n²)</td>
+</tr>
+<tr>
+<td>셸 정렬</td>
+<td>간격을 두고 삽입 정렬</td>
+<td>O(n^1.5)</td>
+<td>O(n²)</td>
+</tr>
+<tr>
+<td><strong>퀵 정렬</strong></td>
+<td>피벗(기준)으로 분할 정복</td>
+<td><strong>O(n log n)</strong></td>
+<td>O(n²)</td>
+</tr>
+<tr>
+<td><strong>힙 정렬</strong></td>
+<td>완전 이진 트리(힙) 이용</td>
+<td>O(n log n)</td>
+<td>O(n log n)</td>
+</tr>
+<tr>
+<td><strong>병합 정렬</strong></td>
+<td>반으로 나눠 정렬 후 병합</td>
+<td>O(n log n)</td>
+<td>O(n log n)</td>
+</tr>
+<tr>
+<td>기수(Radix) 정렬</td>
+<td>자릿수별로 버킷에 분배</td>
+<td>O(dn)</td>
+<td>O(dn)</td>
+</tr>
+</tbody>
+</table></div>
+<aside class="box box-ex">
+<p class="box-t">선택 정렬 1회전</p>
+<p>8, 3, 4, 9, 7 → 최솟값 3과 첫 자리 8 교환 → <strong>3</strong>, 8, 4, 9, 7
+버블 정렬 1회전: 8,3,4,9,7 → 3,8,4,9,7 → 3,4,8,9,7 → 3,4,8,9,7 → 3,4,8,7,<strong>9</strong>
+삽입 정렬 2회전까지: 8,3 → <strong>3,8</strong>,4,9,7 → <strong>3,4,8</strong>,9,7</p>
+</aside>
+<h3 id="s59">검색과 해싱</h3>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>검색</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>선형 검색</td>
+<td>처음부터 하나씩. O(n)</td>
+</tr>
+<tr>
+<td><strong>이진 검색</strong></td>
+<td><strong>정렬된</strong> 자료에서 중간값과 비교해 절반씩 줄임. O(log n). 중간 = (low + high) / 2</td>
+</tr>
+<tr>
+<td>해싱</td>
+<td>해시 함수로 저장 위치를 바로 계산. O(1)</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>해시 함수</strong>: 제산법(나머지), 제곱법, 폴딩법, 기수 변환법, 숫자 분석법.
+<strong>충돌(Collision)</strong>: 다른 키가 같은 주소를 가짐. 같은 주소의 키들을 <strong>동의어(Synonym)</strong>라 한다. 해결: 개방 주소법(선형 탐사), 체이닝.</p>
+<ol class="quiz">
+<li class="q" data-ans="2"><div class="q-text"><p>후입선출(LIFO) 방식의 자료구조는?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>큐</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>스택</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>데크</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>트리</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> 스택이다. 큐는 FIFO.</p></div></li>
+<li class="q" data-ans="1"><div class="q-text"><p>다음 트리를 전위 순회한 결과는?</p>
+<pre><code class="language-text">      1
+     / \
+    2   3
+   / \
+  4   5
+</code></pre></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>1 2 4 5 3</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>4 2 5 1 3</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>4 5 2 3 1</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>1 2 3 4 5</span></button></li>
+</ol><div class="ans"><p><b>정답 ①</b> 루트 → 왼쪽 → 오른쪽. ②는 중위, ③은 후위.</p></div></li>
+<li class="q" data-ans="1"><div class="q-text"><p>중위 표기식 <code>A * (B + C) − D</code>를 후위 표기식으로 바꾼 것은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>A B C + * D −</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>A B + C * D −</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>− * A + B C D</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>A B C D + * −</span></button></li>
+</ol><div class="ans"><p><b>정답 ①</b> 괄호 안 B C +, 그다음 A와 곱해 A B C + *, 마지막에 D를 빼서 D −.</p></div></li>
+<li class="q" data-ans="3"><div class="q-text"><p>평균 시간 복잡도가 O(n log n)이지만 최악의 경우 O(n²)인 정렬은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>힙 정렬</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>병합 정렬</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>퀵 정렬</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>버블 정렬</span></button></li>
+</ol><div class="ans"><p><b>정답 ③</b> 퀵 정렬은 피벗 선택이 나쁘면 O(n²)이 된다.</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>정점이 6개인 무방향 그래프가 가질 수 있는 최대 간선 수는?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>12</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>15</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>30</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>36</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> n(n−1)/2 = 6 × 5 / 2 = 15.</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>이진 검색에 대한 설명으로 옳은 것은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>정렬되지 않은 자료에서도 사용할 수 있다</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>반드시 자료가 정렬되어 있어야 한다</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>시간 복잡도는 O(n)이다</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>해시 함수를 사용한다</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> 정렬된 자료에서 절반씩 범위를 줄인다. O(log n).</p></div></li>
+</ol>
+  </div>
+</section>
+
+<section class="chapter" id="ch10" data-title="개발 환경과 UI 테스트" data-group="2과목 · 응용 SW 기초 기술">
+  <header class="ch-head reveal">
+    <p class="ch-group">2과목 · 응용 SW 기초 기술</p>
+    <h2>개발 환경과 UI 테스트</h2>
+    <button type="button" class="ch-pdf" data-ch="ch10"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 1.5h5.5L12.5 4.5V14.5h-8.5z M9.5 1.5v3h3 M6 9.5l2 2 2-2 M8 6.5v5"/></svg>이 장만 PDF로</button>
+  </header>
+  <div class="ch-body">
+<h3 id="s60">개발 환경 구축</h3>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>구분</th>
+<th>예</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>운영체제</td>
+<td>Windows, Linux, macOS</td>
+</tr>
+<tr>
+<td>언어 실행 환경</td>
+<td>JDK·JRE·JVM(Java), Python 인터프리터, gcc(C)</td>
+</tr>
+<tr>
+<td>통합 개발 환경 (IDE)</td>
+<td>VS Code, 이클립스, IntelliJ, PyCharm. 편집·컴파일·디버깅을 한곳에서</td>
+</tr>
+<tr>
+<td>빌드 도구</td>
+<td>Maven, Gradle (Java), pip (Python 패키지 설치)</td>
+</tr>
+<tr>
+<td>형상 관리</td>
+<td>Git, GitHub, SVN</td>
+</tr>
+<tr>
+<td>웹 서버 / WAS</td>
+<td>Apache, Nginx / Tomcat</td>
+</tr>
+<tr>
+<td>DBMS</td>
+<td>MySQL, Oracle, PostgreSQL</td>
+</tr>
+</tbody>
+</table></div>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>Java 실행 환경</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>JDK</td>
+<td>개발 도구 모음 (컴파일러 javac 포함)</td>
+</tr>
+<tr>
+<td>JRE</td>
+<td>실행 환경 (JVM + 라이브러리)</td>
+</tr>
+<tr>
+<td>JVM</td>
+<td>바이트코드(.class)를 실행하는 가상 머신. "한 번 작성하면 어디서나 실행"</td>
+</tr>
+</tbody>
+</table></div>
+<ul>
+<li><strong>디버깅</strong>: 오류의 원인을 찾아 고치는 것. 중단점(Breakpoint)을 걸고 한 줄씩 실행(Step Over / Step Into)하며 변수 값을 확인</li>
+<li><strong>공통 모듈</strong>: 여러 곳에서 재사용하는 코드(로그인, 날짜 처리, 로그). 결합도는 낮게, 응집도는 높게</li>
+<li><strong>라이브러리 vs 프레임워크</strong>: 라이브러리는 개발자가 필요할 때 호출, 프레임워크는 정해진 틀이 개발자 코드를 호출(제어의 역전)</li>
+</ul>
+<h3 id="s61">오류의 종류</h3>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>오류</th>
+<th>발생 시점</th>
+<th>예</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>문법 오류 (Syntax Error)</td>
+<td>컴파일·실행 전</td>
+<td>세미콜론 누락, 괄호 짝 안 맞음, 들여쓰기 오류(Python)</td>
+</tr>
+<tr>
+<td>실행 오류 (Runtime Error)</td>
+<td>실행 중</td>
+<td>0으로 나누기, 배열 범위 초과, 널 참조</td>
+</tr>
+<tr>
+<td>논리 오류 (Logic Error)</td>
+<td>실행은 되지만 결과가 틀림</td>
+<td><code>&lt;</code>를 <code>&lt;=</code>로 잘못 씀, 반복 횟수 착오</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="s62">UI 설계와 UI 테스트</h3>
+<p><strong>UI 설계 원칙</strong>: 직관성, 유효성, 학습성, 유연성. UI 화면 설계 도구: <strong>와이어프레임</strong>(뼈대) → <strong>스토리보드</strong>(화면 설명·흐름) → <strong>프로토타입</strong>(동작하는 시제품), 목업(정적 모형).</p>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>테스트</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>단위 테스트</td>
+<td>함수·모듈 하나</td>
+</tr>
+<tr>
+<td>통합 테스트</td>
+<td>모듈끼리 연결</td>
+</tr>
+<tr>
+<td>시스템 테스트</td>
+<td>전체 시스템</td>
+</tr>
+<tr>
+<td>인수 테스트</td>
+<td>사용자가 요구 충족 여부 확인 (알파·베타 테스트)</td>
+</tr>
+<tr>
+<td>UI 테스트</td>
+<td>화면이 설계대로 보이고 동작하는지: 레이아웃, 버튼 동작, 입력 검증, 화면 이동, 브라우저·기기 호환</td>
+</tr>
+<tr>
+<td>사용성 테스트</td>
+<td>실제 사용자가 쓰기 편한지 관찰</td>
+</tr>
+</tbody>
+</table></div>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>테스트 기법</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>블랙박스</td>
+<td>입력과 출력만 보고 테스트. 동등 분할, <strong>경계값 분석</strong></td>
+</tr>
+<tr>
+<td>화이트박스</td>
+<td>코드 내부 구조를 보고 테스트. 문장·분기 커버리지</td>
+</tr>
+</tbody>
+</table></div>
+<ol class="quiz">
+<li class="q" data-ans="3"><div class="q-text"><p>Java 바이트코드를 실행하는 가상 머신은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>JDK</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>JRE</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>JVM</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>IDE</span></button></li>
+</ol><div class="ans"><p><b>정답 ③</b> JVM이 .class 파일을 실행한다.</p></div></li>
+<li class="q" data-ans="3"><div class="q-text"><p>프로그램은 실행되지만 결과가 의도와 다르게 나오는 오류는?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>문법 오류</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>실행 오류</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>논리 오류</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>컴파일 오류</span></button></li>
+</ol><div class="ans"><p><b>정답 ③</b> 논리 오류다.</p></div></li>
+<li class="q" data-ans="1"><div class="q-text"><p>화면의 레이아웃 뼈대만 간단히 그린 UI 설계 산출물은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>와이어프레임</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>스토리보드</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>프로토타입</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>목업</span></button></li>
+</ol><div class="ans"><p><b>정답 ①</b> 와이어프레임이다.</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>입력 범위 1~100에서 0, 1, 100, 101을 테스트하는 기법은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>동등 분할</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>경계값 분석</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>오류 예측</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>문장 커버리지</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> 경계값 분석이다.</p></div></li>
+</ol>
+  </div>
+</section>
+
+<section class="chapter" id="ch11" data-title="실전 모의 문제" data-group="마무리">
+  <header class="ch-head reveal">
+    <p class="ch-group">마무리</p>
+    <h2>실전 모의 문제</h2>
+    <button type="button" class="ch-pdf" data-ch="ch11"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 1.5h5.5L12.5 4.5V14.5h-8.5z M9.5 1.5v3h3 M6 9.5l2 2 2-2 M8 6.5v5"/></svg>이 장만 PDF로</button>
+  </header>
+  <div class="ch-body">
+<h3 id="s63">과목 섞어 풀기</h3>
+<ol class="quiz">
+<li class="q" data-ans="1"><div class="q-text"><p>다음 Python 코드의 출력은?</p>
+<pre><code class="language-python">total = 0
+for i in range(1, 6):
+    if i % 2 == 0:
+        total += i
+print(total)
+</code></pre></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>6</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>9</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>15</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>4</span></button></li>
+</ol><div class="ans"><p><b>정답 ①</b> 2 + 4 = 6. (Python)</p></div></li>
+<li class="q" data-ans="1"><div class="q-text"><p>다음 C 코드의 출력은?</p>
+<pre><code class="language-c">int a = 10, b = 3;
+printf(&quot;%d %d&quot;, a / b, a % b);
+</code></pre></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>3 1</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>3.33 1</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>1 3</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>3 0</span></button></li>
+</ol><div class="ans"><p><b>정답 ①</b> 정수 나눗셈 몫 3, 나머지 1. (C)</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>다음 Java 코드의 출력은?</p>
+<pre><code class="language-java">int[] arr = {1, 2, 3};
+System.out.println(arr.length + arr[2]);
+</code></pre></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>5</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>6</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>33</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>4</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> 길이 3 + arr[2] 3 = 6. (Java)</p></div></li>
+<li class="q" data-ans="3"><div class="q-text"><p>다음 중 스크립트 언어가 아닌 것은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>Python</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>JavaScript</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>C</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>PHP</span></button></li>
+</ol><div class="ans"><p><b>정답 ③</b> C는 컴파일 언어다. (언어 공통)</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>HTML에서 순서가 있는 목록을 만드는 태그는?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span><code>&lt;ul&gt;</code></span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span><code>&lt;ol&gt;</code></span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span><code>&lt;li&gt;</code></span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span><code>&lt;dl&gt;</code></span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> ol(ordered list). ul은 순서 없는 목록. (웹)</p></div></li>
+<li class="q" data-ans="3"><div class="q-text"><p>JavaScript에서 값을 바꿀 수 없는 변수를 선언하는 키워드는?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>var</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>let</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>const</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>static</span></button></li>
+</ol><div class="ans"><p><b>정답 ③</b> const. (웹)</p></div></li>
+<li class="q" data-ans="1"><div class="q-text"><p>OSI 7계층 중 비트를 전기 신호로 전송하는 계층은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>물리 계층</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>데이터 링크 계층</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>네트워크 계층</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>전송 계층</span></button></li>
+</ol><div class="ans"><p><b>정답 ①</b> (네트워크)</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>도메인 이름을 IP 주소로 바꿔 주는 서비스는?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>DHCP</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>DNS</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>FTP</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>ARP</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> (네트워크)</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>테이블에서 각 행을 유일하게 식별하며 NULL을 가질 수 없는 키는?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>외래키</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>기본키</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>대체키</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>슈퍼키</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> (데이터베이스)</p></div></li>
+<li class="q" data-ans="3"><div class="q-text"><p>데이터를 조회하는 SQL 명령어는?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>INSERT</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>UPDATE</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>SELECT</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>DELETE</span></button></li>
+</ol><div class="ans"><p><b>정답 ③</b> (SQL)</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>먼저 들어온 데이터가 먼저 나가는 자료구조는?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>스택</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>큐</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>트리</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>그래프</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> FIFO. (자료구조)</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>Python에서 리스트 <code>a = [5, 3, 9]</code>를 오름차순으로 정렬한 새 리스트를 돌려주는 함수는?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>a.sort()</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>sorted(a)</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>a.reverse()</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>sort(a)</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> sorted()는 새 리스트를 반환, a.sort()는 원본을 정렬하고 None을 반환. (Python)</p></div></li>
+</ol>
+
+<aside class="box box-tip">
+<p class="box-t">시험 직전 체크리스트</p>
+<ul>
+<li>연산자 우선순위, 정수 나눗셈과 나머지, 전위·후위 증감</li>
+<li>C: printf 서식, 배열과 포인터, 문자열 끝 <code>\0</code></li>
+<li>Java: 클래스·생성자·상속·오버라이딩, 문자열 + 숫자</li>
+<li>Python: 슬라이싱, 리스트·딕셔너리 메서드, range</li>
+<li>HTML 태그와 시맨틱 태그, CSS 선택자·박스 모델, JavaScript 기본 문법</li>
+<li>OSI 7계층, TCP/UDP, IP 주소, DNS·DHCP</li>
+<li>키와 무결성, SQL 기본 4문장, 스택·큐·트리 순회</li>
+</ul>
+</aside>
+  </div>
+</section>
+    <footer class="end">
+      <p><b>프로그래밍기능사 교본</b> · 2026년 11월 기준. 시험 일정·응시료·출제 기준은 바뀔 수 있으니 접수 전 공식 사이트 공지를 확인하세요.</p>
+    </footer>
+  </main>
+</div>
+
+<div class="modal" id="pdfModal" role="dialog" aria-modal="true" aria-labelledby="pdfTitle" hidden>
+  <div class="modal-back" data-close></div>
+  <div class="modal-box">
+    <div class="modal-head">
+      <h2 id="pdfTitle">PDF로 저장할 단원</h2>
+      <button type="button" class="x" data-close aria-label="닫기"><svg viewBox="0 0 16 16"><path d="M3 3l10 10M13 3L3 13"/></svg></button>
+    </div>
+    <div class="pick-tools">
+      <button type="button" class="link" data-all="1">전체 선택</button>
+      <button type="button" class="link" data-all="0">전체 해제</button>
+      <label class="switch"><input type="checkbox" id="optAns" checked> 정답·해설 함께 인쇄</label>
+    </div>
+    <div class="pick-list"><label class="pick"><input type="checkbox" value="ch0" checked><span class="pick-g">시작하기</span><span class="pick-t">시험 구성과 공부 순서</span></label>
+<label class="pick"><input type="checkbox" value="ch1" checked><span class="pick-g">1과목 · 프로그래밍 언어</span><span class="pick-t">언어 공통 개념</span></label>
+<label class="pick"><input type="checkbox" value="ch2" checked><span class="pick-g">1과목 · 프로그래밍 언어</span><span class="pick-t">Python</span></label>
+<label class="pick"><input type="checkbox" value="ch3" checked><span class="pick-g">1과목 · 프로그래밍 언어</span><span class="pick-t">C 언어</span></label>
+<label class="pick"><input type="checkbox" value="ch4" checked><span class="pick-g">1과목 · 프로그래밍 언어</span><span class="pick-t">Java</span></label>
+<label class="pick"><input type="checkbox" value="ch5" checked><span class="pick-g">1과목 · 프로그래밍 언어</span><span class="pick-t">웹 언어 HTML · CSS · JavaScript</span></label>
+<label class="pick"><input type="checkbox" value="ch6" checked><span class="pick-g">2과목 · 응용 SW 기초 기술</span><span class="pick-t">네트워크 기초</span></label>
+<label class="pick"><input type="checkbox" value="ch7" checked><span class="pick-g">2과목 · 응용 SW 기초 기술</span><span class="pick-t">데이터베이스 기초</span></label>
+<label class="pick"><input type="checkbox" value="ch8" checked><span class="pick-g">2과목 · 응용 SW 기초 기술</span><span class="pick-t">SQL</span></label>
+<label class="pick"><input type="checkbox" value="ch9" checked><span class="pick-g">2과목 · 응용 SW 기초 기술</span><span class="pick-t">자료구조</span></label>
+<label class="pick"><input type="checkbox" value="ch10" checked><span class="pick-g">2과목 · 응용 SW 기초 기술</span><span class="pick-t">개발 환경과 UI 테스트</span></label>
+<label class="pick"><input type="checkbox" value="ch11" checked><span class="pick-g">마무리</span><span class="pick-t">실전 모의 문제</span></label></div>
+    <div class="modal-foot">
+      <p class="hint">인쇄 창에서 <b>대상: PDF로 저장</b>, 용지 <b>A4</b>를 고르세요. 단원마다 새 페이지에서 시작하고, 표·코드·문제는 페이지 경계에서 잘리지 않게 넘어갑니다.</p>
+      <button type="button" class="btn btn-solid" id="doPrint">선택한 단원 PDF로 저장</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  var $ = function(s, r){ return (r||document).querySelector(s); };
+  var $$ = function(s, r){ return Array.prototype.slice.call((r||document).querySelectorAll(s)); };
+  var body = document.body;
+
+  /* ---- reveal on scroll ---- */
+  var revs = $$('.reveal');
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function(es){
+      es.forEach(function(e){ if (e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, {rootMargin:'0px 0px -8% 0px'});
+    revs.forEach(function(el){ io.observe(el); });
+  } else revs.forEach(function(el){ el.classList.add('in'); });
+
+  /* ---- progress bar + toc spy ---- */
+  var bar = $('.progress i');
+  var chs = $$('.chapter');
+  var subs = $$('.ch-body h3[id]');
+  var tocCh = {}; $$('.toc-ch').forEach(function(a){ tocCh[a.dataset.ch] = a; });
+  var tocSub = {}; $$('.toc ol a').forEach(function(a){ tocSub[a.getAttribute('href').slice(1)] = a; });
+  var curCh = null, curSub = null, ticking = false;
+  function spy(){
+    ticking = false;
+    var h = document.documentElement, max = h.scrollHeight - innerHeight;
+    if (bar) bar.style.transform = 'scaleX(' + (max > 0 ? Math.min(1, scrollY / max) : 0) + ')';
+    var line = 140, c = null, s = null;
+    for (var i = 0; i < chs.length; i++) { if (chs[i].getBoundingClientRect().top - line < 0) c = chs[i]; else break; }
+    for (var j = 0; j < subs.length; j++) { if (subs[j].getBoundingClientRect().top - line < 0) s = subs[j]; else break; }
+    if (c !== curCh) {
+      if (curCh && tocCh[curCh.id]) { tocCh[curCh.id].classList.remove('on'); tocCh[curCh.id].parentNode.classList.remove('open'); }
+      curCh = c;
+      if (c && tocCh[c.id]) { tocCh[c.id].classList.add('on'); tocCh[c.id].parentNode.classList.add('open'); }
+    }
+    if (s !== curSub) {
+      if (curSub && tocSub[curSub.id]) tocSub[curSub.id].classList.remove('on');
+      curSub = s;
+      if (s && tocSub[s.id] && c && c.contains(s)) tocSub[s.id].classList.add('on');
+    }
+  }
+  addEventListener('scroll', function(){ if (!ticking){ ticking = true; requestAnimationFrame(spy); } }, {passive:true});
+  spy();
+
+  /* ---- mobile toc ---- */
+  var tg = $('.toc-toggle');
+  if (tg) tg.addEventListener('click', function(){
+    var open = body.classList.toggle('toc-open'); tg.setAttribute('aria-expanded', open);
+  });
+  $$('.toc a').forEach(function(a){ a.addEventListener('click', function(){ body.classList.remove('toc-open'); if (tg) tg.setAttribute('aria-expanded', false); }); });
+
+  /* ---- quiz ---- */
+  document.addEventListener('click', function(e){
+    var b = e.target.closest && e.target.closest('.opt');
+    if (!b) return;
+    var q = b.closest('.q'); if (q.classList.contains('done')) return;
+    var ans = +q.dataset.ans, pick = +b.dataset.i;
+    q.classList.add('done');
+    $$('.opt', q).forEach(function(o){ if (+o.dataset.i === ans) o.classList.add('right'); });
+    if (pick !== ans) b.classList.add('wrong');
+  });
+  $$('.q').forEach(function(q){
+    var t = document.createElement('button'); t.type = 'button'; t.className = 'ans-toggle'; t.textContent = '정답만 보기';
+    t.addEventListener('click', function(){
+      q.classList.add('done'); $$('.opt', q).forEach(function(o){ if (+o.dataset.i === +q.dataset.ans) o.classList.add('right'); });
+      t.remove();
+    });
+    q.appendChild(t);
+  });
+
+  /* ---- PDF (print) ---- */
+  var modal = $('#pdfModal'), lastFocus = null;
+  function openModal(){ lastFocus = document.activeElement; modal.hidden = false; $('#doPrint').focus(); }
+  function closeModal(){ modal.hidden = true; if (lastFocus) lastFocus.focus(); }
+  $$('.open-pdf').forEach(function(b){ b.addEventListener('click', openModal); });
+  $$('[data-close]', modal).forEach(function(b){ b.addEventListener('click', closeModal); });
+  addEventListener('keydown', function(e){ if (e.key === 'Escape' && !modal.hidden) closeModal(); });
+  $$('[data-all]', modal).forEach(function(b){ b.addEventListener('click', function(){
+    var v = b.dataset.all === '1'; $$('.pick input', modal).forEach(function(i){ i.checked = v; });
+  }); });
+
+  var cover = $('.pc-list');
+  function fillCover(ids){
+    cover.innerHTML = '';
+    chs.forEach(function(c){
+      if (ids && ids.indexOf(c.id) < 0) return;
+      var li = document.createElement('li'), g = c.dataset.group;
+      li.innerHTML = (g ? '<span>' + g + '</span>' : '') + c.dataset.title;
+      cover.appendChild(li);
+    });
+  }
+  function printChapters(ids, withAns){
+    if (!ids.length) { alert('저장할 단원을 하나 이상 고르세요.'); return; }
+    var all = ids.length === chs.length;
+    chs.forEach(function(c){ c.classList.toggle('pr', ids.indexOf(c.id) > -1); });
+    body.classList.toggle('pick-mode', !all);
+    body.classList.toggle('no-ans', !withAns);
+    fillCover(ids);
+    revs.forEach(function(el){ el.classList.add('in'); });
+    var t = document.title;
+    if (!all && ids.length === 1) document.title = t.replace(' 교본', '') + ' - ' + $('#' + ids[0]).dataset.title;
+    modal.hidden = true;
+    setTimeout(function(){
+      window.print();
+      setTimeout(function(){ document.title = t; }, 500);
+    }, 60);
+  }
+  $('#doPrint').addEventListener('click', function(){
+    var ids = $$('.pick input:checked', modal).map(function(i){ return i.value; });
+    printChapters(ids, $('#optAns').checked);
+  });
+  $$('.ch-pdf').forEach(function(b){ b.addEventListener('click', function(){ printChapters([b.dataset.ch], true); }); });
+  addEventListener('afterprint', function(){
+    body.classList.remove('pick-mode', 'no-ans'); chs.forEach(function(c){ c.classList.remove('pr'); });
+    fillCover(null);
+  });
+  addEventListener('beforeprint', function(){ revs.forEach(function(el){ el.classList.add('in'); }); });
+  /* 브라우저 메뉴(Ctrl+P)로 바로 인쇄해도 표지 목록이 채워지도록 */
+  fillCover(null);
+
+  /* figures: run once when visible */
+  window.__onSeen = function(el, fn){
+    if (!el) return;
+    if (!('IntersectionObserver' in window)) { fn(); return; }
+    var o = new IntersectionObserver(function(es){ es.forEach(function(e){ if (e.isIntersecting){ o.disconnect(); fn(); } }); }, {threshold:.35});
+    o.observe(el);
+  };
+})();
+
+
+(function(){
+  var d = document.getElementById('fig-dikw'); __onSeen(d, function(){ d.classList.add('play'); });
+  var c = document.getElementById('fig-crisp');
+  if (c) {
+    var ph = c.querySelectorAll('.ph'), orb = c.querySelector('.orbit'), desc = c.querySelector('.crisp-desc');
+    var tx = ['비즈니스 목표 → 분석 목표','데이터 수집·품질 확인','정제·통합·변환 (가장 오래 걸림)','기법 선택·모델 작성','목표 달성 여부 판단','배포·모니터링·보고서'];
+    var n = -1, timer = null;
+    function step(){ n++; var i = n % 6; ph.forEach(function(p){ p.classList.toggle('on', +p.dataset.i === i); });
+      orb.style.transform = 'rotate(' + (n*60) + 'deg)'; desc.textContent = tx[i]; }
+    __onSeen(c, function(){ step(); timer = setInterval(step, 1800); });
+  }
+  var m = document.getElementById('fig-cm');
+  if (m) {
+    var ins = m.querySelectorAll('input'), out = {};
+    m.querySelectorAll('[data-o]').forEach(function(e){ out[e.dataset.o] = e; });
+    function f(x){ return isFinite(x) ? (x*100).toFixed(1) + '%' : '—'; }
+    function calc(){ var v = {}; ins.forEach(function(i){ v[i.dataset.k] = Math.max(0, +i.value || 0); });
+      var all = v.tp+v.fn+v.fp+v.tn, P = v.tp/(v.tp+v.fp), R = v.tp/(v.tp+v.fn);
+      out.acc.textContent = f((v.tp+v.tn)/all); out.pre.textContent = f(P); out.rec.textContent = f(R);
+      out.spe.textContent = f(v.tn/(v.tn+v.fp)); out.f1.textContent = isFinite(2*P*R/(P+R)) ? (2*P*R/(P+R)).toFixed(3) : '—';
+      out.fpr.textContent = f(v.fp/(v.fp+v.tn)); }
+    ins.forEach(function(i){ i.addEventListener('input', calc); }); calc();
+  }
+})();
+
+
+(function(){
+  /* hero: 조인 행 연결 애니메이션 */
+  var h = document.getElementById('hero-sqld');
+  if (h) {
+    var er = h.querySelectorAll('.er'), dr = h.querySelectorAll('.dr'), jl = h.querySelector('.jl');
+    var map = [1, 2, 1, 0], k = 0; // EMP행 -> DEPT행 인덱스 (20,30,20,10)
+    function yE(r){ return 60 + 34 + r*36 + 18; } function yD(r){ return 78 + 34 + r*36 + 18; }
+    function tick(){
+      er.forEach(function(g){ g.classList.remove('on'); }); dr.forEach(function(g){ g.classList.remove('on'); });
+      var r = k % 4, d = map[r]; er[r].classList.add('on'); dr[d].classList.add('on');
+      jl.setAttribute('d', 'M240 ' + yE(r) + ' C290 ' + yE(r) + ' 290 ' + yD(d) + ' 340 ' + yD(d)); k++;
+    }
+    if (!matchMedia('(prefers-reduced-motion: reduce)').matches) { tick(); setInterval(tick, 1500); } else tick();
+  }
+  /* 실행 순서 */
+  var o = document.getElementById('fig-order');
+  if (o) {
+    var w = o.querySelectorAll('li'), s = 0;
+    function st(){ s = s % 6 + 1; w.forEach(function(li){ var n = +li.dataset.s; li.classList.toggle('on', n === s); li.classList.toggle('done', n < s); }); }
+    __onSeen(o, function(){ st(); setInterval(st, 1400); });
+  }
+  /* 조인 시각화 */
+  var j = document.getElementById('fig-join');
+  if (j) {
+    var A = [['SMITH',20],['ALLEN',30],['KING',10],['SCOTT',null]];
+    var B = [[10,'ACCOUNTING'],[20,'RESEARCH'],[40,'OPERATIONS']];
+    var SQL = {
+      inner:'SELECT E.ENAME, E.DEPTNO, D.DEPTNO, D.DNAME\n  FROM EMP E INNER JOIN DEPT D\n    ON E.DEPTNO = D.DEPTNO;',
+      left:'SELECT E.ENAME, E.DEPTNO, D.DEPTNO, D.DNAME\n  FROM EMP E LEFT OUTER JOIN DEPT D\n    ON E.DEPTNO = D.DEPTNO;',
+      right:'SELECT E.ENAME, E.DEPTNO, D.DEPTNO, D.DNAME\n  FROM EMP E RIGHT OUTER JOIN DEPT D\n    ON E.DEPTNO = D.DEPTNO;',
+      full:'SELECT E.ENAME, E.DEPTNO, D.DEPTNO, D.DNAME\n  FROM EMP E FULL OUTER JOIN DEPT D\n    ON E.DEPTNO = D.DEPTNO;',
+      cross:'SELECT E.ENAME, E.DEPTNO, D.DEPTNO, D.DNAME\n  FROM EMP E CROSS JOIN DEPT D;'
+    };
+    function cell(v){ return v === null ? '<td class="nul">NULL</td>' : '<td>' + v + '</td>'; }
+    function run(t){
+      var res = [], ma = {}, mb = {};
+      if (t === 'cross') { A.forEach(function(a){ B.forEach(function(b){ res.push([a[0],a[1],b[0],b[1]]); }); }); }
+      else {
+        A.forEach(function(a, i){ B.forEach(function(b, k){ if (a[1] !== null && a[1] === b[0]) { res.push([a[0],a[1],b[0],b[1]]); ma[i]=1; mb[k]=1; } }); });
+        if (t === 'left' || t === 'full') A.forEach(function(a, i){ if (!ma[i]) res.push([a[0],a[1],null,null]); });
+        if (t === 'right' || t === 'full') B.forEach(function(b, k){ if (!mb[k]) res.push([null,null,b[0],b[1]]); });
+      }
+      j.querySelector('.j-a tbody').innerHTML = A.map(function(a,i){ return '<tr' + (ma[i]||t==='cross' ? ' class="m"' : '') + '>' + cell(a[0]) + cell(a[1]) + '</tr>'; }).join('');
+      j.querySelector('.j-b tbody').innerHTML = B.map(function(b,k){ return '<tr' + (mb[k]||t==='cross' ? ' class="m"' : '') + '>' + cell(b[0]) + cell(b[1]) + '</tr>'; }).join('');
+      j.querySelector('.j-r tbody').innerHTML = res.map(function(r,i){ return '<tr style="animation-delay:' + (i*35) + 'ms">' + r.map(cell).join('') + '</tr>'; }).join('');
+      j.querySelector('.j-n').textContent = res.length + '행';
+      j.querySelector('.j-sql code').textContent = SQL[t];
+    }
+    j.querySelectorAll('.chip').forEach(function(b){ b.addEventListener('click', function(){
+      j.querySelectorAll('.chip').forEach(function(x){ x.setAttribute('aria-pressed', x === b); }); run(b.dataset.j); }); });
+    run('inner');
+  }
+})();
+
+
+(function(){
+  /* hero terminal typing */
+  var t = document.getElementById('heroTerm');
+  if (t) {
+    var S = [
+      ['$ ', 'whoami', 'student'],
+      ['$ ', 'pwd', '/home/student'],
+      ['$ ', 'ls -l report.txt', '-rw-r--r--. 1 student student 2048 Nov  7 16:00 report.txt'],
+      ['$ ', 'chmod 640 report.txt', ''],
+      ['$ ', 'ls -l report.txt', '-rw-r-----. 1 student student 2048 Nov  7 16:00 report.txt'],
+      ['$ ', 'ps -ef | grep sshd | head -1', 'root      1024     1  0 09:12 ?   00:00:00 /usr/sbin/sshd -D']
+    ];
+    var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var html = '<span class="d">[student@rocky ~]</span>';
+    function esc(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;'); }
+    if (reduce) { S.forEach(function(s){ html += '\n<span class="p">' + s[0] + '</span>' + esc(s[1]) + (s[2] ? '\n' + esc(s[2]) : ''); }); t.innerHTML = html; }
+    else {
+      var ln = 0, ci = 0;
+      function frame(){
+        if (ln >= S.length) { t.innerHTML = html + '\n<span class="p">$ </span><span class="cur"></span>'; return; }
+        var s = S[ln];
+        if (ci <= s[1].length) {
+          t.innerHTML = html + '\n<span class="p">' + s[0] + '</span>' + esc(s[1].slice(0, ci)) + '<span class="cur"></span>';
+          ci++; setTimeout(frame, 38 + Math.random()*50);
+        } else {
+          html += '\n<span class="p">' + s[0] + '</span>' + esc(s[1]) + (s[2] ? '\n' + esc(s[2]) : '');
+          ln++; ci = 0; t.innerHTML = html; setTimeout(frame, 520);
+        }
+      }
+      setTimeout(frame, 500);
+    }
+  }
+  /* boot */
+  var b = document.getElementById('fig-boot');
+  if (b) {
+    var steps = b.querySelectorAll('li'), bar = b.querySelector('.boot-bar i'), dsc = b.querySelector('.boot-desc');
+    var D = ['전원이 들어오면 메인보드 펌웨어(BIOS 또는 UEFI)가 POST(하드웨어 자가 진단)를 하고, 부팅 장치에서 부트로더를 찾는다.',
+             '부트로더 GRUB2가 메뉴를 보여주고, 선택한 커널 이미지와 initramfs를 메모리에 올린다. 설정은 /boot/grub2/grub.cfg.',
+             '커널이 하드웨어를 초기화하고 루트 파일 시스템을 마운트한다. initramfs는 그 전에 필요한 임시 드라이버 묶음이다.',
+             '커널이 첫 프로세스 systemd를 실행한다. PID는 1번이고, 이후 모든 프로세스의 조상이 된다.',
+             'systemd가 기본 target(예전의 런레벨)에 필요한 서비스들을 띄운다. 기본값 확인은 systemctl get-default.',
+             '텍스트 로그인(getty) 또는 그래픽 로그인(GDM) 화면이 뜬다. 로그인하면 셸이 시작된다.'];
+    var i = -1;
+    function go(){ i = (i + 1) % 6; steps.forEach(function(e){ var n = +e.dataset.i; e.classList.toggle('on', n === i); e.classList.toggle('done', n < i); });
+      bar.style.transform = 'scaleX(' + ((i + 1) / 6) + ')'; dsc.textContent = (i + 1) + '단계 · ' + D[i]; }
+    __onSeen(b, function(){ go(); setInterval(go, 2600); });
+  }
+  /* chmod */
+  var p = document.getElementById('fig-chmod');
+  if (p) {
+    var bt = p.querySelectorAll('.perm-grid button'), num = p.querySelector('.perm-num'), term = p.querySelector('.perm-term');
+    function val(){ var v = 0; bt.forEach(function(x){ if (x.getAttribute('aria-pressed') === 'true') v += +x.dataset.b; }); return v; }
+    function sym(v){ var s = 'rwxrwxrwx', o = '-'; for (var k = 0; k < 9; k++) o += (v & (256 >> k)) ? s[k] : '-'; return o; }
+    function show(v, fromNum){
+      var oc = v.toString(8); while (oc.length < 3) oc = '0' + oc;
+      if (!fromNum) num.value = oc;
+      bt.forEach(function(x){ x.setAttribute('aria-pressed', (v & +x.dataset.b) ? 'true' : 'false'); });
+      var u = 'ugo', parts = [];
+      for (var k = 0; k < 3; k++) { var seg = sym(v).slice(1 + k*3, 4 + k*3).replace(/-/g, ''); parts.push(u[k] + '=' + seg); }
+      term.innerHTML = '<span class="p">$ </span>chmod ' + oc + ' report.txt\n<span class="d"># 같은 뜻</span>\n<span class="p">$ </span>chmod ' + parts.join(',') + ' report.txt\n<span class="p">$ </span>ls -l report.txt\n' + sym(v) + '. 1 student student 2048 report.txt';
+    }
+    bt.forEach(function(x){ x.addEventListener('click', function(){ x.setAttribute('aria-pressed', x.getAttribute('aria-pressed') !== 'true'); show(val()); }); });
+    num.addEventListener('input', function(){ var s = num.value.replace(/[^0-7]/g, ''); num.value = s; if (s.length === 3) show(parseInt(s, 8), true); });
+    show(val());
+  }
+})();
+
+
+(function(){
+  /* 범용 터미널 히어로 */
+  document.querySelectorAll('.gen-term').forEach(function(t){
+    var S; try { S = JSON.parse(t.dataset.lines); } catch(e) { return; }
+    var P = t.dataset.prompt || '';
+    function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;'); }
+    var html = '<span class="d">' + esc(P) + '</span>';
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      S.forEach(function(s){ html += '\n<span class="p">' + esc(s[0]) + '</span>' + esc(s[1]) + (s[2] ? '\n' + esc(s[2]) : ''); }); t.innerHTML = html; return;
+    }
+    var ln = 0, ci = 0;
+    function frame(){
+      if (ln >= S.length) { t.innerHTML = html + '\n<span class="cur"></span>'; return; }
+      var s = S[ln];
+      if (ci <= s[1].length) { t.innerHTML = html + '\n<span class="p">' + esc(s[0]) + '</span>' + esc(s[1].slice(0, ci)) + '<span class="cur"></span>'; ci++; setTimeout(frame, 30 + Math.random()*40); }
+      else { html += '\n<span class="p">' + esc(s[0]) + '</span>' + esc(s[1]) + (s[2] ? '\n' + esc(s[2]) : ''); ln++; ci = 0; t.innerHTML = html; setTimeout(frame, 450); }
+    }
+    setTimeout(frame, 500);
+  });
+  /* 서브넷 계산기 */
+  var sn = document.getElementById('fig-subnet');
+  if (sn) {
+    var ip = sn.querySelector('.sn-ip'), px = sn.querySelector('.sn-px'), bits = sn.querySelector('.sn-bits'), o = {};
+    sn.querySelectorAll('[data-o]').forEach(function(e){ o[e.dataset.o] = e; });
+    for (var i = 0; i < 32; i++) { var b = document.createElement('i'); if (i % 8 === 7 && i < 31) b.className = 'g'; bits.appendChild(b); }
+    var cells = bits.querySelectorAll('i');
+    function toS(n){ return [n>>>24, (n>>>16)&255, (n>>>8)&255, n&255].join('.'); }
+    function calc(){
+      var p = ip.value.trim().split('.').map(Number), k = Math.max(0, Math.min(32, parseInt(px.value, 10) || 0));
+      if (p.length !== 4 || p.some(function(x){ return isNaN(x) || x < 0 || x > 255; })) { o.mask.textContent = '올바른 IP를 입력'; return; }
+      var n = ((p[0]<<24)>>>0) + (p[1]<<16) + (p[2]<<8) + p[3];
+      var m = k === 0 ? 0 : (0xFFFFFFFF << (32 - k)) >>> 0;
+      var net = (n & m) >>> 0, bc = (net | (~m >>> 0)) >>> 0;
+      cells.forEach(function(c, i){ c.textContent = (n >>> (31 - i)) & 1; c.classList.toggle('n', i < k); });
+      o.mask.textContent = toS(m); o.net.textContent = toS(net); o.bc.textContent = toS(bc);
+      var h = k >= 31 ? (k === 32 ? 1 : 2) : Math.pow(2, 32 - k) - 2;
+      o.range.textContent = k >= 31 ? toS(net) + ' ~ ' + toS(bc) : toS(net + 1) + ' ~ ' + toS(bc - 1);
+      o.hosts.textContent = h.toLocaleString() + '개';
+      var c = p[0] < 128 ? 'A' : p[0] < 192 ? 'B' : p[0] < 224 ? 'C' : p[0] < 240 ? 'D' : 'E';
+      var priv = p[0] === 10 || (p[0] === 172 && p[1] >= 16 && p[1] <= 31) || (p[0] === 192 && p[1] === 168);
+      o.cls.textContent = c + '클래스 · ' + (p[0] === 127 ? '루프백' : priv ? '사설' : '공인');
+    }
+    ip.addEventListener('input', calc); px.addEventListener('input', calc); calc();
+  }
+  /* TCP 3-way */
+  var tc = document.getElementById('fig-tcp3'); if (tc) __onSeen(tc, function(){ tc.classList.add('play'); });
+  /* 페이지 교체 */
+  var pg = document.getElementById('fig-paging');
+  if (pg) {
+    var alg = 'FIFO', ref = pg.querySelector('.pg-ref'), fr = pg.querySelector('.pg-fr'), tb = pg.querySelector('tbody'), sum = pg.querySelector('.pg-sum');
+    function run(){
+      var R = ref.value.trim().split(/[\s,]+/).filter(Boolean), F = Math.max(1, Math.min(6, +fr.value || 3));
+      var mem = [], cols = [], faults = 0, last = {}, order = [];
+      R.forEach(function(r, t){
+        var hit = mem.indexOf(r) > -1;
+        if (!hit) {
+          faults++;
+          if (mem.length < F) { mem.push(r); order.push(r); }
+          else {
+            var victim;
+            if (alg === 'FIFO') victim = order.shift();
+            else if (alg === 'LRU') { victim = mem.slice().sort(function(a, b){ return last[a] - last[b]; })[0]; }
+            else { var far = -1; mem.forEach(function(m){ var nx = R.indexOf(m, t + 1); if (nx === -1) nx = 1e9; if (nx > far) { far = nx; victim = m; } }); }
+            mem[mem.indexOf(victim)] = r;
+            if (alg === 'FIFO') order.push(r);
+          }
+        }
+        last[r] = t; cols.push({r: r, m: mem.slice(), f: !hit});
+      });
+      var h = '<tr><th>참조</th>' + cols.map(function(c){ return '<th>' + c.r + '</th>'; }).join('') + '</tr>';
+      for (var i = 0; i < F; i++) h += '<tr><th>프레임' + (i + 1) + '</th>' + cols.map(function(c){ var v = c.m[i]; return '<td class="' + (c.f && v === c.r ? 'f' : 'h') + '">' + (v === undefined ? '' : v) + '</td>'; }).join('') + '</tr>';
+      tb.innerHTML = h; sum.textContent = alg + ' · 페이지 부재 ' + faults + '회 / 참조 ' + R.length + '회';
+    }
+    pg.querySelectorAll('.chip').forEach(function(b){ b.addEventListener('click', function(){ pg.querySelectorAll('.chip').forEach(function(x){ x.setAttribute('aria-pressed', x === b); }); alg = b.dataset.a; run(); }); });
+    ref.addEventListener('input', run); fr.addEventListener('input', run); run();
+  }
+})();
+
+</script>
+</body>
+</html>

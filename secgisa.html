@@ -1,0 +1,4719 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>정보보안기사 교본</title>
+<meta name="description" content="공격 원리부터 대응, 암호, 관리체계와 법규까지 5과목 전체를 한 권에.">
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pretendard@1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+:root{--accent:#a1162b;--accent-2:#f8e3e6;--accent-ink:#ffffff;}
+:root{
+  --bg:#ffffff; --surface:#f3f5f7; --surface-2:#e8ecf0; --line:#d6dce2;
+  --text:#121a22; --text-2:#4f5d6b; --code-bg:#11161b; --code-text:#e4eaf0; --code-dim:#8b97a3;
+  --ok:#0d7a4f; --ok-bg:#e2f3ea; --bad:#b42318; --bad-bg:#fcebe9;
+  --ease-out:cubic-bezier(.23,1,.32,1); --ease-io:cubic-bezier(.77,0,.175,1);
+  --font:"Pretendard Variable",Pretendard,-apple-system,"Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
+  --mono:ui-monospace,"SF Mono","D2Coding",Consolas,"Liberation Mono",monospace;
+  --top:60px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:calc(var(--top) + 20px);-webkit-text-size-adjust:100%;font-family:var(--font);overflow-x:clip}
+button,input,select,textarea{font-family:inherit}
+body{margin:0;overflow-x:clip;background:var(--bg);color:var(--text);font-family:var(--font);font-size:17px;line-height:1.75;
+  word-break:keep-all;overflow-wrap:anywhere;-webkit-font-smoothing:antialiased}
+::selection{background:var(--accent);color:var(--accent-ink)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:2px}
+a{color:var(--accent);text-underline-offset:3px;text-decoration-thickness:1px}
+h1,h2,h3,h4{text-wrap:balance;line-height:1.25;margin:0}
+img,svg{max-width:100%}
+html{scrollbar-color:var(--line) transparent}
+
+/* progress */
+.progress{position:fixed;inset:0 0 auto 0;height:3px;z-index:60;pointer-events:none}
+.progress i{display:block;height:100%;background:var(--accent);transform-origin:0 50%;transform:scaleX(0)}
+
+/* top bar */
+.topbar{position:sticky;top:0;z-index:50;background:var(--bg);border-bottom:1px solid var(--line)}
+.topbar-in{max-width:1320px;margin:0 auto;height:var(--top);display:flex;align-items:center;gap:28px;padding:0 28px}
+.brand{color:var(--text);text-decoration:none;font-size:16px;white-space:nowrap}
+.brand b{font-weight:700;margin-left:4px}
+.guides{display:flex;gap:22px;margin-left:auto}
+.guides a{color:var(--text-2);text-decoration:none;font-size:15px;padding:6px 0;border-bottom:2px solid transparent}
+.guides a[aria-current]{color:var(--text);border-bottom-color:var(--accent);font-weight:600}
+.toc-toggle{display:none}
+.btn{font:inherit;font-size:15px;font-weight:600;border-radius:999px;padding:10px 20px;cursor:pointer;border:1px solid transparent;
+  text-decoration:none;display:inline-flex;align-items:center;gap:8px;line-height:1.2;
+  transition:transform 160ms var(--ease-out),background-color 160ms var(--ease-out)}
+.btn:active{transform:scale(.97)}
+.btn-solid{background:var(--accent);color:var(--accent-ink)}
+.btn-light{background:#fff;color:var(--accent)}
+.btn-line-light{background:transparent;color:#fff;border-color:rgba(255,255,255,.55)}
+@media (hover:hover) and (pointer:fine){
+  .btn-solid:hover{background:color-mix(in srgb,var(--accent) 86%,#000)}
+  .btn-line-light:hover{background:rgba(255,255,255,.12)}
+  .guides a:hover{color:var(--text)}
+}
+
+/* hero: solid accent plane */
+.hero{background:var(--accent);color:#fff}
+.hero-in{max-width:1320px;margin:0 auto;padding:96px 28px 104px;display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:56px;align-items:center}
+.hero h1{font-size:clamp(40px,5.4vw,76px);letter-spacing:-.035em;line-height:1.08;font-weight:800}
+.hero-tag{font-size:clamp(18px,1.6vw,22px);margin:24px 0 0;max-width:30em;color:rgba(255,255,255,.9);line-height:1.6}
+.hero-stats{display:flex;gap:44px;margin:48px 0 0;padding:0}
+.hero-stats div{margin:0}
+.hero-stats dt{font-size:14px;color:rgba(255,255,255,.75)}
+.hero-stats dd{margin:2px 0 0;font-size:40px;font-weight:700;letter-spacing:-.02em;font-variant-numeric:tabular-nums;line-height:1.1}
+.hero-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:44px}
+.hero-fig svg{display:block;width:100%;height:auto}
+
+/* layout */
+.layout{max-width:1320px;margin:0 auto;display:grid;grid-template-columns:290px minmax(0,1fr);gap:64px;padding:0 28px}
+.sidebar{position:relative}
+.sidebar-in{position:sticky;top:calc(var(--top) + 0px);max-height:calc(100vh - var(--top));overflow:auto;padding:48px 8px 48px 0;scrollbar-width:thin}
+.toc-title{font-size:14px;color:var(--text-2);margin:0 0 12px}
+.toc,.toc ol{list-style:none;margin:0;padding:0}
+.toc>li{margin:0 0 4px}
+.toc-ch{display:block;color:var(--text);text-decoration:none;font-size:15px;font-weight:600;padding:8px 10px;border-radius:4px;line-height:1.4}
+.toc-g{display:block;font-size:13px;font-weight:500;color:var(--text-2)}
+.toc ol{display:none;padding:2px 0 8px 10px}
+.toc li.open>ol{display:block}
+.toc ol a{display:block;color:var(--text-2);text-decoration:none;font-size:14px;padding:4px 10px;line-height:1.45;border-radius:4px}
+.toc a.on{background:var(--accent-2);color:var(--text)}
+@media (hover:hover) and (pointer:fine){ .toc a:hover{background:var(--surface)} }
+
+.content{min-width:0;max-width:800px;padding:0 0 120px}
+
+/* chapter */
+.chapter{padding-top:120px}
+.ch-head{padding-bottom:36px;margin-bottom:44px;border-bottom:1px solid var(--line);position:relative}
+.ch-group{margin:0 0 12px;font-size:16px;color:var(--accent);font-weight:600}
+.ch-head h2{font-size:clamp(32px,4vw,50px);letter-spacing:-.03em;font-weight:800}
+.ch-pdf{margin-top:22px;font:inherit;font-size:14px;color:var(--text-2);background:var(--surface);border:0;border-radius:999px;padding:7px 14px 7px 11px;
+  display:inline-flex;align-items:center;gap:7px;cursor:pointer;transition:transform 160ms var(--ease-out),background-color 160ms var(--ease-out)}
+.ch-pdf svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.3;stroke-linejoin:round;stroke-linecap:round}
+.ch-pdf:active{transform:scale(.97)}
+@media (hover:hover) and (pointer:fine){ .ch-pdf:hover{background:var(--surface-2);color:var(--text)} }
+
+.ch-body h3{font-size:28px;letter-spacing:-.02em;font-weight:750;margin:80px 0 20px}
+.ch-body h3:first-child{margin-top:0}
+.ch-body h4{font-size:20px;font-weight:700;margin:44px 0 12px;letter-spacing:-.01em}
+.ch-body p{margin:0 0 16px}
+.ch-body ul,.ch-body ol{margin:0 0 18px;padding-left:1.4em}
+.ch-body li{margin:4px 0}
+.ch-body li>ul,.ch-body li>ol{margin:4px 0}
+.ch-body strong{font-weight:700}
+.ch-body hr{border:0;border-top:1px solid var(--line);margin:48px 0}
+
+/* inline code & blocks */
+code{font-family:var(--mono);font-size:.88em;background:var(--surface);padding:.12em .4em;border-radius:3px}
+pre{background:var(--code-bg);color:var(--code-text);border-radius:6px;padding:18px 20px;overflow:auto;margin:0 0 20px;line-height:1.6;font-size:14.5px}
+pre code{background:none;padding:0;font-size:inherit;color:inherit;white-space:pre}
+
+/* tables */
+.tw{overflow-x:auto;margin:0 0 22px}
+table{border-collapse:collapse;width:100%;font-size:15.5px;line-height:1.55;font-variant-numeric:tabular-nums}
+th,td{text-align:left;vertical-align:top;padding:10px 12px;border-bottom:1px solid var(--line)}
+thead th{background:var(--surface);font-weight:650;border-bottom:1px solid var(--text-2)}
+td code{white-space:nowrap}
+
+/* boxes */
+.box{margin:28px 0;padding:22px 24px 8px;background:var(--surface);border-radius:6px}
+.box-t{font-weight:700;margin:0 0 8px !important;font-size:16px}
+.box-exam{background:var(--accent-2)}
+.box-exam .box-t{color:var(--accent)}
+.box-warn{background:#fdf3e4}
+.box-warn .box-t{color:#8a4b00}
+.box-ex{background:transparent;border:1px solid var(--line)}
+.box table{background:#fff}
+
+/* quiz */
+.quiz{list-style:none;padding:0 !important;margin:32px 0 !important;counter-reset:q}
+.q{counter-increment:q;margin:0 0 18px !important;padding:22px 24px;background:var(--surface);border-radius:6px}
+.q-text{font-weight:600}
+.q-text p:first-child::before{content:"문제 " counter(q) ". ";color:var(--accent);font-weight:700}
+.q-text p{margin:0 0 10px}
+.q-text pre{font-weight:400;font-size:14px}
+.opts{list-style:none;padding:0 !important;margin:6px 0 0 !important;display:grid;gap:6px}
+.opts li{margin:0}
+.opt{all:unset;box-sizing:border-box;width:100%;display:flex;gap:10px;align-items:flex-start;padding:10px 14px;background:#fff;border:1px solid var(--line);
+  border-radius:4px;cursor:pointer;font-size:16px;line-height:1.55;transition:transform 140ms var(--ease-out),border-color 140ms var(--ease-out),background-color 140ms var(--ease-out)}
+.opt .n{flex:none;color:var(--text-2)}
+.opt:active{transform:scale(.99)}
+.opt:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+@media (hover:hover) and (pointer:fine){ .q:not(.done) .opt:hover{border-color:var(--text-2)} }
+.q.done .opt{cursor:default}
+.opt.right{border-color:var(--ok);background:var(--ok-bg)}
+.opt.wrong{border-color:var(--bad);background:var(--bad-bg)}
+.ans{display:none;margin-top:12px;padding-top:12px;border-top:1px solid var(--line);font-size:15.5px}
+.ans p{margin:0}
+.ans b{color:var(--ok);margin-right:6px}
+.q.done .ans{display:block}
+.no-js .ans{display:block}
+.ans-toggle{all:unset;cursor:pointer;font-size:14px;color:var(--text-2);margin-top:10px;display:inline-block;text-decoration:underline;text-underline-offset:3px}
+
+/* figures */
+.fig{margin:36px 0;padding:28px;background:var(--surface);border-radius:6px}
+.fig svg{display:block;width:100%;height:auto}
+.fig figcaption{font-size:15px;color:var(--text-2);margin-top:14px;line-height:1.6}
+.fig-ctrl{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px}
+.chip{font:inherit;font-size:14px;padding:6px 14px;border-radius:999px;border:1px solid var(--line);background:#fff;color:var(--text);cursor:pointer;
+  transition:transform 140ms var(--ease-out),background-color 140ms var(--ease-out),color 140ms var(--ease-out)}
+.chip:active{transform:scale(.97)}
+.chip[aria-pressed="true"]{background:var(--text);color:#fff;border-color:var(--text)}
+.term{background:var(--code-bg);color:var(--code-text);font-family:var(--mono);font-size:14px;border-radius:6px;padding:16px 18px;line-height:1.65;min-height:3em;white-space:pre-wrap}
+.term .p{color:#7ee2a8}
+.term .d{color:var(--code-dim)}
+
+/* reveal */
+.js .reveal{opacity:0;transform:translateY(22px);transition:opacity 520ms var(--ease-out),transform 520ms var(--ease-out)}
+.js .reveal.in{opacity:1;transform:none}
+
+.end{margin-top:140px;padding-top:28px;border-top:1px solid var(--line);color:var(--text-2);font-size:15px}
+
+/* modal */
+.modal[hidden]{display:none}
+.modal{position:fixed;inset:0;z-index:100;display:grid;place-items:center;padding:20px}
+.modal-back{position:absolute;inset:0;background:rgba(10,14,18,.5);animation:fade 180ms var(--ease-out)}
+.modal-box{position:relative;background:#fff;border-radius:10px;width:min(620px,100%);max-height:min(86vh,820px);display:flex;flex-direction:column;
+  box-shadow:0 24px 60px rgba(0,0,0,.25);animation:pop 220ms var(--ease-out)}
+@keyframes fade{from{opacity:0}}
+@keyframes pop{from{opacity:0;transform:scale(.96) translateY(8px)}}
+.modal-head{display:flex;align-items:center;justify-content:space-between;padding:22px 24px 10px}
+.modal-head h2{font-size:22px;letter-spacing:-.02em}
+.x{all:unset;cursor:pointer;width:36px;height:36px;display:grid;place-items:center;border-radius:999px}
+.x svg{width:16px;height:16px;stroke:var(--text);stroke-width:1.6}
+.x:hover{background:var(--surface)}
+.pick-tools{display:flex;gap:16px;align-items:center;padding:0 24px 12px;border-bottom:1px solid var(--line);font-size:14px;flex-wrap:wrap}
+.link{all:unset;cursor:pointer;color:var(--accent);font-weight:600}
+.switch{margin-left:auto;display:flex;gap:6px;align-items:center;color:var(--text-2);cursor:pointer}
+.pick-list{overflow:auto;padding:8px 14px}
+.pick{display:grid;grid-template-columns:22px 1fr;column-gap:10px;padding:9px 10px;border-radius:4px;cursor:pointer;line-height:1.4}
+.pick:hover{background:var(--surface)}
+.pick input{grid-row:span 2;margin-top:3px;accent-color:var(--accent);width:16px;height:16px}
+.pick-g{font-size:13px;color:var(--text-2)}
+.pick-t{font-size:16px;font-weight:600}
+.modal-foot{padding:16px 24px 22px;border-top:1px solid var(--line)}
+.hint{font-size:14px;color:var(--text-2);margin:0 0 14px;line-height:1.6}
+#doPrint{width:100%;justify-content:center;padding:13px}
+
+.print-cover{display:none}
+
+/* responsive */
+@media (max-width:1080px){
+  .layout{grid-template-columns:1fr;gap:0}
+  .sidebar{position:fixed;inset:var(--top) 0 0 auto;width:min(360px,88vw);background:#fff;z-index:45;border-left:1px solid var(--line);
+    transform:translateX(100%);visibility:hidden;transition:transform 260ms var(--ease-io),visibility 0s linear 260ms}
+  body.toc-open .sidebar{transform:none;visibility:visible;transition:transform 260ms var(--ease-io),visibility 0s;box-shadow:-20px 0 40px rgba(0,0,0,.12)}
+  .sidebar-in{position:static;max-height:100%;height:100%;padding:24px 20px}
+  .toc-toggle{display:inline-flex;font:inherit;font-size:15px;background:none;border:1px solid var(--line);border-radius:999px;padding:8px 16px;cursor:pointer;color:var(--text)}
+  .guides{display:none}
+  .topbar-in{gap:10px}
+  .toc-toggle{margin-left:auto}
+  .content{max-width:760px;width:100%;margin:0 auto}
+  .hero-in{grid-template-columns:1fr;padding:72px 28px 80px}
+  .hero-fig{max-width:560px}
+}
+@media (max-width:600px){
+  body{font-size:16px}
+  .topbar-in{padding:0 16px}
+  .layout{padding:0 18px}
+  .hero-in{padding:56px 20px 64px;gap:40px}
+  .hero-stats{gap:28px}
+  .hero-stats dd{font-size:32px}
+  .topbar .btn-solid{padding:8px 14px;font-size:14px}
+  .chapter{padding-top:88px}
+  .ch-body h3{font-size:24px;margin-top:64px}
+  .box,.q,.fig{padding-left:16px;padding-right:16px;margin-left:-4px;margin-right:-4px}
+  pre{font-size:13px;padding:14px;margin-left:-4px;margin-right:-4px}
+  table{font-size:14.5px}
+  th,td{padding:8px 9px}
+  .switch{margin-left:0}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .js .reveal{transform:none;transition:opacity 300ms linear}
+  *,*::before,*::after{animation-duration:1ms !important;animation-iteration-count:1 !important}
+  .sidebar{transition:none}
+}
+
+/* ============ PRINT ============ */
+@page{size:A4;margin:16mm 15mm 17mm}
+@media print{
+  :root{--surface:#f2f4f6}
+  *{-webkit-print-color-adjust:exact !important;print-color-adjust:exact !important;animation:none !important;transition:none !important}
+  html,body{background:#fff;font-size:10pt;line-height:1.62;scroll-behavior:auto}
+  .topbar,.progress,.sidebar,.hero,.ch-pdf,.modal,.fig-ctrl,.ans-toggle,.no-print,.end{display:none !important}
+  .layout{display:block;padding:0;max-width:none}
+  .content{max-width:none;padding:0}
+  .js .reveal{opacity:1 !important;transform:none !important}
+  body.pick-mode .chapter:not(.pr){display:none !important}
+
+  .print-cover{display:flex;flex-direction:column;justify-content:flex-start;min-height:250mm;break-after:page;padding-top:40mm}
+  .pc-kind{font-size:12pt;color:var(--accent);font-weight:700;margin:0 0 6mm}
+  .print-cover h1{font-size:34pt;letter-spacing:-.03em;line-height:1.15}
+  .pc-tag{font-size:13pt;color:var(--text-2);margin:6mm 0 18mm}
+  .pc-list{margin:0;padding:8mm 0 0 1.2em;border-top:1.5pt solid var(--accent);font-size:11pt;line-height:1.9}
+  .pc-list span{color:var(--text-2);margin-right:3mm}
+  .pc-date{margin-top:auto;font-size:9pt;color:var(--text-2)}
+
+  .chapter{padding-top:0;break-before:page}
+  .ch-head{padding-bottom:5mm;margin-bottom:7mm;break-after:avoid;break-inside:avoid}
+  .ch-group{font-size:10pt;margin-bottom:2mm}
+  .ch-head h2{font-size:22pt}
+  .ch-body h3{font-size:15pt;margin:9mm 0 3mm;break-after:avoid;break-inside:avoid}
+  .ch-body h4{font-size:12pt;margin:6mm 0 2mm;break-after:avoid;break-inside:avoid}
+  .keep{break-inside:avoid}
+  p{orphans:3;widows:3}
+  .ch-body p{margin-bottom:2.5mm}
+  pre{font-size:8.6pt;padding:3.5mm 4mm;line-height:1.5;white-space:pre-wrap;break-inside:avoid;overflow:visible;
+      background:#f4f6f8 !important;color:#14202b !important;border:.6pt solid #d6dce2}
+  pre code{white-space:pre-wrap}
+  .term{background:#f4f6f8 !important;color:#14202b !important;border:.6pt solid #d6dce2}
+  .term .p{color:#0d7a4f}
+  .tw{overflow:visible}
+  table{font-size:9pt;break-inside:auto}
+  thead{display:table-header-group}
+  tr,th,td{break-inside:avoid}
+  th,td{padding:1.6mm 2.2mm}
+  .tw.small-table, table.small{break-inside:avoid}
+  .box{break-inside:avoid;padding:4mm 5mm 1.5mm;margin:5mm 0}
+  .fig{break-inside:avoid;padding:4mm;margin:5mm 0}
+  .fig svg{max-height:120mm}
+  .quiz{margin:5mm 0 !important;display:block}
+  .opts{display:block !important}
+  .opts li{margin:0}
+  .opt{display:flex;border:0 !important;padding:.5mm 0 !important;background:transparent !important}
+  .q{break-inside:avoid;padding:3.2mm 4.5mm;margin-bottom:2.5mm !important}
+  .q-text p{margin-bottom:1.5mm}
+  .opt{padding:1.4mm 3mm;font-size:9.5pt;border-color:#d6dce2;background:#fff !important}
+  .opt.right,.opt.wrong{background:#fff !important;border-color:#d6dce2}
+  .ans{display:block !important;font-size:9.3pt;margin-top:2.5mm;padding-top:2.5mm}
+  body.no-ans .ans{display:none !important}
+  a{color:inherit;text-decoration:none}
+}
+
+/* hero svg animations */
+.hero-svg .pt{opacity:0;transform-box:fill-box;transform-origin:center;animation:ptIn 420ms var(--ease-out) forwards}
+@keyframes ptIn{from{opacity:0;transform:scale(.6)}to{opacity:.95;transform:none}}
+.hero-svg .reg{stroke-dasharray:500;stroke-dashoffset:500;animation:draw 1100ms var(--ease-io) 1400ms forwards}
+.hero-svg .rs{opacity:0;animation:fadeIn 300ms var(--ease-out) forwards}
+.hero-svg .eq{opacity:0;animation:fadeIn 500ms var(--ease-out) 2300ms forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+@keyframes fadeIn{to{opacity:1}}
+#hero-sqld .er rect,#hero-sqld .dr rect{transition:fill 260ms var(--ease-out)}
+#hero-sqld .on rect{fill:rgba(255,255,255,.2)}
+#hero-sqld .jl{transition:opacity 200ms var(--ease-out)}
+.hero-term{min-height:300px;font-size:15px;background:#0b0f12}
+.hero-term .cur{display:inline-block;width:.6em;height:1.1em;background:#7ee2a8;vertical-align:-.15em;animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+
+/* DIKW */
+.js #fig-dikw:not(.play) .lay{opacity:0}
+#fig-dikw.play .lay{animation:rise 620ms var(--ease-out) both;animation-delay:var(--d)}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+
+/* CRISP */
+#fig-crisp .ph rect{fill:#fff;stroke:var(--line);stroke-width:1.5;transition:fill 300ms var(--ease-out),stroke 300ms var(--ease-out)}
+#fig-crisp .ph text{fill:var(--text);transition:fill 300ms var(--ease-out)}
+#fig-crisp .ph.on rect{fill:var(--accent);stroke:var(--accent)}
+#fig-crisp .ph.on text{fill:#fff}
+#fig-crisp .orbit{transition:transform 900ms var(--ease-io)}
+
+/* CM */
+.cm{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:28px;align-items:start}
+.cm-grid{display:grid;grid-template-columns:auto 1fr 1fr;gap:6px;font-size:14px}
+.cm-h{font-weight:600;color:var(--text-2);text-align:center;align-self:end;padding-bottom:2px}
+.cm-v{writing-mode:horizontal-tb;text-align:right;align-self:center;padding-right:6px}
+.cm-c{display:flex;flex-direction:column;gap:4px;padding:12px;border-radius:4px;font-weight:700;font-size:14px;background:#fff;border:1px solid var(--line)}
+.cm-c.tp,.cm-c.tn{background:var(--accent-2);border-color:transparent}
+.cm-c input{font:inherit;font-size:24px;font-weight:700;width:100%;border:0;background:transparent;padding:0;color:var(--text);font-variant-numeric:tabular-nums}
+.cm-c input:focus{outline:none}
+.cm-c:focus-within{outline:2px solid var(--accent);outline-offset:1px}
+.cm-out{display:grid;grid-template-columns:1fr 1fr;gap:14px 18px;margin:0}
+.cm-out div{margin:0}
+.cm-out dt{font-size:13.5px;color:var(--text-2)}
+.cm-out dd{margin:0;font-size:26px;font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:-.01em;line-height:1.25}
+.cm-out p{margin:0 !important;font-size:14px;color:var(--text-2)}
+
+/* ORDER */
+.ord{display:grid;grid-template-columns:1fr 1.4fr;gap:28px}
+.ord-h{font-size:14px;color:var(--text-2);margin:0 0 8px !important;font-weight:600}
+.ord ol{list-style:none;padding:0 !important;margin:0 !important;display:grid;gap:6px}
+.ord li{margin:0;padding:10px 14px;background:#fff;border:1px solid var(--line);border-radius:4px;font-family:var(--mono);font-size:15px;
+  transition:background-color 260ms var(--ease-out),color 260ms var(--ease-out),border-color 260ms var(--ease-out),transform 260ms var(--ease-out)}
+.ord-x li{display:flex;justify-content:space-between;gap:12px}
+.ord-x li span{font-family:var(--font);color:var(--text-2);font-size:14px}
+.ord-x li::before{content:attr(data-s);font-family:var(--font);font-weight:700;color:var(--accent);margin-right:-4px;min-width:1.2em}
+.ord-x li b{flex:1}
+.ord li.on{background:var(--accent);border-color:var(--accent);color:#fff;transform:translateX(4px)}
+.ord li.on span,.ord-x li.on::before{color:#fff}
+.ord li.done{border-color:var(--accent)}
+
+/* JOIN */
+.j-sql{margin-bottom:16px}
+.j-wrap{display:grid;grid-template-columns:.8fr .8fr 1.4fr;gap:16px;align-items:start}
+.j-t{font-size:14px;font-weight:700;margin:0 0 6px !important}
+.j-n{color:var(--accent);font-weight:600;margin-left:6px}
+.j-wrap table{font-size:13.5px;background:#fff}
+.j-wrap th,.j-wrap td{padding:6px 8px;font-family:var(--mono);white-space:nowrap}
+.j-wrap tr.m td{background:var(--accent-2)}
+.j-wrap td.nul{color:var(--text-2);font-style:italic}
+.j-r tbody tr{animation:rowIn 260ms var(--ease-out) both}
+@keyframes rowIn{from{opacity:0;transform:translateY(6px)}}
+
+/* BOOT */
+.boot{list-style:none;padding:0 !important;margin:0 0 14px !important;display:grid;grid-template-columns:repeat(6,1fr);gap:6px}
+.boot li{margin:0;padding:12px 10px;background:#fff;border:1px solid var(--line);border-radius:4px;display:flex;flex-direction:column;
+  transition:background-color 300ms var(--ease-out),color 300ms var(--ease-out),border-color 300ms var(--ease-out)}
+.boot b{font-size:15px}
+.boot span{font-size:12.5px;color:var(--text-2);line-height:1.4;margin-top:2px}
+.boot li.on{background:var(--accent);border-color:var(--accent);color:#fff}
+.boot li.on span{color:rgba(255,255,255,.85)}
+.boot li.done{border-color:var(--accent)}
+.boot-bar{height:4px;background:var(--surface-2);border-radius:2px;overflow:hidden}
+.boot-bar i{display:block;height:100%;background:var(--accent);transform-origin:0 50%;transform:scaleX(0);transition:transform 900ms var(--ease-io)}
+.boot-desc{min-height:3.4em;margin:14px 0 0 !important;font-size:15.5px}
+
+/* CHMOD */
+.perm{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:24px;align-items:start}
+.perm-grid{display:grid;grid-template-columns:auto repeat(3,1fr);gap:6px;font-size:13.5px;align-items:center}
+.perm-grid>b{color:var(--text-2);font-weight:600;text-align:center}
+.perm-grid>b.perm-who{text-align:right;padding-right:6px;color:var(--text)}
+.perm-grid button{font:inherit;font-family:var(--mono);font-size:20px;font-weight:700;height:52px;border-radius:4px;border:1px solid var(--line);background:#fff;color:var(--text-2);cursor:pointer;
+  transition:background-color 160ms var(--ease-out),color 160ms var(--ease-out),transform 140ms var(--ease-out)}
+.perm-grid button:active{transform:scale(.96)}
+.perm-grid button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+.perm-grid button[aria-pressed="false"]{text-decoration:line-through;text-decoration-thickness:1px}
+.perm-out label{display:flex;flex-direction:column;font-size:13.5px;color:var(--text-2);gap:4px;margin-bottom:10px}
+.perm-num{font:inherit;font-family:var(--mono);font-size:30px;font-weight:700;width:5em;padding:4px 10px;border:1px solid var(--line);border-radius:4px;color:var(--text);letter-spacing:.08em}
+.perm-term{font-size:13.5px;min-height:7.5em}
+
+@media (max-width:720px){
+  .cm,.perm,.ord{grid-template-columns:1fr}
+  .j-wrap{grid-template-columns:1fr 1fr}
+  .j-res{grid-column:1/-1;overflow-x:auto}
+  .boot{grid-template-columns:repeat(3,1fr)}
+}
+@media print{
+  .hero-term{display:none}
+  #fig-dikw .lay{opacity:1 !important}
+  #fig-crisp .orbit{display:none}
+  #fig-crisp .ph rect{fill:#fff !important;stroke:var(--accent) !important}
+  #fig-crisp .ph text{fill:var(--text) !important}
+  .ord li.on,.boot li.on{background:#fff !important;color:var(--text) !important;border-color:var(--accent) !important;transform:none}
+  .ord li.on span,.boot li.on span{color:var(--text-2) !important}
+  .ord-x li.on::before{color:var(--accent) !important}
+  .boot-bar,.boot-desc{display:none}
+  .boot{grid-template-columns:repeat(6,1fr)}
+  .perm-grid button{height:9mm;font-size:12pt}
+  .cm-c input{font-size:14pt}
+  .j-wrap{grid-template-columns:.8fr .8fr 1.4fr}
+}
+
+/* SUBNET */
+.sn-in{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:14px}
+.sn-in label,.pg-in{display:flex;flex-direction:column;font-size:13.5px;color:var(--text-2);gap:4px}
+.sn-in input,.pg-in input{font:inherit;font-family:var(--mono);font-size:18px;padding:6px 10px;border:1px solid var(--line);border-radius:4px;color:var(--text);background:#fff}
+.sn-ip{width:11em}.sn-px{width:5em}
+.sn-bits{display:grid;grid-template-columns:repeat(32,1fr);gap:2px;margin-bottom:16px}
+.sn-bits i{height:26px;border-radius:2px;background:var(--surface-2);font-style:normal;font-family:var(--mono);font-size:11px;display:grid;place-items:center;color:var(--text-2);
+  transition:background-color 200ms var(--ease-out),color 200ms var(--ease-out)}
+.sn-bits i.n{background:var(--accent);color:#fff}
+.sn-bits i.g{margin-right:5px}
+.sn-out{display:grid;grid-template-columns:repeat(3,1fr);gap:12px 18px;margin:0}
+.sn-out div{margin:0}.sn-out dt{font-size:13.5px;color:var(--text-2)}
+.sn-out dd{margin:0;font-family:var(--mono);font-size:17px;font-weight:700;font-variant-numeric:tabular-nums}
+/* TCP3 */
+.js #fig-tcp3:not(.play) .tm{opacity:0}
+#fig-tcp3.play .tm{animation:rise 520ms var(--ease-out) both;animation-delay:var(--d)}
+/* PAGING */
+.pg-in{flex-direction:row;align-items:center;margin-left:8px}
+.pg-in input{font-size:14px;padding:4px 8px}
+.pg-ref{width:14em}.pg-fr{width:4em}
+.pg-wrap{overflow-x:auto}
+.pg td,.pg th{text-align:center;font-family:var(--mono);padding:6px 8px;min-width:34px;border:1px solid var(--line)}
+.pg th{background:#fff}
+.pg td.f{background:var(--accent);color:#fff;font-weight:700}
+.pg td.h{background:#fff}
+.pg-sum{margin:12px 0 0 !important;font-weight:600}
+@media (max-width:720px){ .sn-out{grid-template-columns:1fr 1fr} .sn-bits i{font-size:0;height:18px} }
+@media print{ .js #fig-tcp3 .tm{opacity:1 !important} .sn-in input,.pg-in input{border-color:#d6dce2} }
+
+</style>
+<script>document.documentElement.classList.add('js')</script>
+</head>
+<body data-guide="secgisa">
+<div class="progress" aria-hidden="true"><i></i></div>
+<header class="topbar">
+  <div class="topbar-in">
+    <a class="brand" href="index.html">교본 <b>정보보안기사</b></a>
+    <nav class="guides" aria-label="다른 교본"><a href="index.html">전체 교본 목록</a></nav>
+    <button type="button" class="toc-toggle" aria-expanded="false" aria-controls="toc">목차</button>
+    <button type="button" class="btn btn-solid open-pdf">PDF로 저장</button>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="hero-in">
+    <div class="hero-text">
+      <h1>정보보안기사</h1>
+      <p class="hero-tag">공격 원리부터 대응, 암호, 관리체계와 법규까지 5과목 전체를 한 권에.</p>
+      <dl class="hero-stats">
+        <div><dt>단원</dt><dd>9</dd></div>
+        <div><dt>주제</dt><dd>47</dd></div>
+        <div><dt>확인 문제</dt><dd>87</dd></div>
+      </dl>
+      <div class="hero-actions">
+        <a class="btn btn-light" href="#ch0">처음부터 읽기</a>
+        <button type="button" class="btn btn-line-light open-pdf">원하는 단원만 PDF로</button>
+      </div>
+    </div>
+    <div class="hero-fig"><div class="term hero-term gen-term" data-prompt="# tail -f /var/log/secure" data-lines='[["# ", "tail -3 /var/log/secure", "Failed password for root from 203.0.113.7 port 51022 ssh2\nFailed password for root from 203.0.113.7 port 51024 ssh2"], ["# ", "nmap -sS -p 22,80,443 10.0.0.5", "22/tcp open ssh\n80/tcp open http"], ["# ", "iptables -A INPUT -s 203.0.113.7 -j DROP", ""]]' aria-label="실행 예시"><span class="d"># tail -f /var/log/secure</span></div></div>
+  </div>
+</section>
+
+<div class="print-cover" aria-hidden="true">
+  <p class="pc-kind">교본</p>
+  <h1>정보보안기사</h1>
+  <p class="pc-tag">공격 원리부터 대응, 암호, 관리체계와 법규까지 5과목 전체를 한 권에.</p>
+  <ol class="pc-list"></ol>
+  <p class="pc-date">2026년 11월 기준으로 정리 · 시험 일정과 세부 규정은 접수 전 공식 사이트에서 다시 확인하세요.</p>
+</div>
+
+<div class="layout">
+  <aside class="sidebar" id="toc" aria-label="목차">
+    <div class="sidebar-in">
+      <p class="toc-title">목차</p>
+      <ol class="toc"><li><a href="#ch0" class="toc-ch" data-ch="ch0"><span class="toc-g">시작하기</span>시험 구성과 공부 순서</a>
+<ol><li><a href="#s1">정보보안기사는 어떤 시험인가</a></li><li><a href="#s2">공부 순서</a></li></ol>
+</li>
+<li><a href="#ch1" class="toc-ch" data-ch="ch1"><span class="toc-g">1과목 · 시스템 보안</span>시스템 보안</a>
+<ol><li><a href="#s3">운영체제와 보안의 기본</a></li><li><a href="#s4">유닉스·리눅스 보안</a></li><li><a href="#s5">윈도우 보안</a></li><li><a href="#s6">악성코드</a></li><li><a href="#s7">클라우드·가상화·IoT·모바일 보안</a></li><li><a href="#s8">시스템 보안 점검·대응 도구</a></li></ol>
+</li>
+<li><a href="#ch2" class="toc-ch" data-ch="ch2"><span class="toc-g">2과목 · 네트워크 보안</span>네트워크 기초</a>
+<ol><li><a href="#s9">네트워크 기초</a></li><li><a href="#s10">OSI 7계층</a></li><li><a href="#s11">TCP/IP 4계층</a></li><li><a href="#s12">IP 주소와 서브네팅</a></li><li><a href="#s13">네트워크 장비</a></li><li><a href="#s14">흐름 제어·오류 제어·다중화</a></li><li><a href="#s15">무선·최신 네트워크 용어</a></li></ol>
+</li>
+<li><a href="#ch3" class="toc-ch" data-ch="ch3"><span class="toc-g">2과목 · 네트워크 보안</span>네트워크 공격과 보안 기술</a>
+<ol><li><a href="#s16">패킷 구조와 분석</a></li><li><a href="#s17">서비스 거부 공격 (DoS / DDoS)</a></li><li><a href="#s18">스캐닝</a></li><li><a href="#s19">스니핑과 스푸핑</a></li><li><a href="#s20">무선 네트워크 보안</a></li><li><a href="#s21">네트워크 보안 기술</a></li></ol>
+</li>
+<li><a href="#ch4" class="toc-ch" data-ch="ch4"><span class="toc-g">3과목 · 어플리케이션 보안</span>어플리케이션 보안</a>
+<ol><li><a href="#s22">인터넷 응용 서비스 보안</a></li><li><a href="#s23">웹 애플리케이션 공격</a></li><li><a href="#s24">데이터베이스 보안</a></li><li><a href="#s25">전자상거래 보안</a></li><li><a href="#s26">소프트웨어 개발 보안</a></li></ol>
+</li>
+<li><a href="#ch5" class="toc-ch" data-ch="ch5"><span class="toc-g">4과목 · 정보보안 일반</span>암호, 인증, 접근통제</a>
+<ol><li><a href="#s27">암호학 기초</a></li><li><a href="#s28">대칭키 암호</a></li><li><a href="#s29">공개키(비대칭) 암호</a></li><li><a href="#s30">해시와 메시지 인증</a></li><li><a href="#s31">전자서명과 PKI</a></li><li><a href="#s32">인증</a></li><li><a href="#s33">접근 통제</a></li><li><a href="#s34">최신 보안 동향</a></li></ol>
+</li>
+<li><a href="#ch6" class="toc-ch" data-ch="ch6"><span class="toc-g">5과목 · 정보보안 관리 및 법규</span>관리체계, 위험관리, 법규</a>
+<ol><li><a href="#s35">정보보호 관리와 거버넌스</a></li><li><a href="#s36">위험 관리</a></li><li><a href="#s37">업무 연속성과 재해 복구</a></li><li><a href="#s38">침해사고 대응과 디지털 포렌식</a></li><li><a href="#s39">인증 제도</a></li><li><a href="#s40">정보보호 관련 법규</a></li><li><a href="#s41">사이버 윤리</a></li></ol>
+</li>
+<li><a href="#ch7" class="toc-ch" data-ch="ch7"><span class="toc-g">실기 · 정보보안 실무</span>실기 필답형 공략</a>
+<ol><li><a href="#s42">실기는 &quot;쓰는&quot; 시험이다</a></li><li><a href="#s43">서술형 답안 골격 4가지</a></li><li><a href="#s44">실무형 연습: 로그와 설정 읽기</a></li><li><a href="#s45">단답형 키워드 점검</a></li></ol>
+</li>
+<li><a href="#ch8" class="toc-ch" data-ch="ch8"><span class="toc-g">마무리</span>실전 모의 문제</a>
+<ol><li><a href="#s46">과목 섞어 풀기</a></li><li><a href="#s47">관리·법규 추가 문제</a></li></ol>
+</li></ol>
+    </div>
+  </aside>
+  <main class="content">
+
+<section class="chapter" id="ch0" data-title="시험 구성과 공부 순서" data-group="시작하기">
+  <header class="ch-head reveal">
+    <p class="ch-group">시작하기</p>
+    <h2>시험 구성과 공부 순서</h2>
+    <button type="button" class="ch-pdf" data-ch="ch0"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 1.5h5.5L12.5 4.5V14.5h-8.5z M9.5 1.5v3h3 M6 9.5l2 2 2-2 M8 6.5v5"/></svg>이 장만 PDF로</button>
+  </header>
+  <div class="ch-body">
+<h3 id="s1">정보보안기사는 어떤 시험인가</h3>
+<p>정보보안기사는 <strong>한국방송통신전파진흥원(KCA)</strong>이 시행하는 국가기술자격이다. 시스템·네트워크·애플리케이션 보안, 암호와 인증, 정보보호 관리와 법규까지 보안 실무 전반을 확인한다. 보안 직군 채용, 공공기관·금융권 가점, ISMS-P 심사원 등에 널리 쓰인다.</p>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>구분</th>
+<th>내용</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>시행</td>
+<td>한국방송통신전파진흥원 (국가기술자격검정 cq.or.kr)</td>
+</tr>
+<tr>
+<td>필기 과목</td>
+<td>1 시스템 보안 · 2 네트워크 보안 · 3 어플리케이션 보안 · 4 정보보안 일반 · 5 정보보안 관리 및 법규</td>
+</tr>
+<tr>
+<td>필기 방식</td>
+<td>객관식 4지선다, CBT. <strong>과목당 20문항, 총 100문항, 2시간 30분</strong></td>
+</tr>
+<tr>
+<td>필기 합격</td>
+<td>과목당 40점 이상, 전 과목 평균 60점 이상</td>
+</tr>
+<tr>
+<td>실기</td>
+<td>정보보안 실무, <strong>필답형 3시간</strong>. 100점 만점 60점 이상</td>
+</tr>
+<tr>
+<td>실기 구성 (최근 경향)</td>
+<td><strong>단답형 12문항(각 3점, 36점) · 서술형 4문항(각 12점, 48점) · 실무형 2문항 중 1문항 선택(16점)</strong></td>
+</tr>
+<tr>
+<td>응시료</td>
+<td>필기 19,400원 / 실기 22,600원 (2026년 기준)</td>
+</tr>
+<tr>
+<td>시행 횟수</td>
+<td>연 3회 (2026년 제1·2·4회)</td>
+</tr>
+<tr>
+<td>필기 면제</td>
+<td>필기 합격 후 2년</td>
+</tr>
+</tbody>
+</table></div>
+<h4>2027년 출제기준 변경</h4>
+<p>2027년 1월 1일부터 2029년 12월 31일까지 새 출제기준이 적용된다. <strong>시험 구성(5과목 100문항, 2시간 30분)은 그대로</strong>이고 내용이 추가된다.</p>
+<ul>
+<li>필기: 클라우드·컨테이너 보안, <strong>SASE·ZTNA·XDR</strong>, 블록체인, <strong>양자내성암호·딥페이크</strong> 등 최신 보안 동향, 클라우드 보안 인증·주요정보통신기반시설, 사이버보안 법령</li>
+<li>실기: 주요 항목이 4개에서 5개로 늘며 <strong>최신 보안 동향</strong>이 추가</li>
+</ul>
+<p>이 교본에는 2027년 추가 항목도 들어 있다.</p>
+<aside class="box box-warn">
+<p class="box-t">접수 전에 꼭 다시 확인할 것</p>
+<p>2026년 11월 기준이다. 일정·응시료·실기 문항 구성은 KCA 공고를 확인하자. 법규 과목은 개정이 잦으니 시험 직전 최신 법령을 본다.</p>
+</aside>
+<h3 id="s2">공부 순서</h3>
+<p>필기 합격률은 30~40%대, <strong>실기 합격률은 회차에 따라 한 자릿수에서 20%대</strong>까지 오르내린다. 실기는 같은 범위를 "고르는" 대신 "써야" 하므로, 필기 공부 때부터 <strong>원리 → 공격 방법 → 대응책</strong>을 한 세트로 말할 수 있게 정리하자.</p>
+<ol>
+<li><strong>1~2주</strong> — 2과목 네트워크 보안: 네트워크 기초부터. 다른 과목의 바탕이 된다</li>
+<li><strong>3주</strong> — 1과목 시스템 보안: 리눅스 명령어·로그·권한은 실습하며</li>
+<li><strong>4주</strong> — 3과목 어플리케이션 보안: 웹 공격과 대응</li>
+<li><strong>5주</strong> — 4과목 정보보안 일반: 암호 알고리즘 표, RSA 계산</li>
+<li><strong>6주</strong> — 5과목 관리 및 법규: 과락이 가장 많이 나오는 과목. 법 조문 표 암기</li>
+<li><strong>7주~</strong> — 기출 반복, 실기 장</li>
+</ol>
+  </div>
+</section>
+
+<section class="chapter" id="ch1" data-title="시스템 보안" data-group="1과목 · 시스템 보안">
+  <header class="ch-head reveal">
+    <p class="ch-group">1과목 · 시스템 보안</p>
+    <h2>시스템 보안</h2>
+    <button type="button" class="ch-pdf" data-ch="ch1"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 1.5h5.5L12.5 4.5V14.5h-8.5z M9.5 1.5v3h3 M6 9.5l2 2 2-2 M8 6.5v5"/></svg>이 장만 PDF로</button>
+  </header>
+  <div class="ch-body">
+<h3 id="s3">운영체제와 보안의 기본</h3>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>보안 목표</th>
+<th>의미</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>기밀성</td>
+<td>인가된 사용자만 정보에 접근</td>
+</tr>
+<tr>
+<td>무결성</td>
+<td>인가된 방법으로만 정보 변경</td>
+</tr>
+<tr>
+<td>가용성</td>
+<td>필요할 때 언제든 사용</td>
+</tr>
+<tr>
+<td>인증성·책임추적성·부인방지</td>
+<td>신원 확인, 행위 추적, 행위 부인 불가</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>운영체제 보안 요소</strong>: 사용자 인증, 접근 통제, 감사(로그), 파일 시스템 보호, 메모리 보호.</p>
+<p><strong>참조 모니터(Reference Monitor)</strong>: 주체(사용자·프로세스)가 객체(파일·자원)에 접근할 때마다 권한을 확인하는 추상 개념. 조건 — <strong>우회 불가</strong>(항상 호출), <strong>변조 불가</strong>, <strong>검증 가능</strong>(작아서 분석 가능). 이를 구현한 것이 <strong>보안 커널</strong>, 보안 기능 전체 집합이 <strong>TCB</strong>(신뢰 컴퓨팅 기반).</p>
+<h4>메모리 보호와 공격</h4>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>공격·보호</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>버퍼 오버플로</td>
+<td>버퍼 크기를 넘는 입력으로 복귀 주소를 덮어써 악성 코드 실행. <strong>스택</strong> 버퍼 오버플로, <strong>힙</strong> 버퍼 오버플로</td>
+</tr>
+<tr>
+<td>포맷 스트링 공격</td>
+<td><code>printf(input)</code>처럼 서식 문자열을 사용자 입력 그대로 써서 <code>%x</code>, <code>%n</code>으로 메모리 읽기·쓰기</td>
+</tr>
+<tr>
+<td>레이스 컨디션</td>
+<td>임시 파일 생성 시점과 사용 시점 사이를 노려 심볼릭 링크로 바꿔치기 (TOCTOU)</td>
+</tr>
+<tr>
+<td>스택 가드 (카나리)</td>
+<td>복귀 주소 앞에 임의 값을 두고 변조를 감지</td>
+</tr>
+<tr>
+<td>스택 실드</td>
+<td>복귀 주소를 별도 영역에 복사해 두고 비교</td>
+</tr>
+<tr>
+<td><strong>ASLR</strong></td>
+<td>스택·힙·라이브러리 주소를 실행할 때마다 무작위로</td>
+</tr>
+<tr>
+<td><strong>DEP / NX 비트</strong></td>
+<td>스택·힙 영역에서 코드 실행 금지</td>
+</tr>
+<tr>
+<td>안전한 함수</td>
+<td>strcpy → <strong>strncpy</strong>, strcat → strncat, gets → <strong>fgets</strong>, sprintf → snprintf</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="s4">유닉스·리눅스 보안</h3>
+<h4>계정과 패스워드</h4>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>파일</th>
+<th>내용</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>/etc/passwd</code></td>
+<td><code>사용자:x:UID:GID:설명:홈:셸</code> 7필드. 누구나 읽기 가능</td>
+</tr>
+<tr>
+<td><code>/etc/shadow</code></td>
+<td>암호화된 비밀번호와 기간 정보. <strong>root만</strong> 읽기. 권한 400(또는 000)</td>
+</tr>
+<tr>
+<td><code>/etc/group</code></td>
+<td>그룹 정보</td>
+</tr>
+<tr>
+<td><code>/etc/login.defs</code></td>
+<td>비밀번호 최소 길이·사용 기간 기본값</td>
+</tr>
+<tr>
+<td><code>/etc/pam.d/</code></td>
+<td>PAM(플러그형 인증 모듈) 설정. 비밀번호 복잡도(pam_pwquality), 로그인 실패 잠금(pam_faillock / pam_tally2)</td>
+</tr>
+</tbody>
+</table></div>
+<ul>
+<li>UID 0 = root. <strong>root 외에 UID 0인 계정</strong>이 있으면 백도어 의심</li>
+<li>shadow 비밀번호 필드: <code>$1$</code> MD5, <code>$5$</code> SHA-256, <code>$6$</code> <strong>SHA-512</strong>, <code>$y$</code> yescrypt. <code>!</code>·<code>*</code>는 잠긴 계정</li>
+<li>불필요한 계정의 셸은 <code>/sbin/nologin</code> 또는 <code>/bin/false</code></li>
+</ul>
+<h4>파일 권한과 특수 권한</h4>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>권한</th>
+<th>숫자</th>
+<th>의미</th>
+<th>보안 위험</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SetUID</td>
+<td>4000</td>
+<td>실행하는 동안 <strong>파일 소유자</strong> 권한 (예: passwd)</td>
+<td>root 소유 SetUID 파일은 권한 상승 경로</td>
+</tr>
+<tr>
+<td>SetGID</td>
+<td>2000</td>
+<td>실행 중 그룹 소유자 권한 / 디렉터리 그룹 상속</td>
+<td></td>
+</tr>
+<tr>
+<td>Sticky Bit</td>
+<td>1000</td>
+<td>자기 파일만 삭제 가능 (/tmp)</td>
+<td></td>
+</tr>
+</tbody>
+</table></div>
+<pre><code class="language-bash"># find / -user root -perm -4000 -type f 2&gt;/dev/null   # root 소유 SetUID 파일 점검
+# find / -perm -2 -type f 2&gt;/dev/null                 # 누구나 쓸 수 있는 파일 (world writable)
+# chmod 400 /etc/shadow
+# umask 022                                           # 새 파일 644, 디렉터리 755
+</code></pre>
+<h4>로그 파일</h4>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>로그</th>
+<th>내용</th>
+<th>확인</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>/var/log/messages</code> (데비안 <code>syslog</code>)</td>
+<td>시스템 전반 로그</td>
+<td>텍스트</td>
+</tr>
+<tr>
+<td><code>/var/log/secure</code> (데비안 <code>auth.log</code>)</td>
+<td><strong>인증·로그인·su·sudo</strong> 기록</td>
+<td>텍스트</td>
+</tr>
+<tr>
+<td><strong>utmp</strong> (<code>/var/run/utmp</code>)</td>
+<td><strong>현재 로그인</strong> 사용자</td>
+<td><code>w</code>, <code>who</code>, <code>users</code></td>
+</tr>
+<tr>
+<td><strong>wtmp</strong> (<code>/var/log/wtmp</code>)</td>
+<td><strong>로그인·로그아웃 이력</strong>, 재부팅</td>
+<td><code>last</code></td>
+</tr>
+<tr>
+<td><strong>btmp</strong> (<code>/var/log/btmp</code>)</td>
+<td><strong>로그인 실패</strong> 기록</td>
+<td><code>lastb</code></td>
+</tr>
+<tr>
+<td>lastlog</td>
+<td>사용자별 <strong>마지막 로그인</strong></td>
+<td><code>lastlog</code></td>
+</tr>
+<tr>
+<td>pacct</td>
+<td>사용자가 실행한 <strong>모든 명령</strong> (프로세스 계정)</td>
+<td><code>lastcomm</code></td>
+</tr>
+<tr>
+<td><code>.bash_history</code></td>
+<td>사용자 명령 이력</td>
+<td>텍스트</td>
+</tr>
+<tr>
+<td><code>/var/log/xferlog</code></td>
+<td>FTP 파일 전송</td>
+<td>텍스트</td>
+</tr>
+<tr>
+<td>sulog</td>
+<td>su 명령 기록</td>
+<td>텍스트</td>
+</tr>
+<tr>
+<td>dmesg</td>
+<td>부팅 시 커널 메시지</td>
+<td><code>dmesg</code></td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>syslog 설정</strong> <code>/etc/rsyslog.conf</code>: <code>facility.priority  action</code> 형식. 예) <code>authpriv.*  /var/log/secure</code>, <code>*.emerg  *</code>.
+우선순위(높음 → 낮음): <strong>emerg &gt; alert &gt; crit &gt; err &gt; warning &gt; notice &gt; info &gt; debug</strong>.</p>
+<h4>서비스와 접근 통제</h4>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>기능</th>
+<th>파일·도구</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>TCP Wrapper</td>
+<td><code>/etc/hosts.allow</code> → <code>/etc/hosts.deny</code> 순서로 검사. 예) <code>sshd: 192.168.1.</code></td>
+</tr>
+<tr>
+<td>inetd / xinetd</td>
+<td>슈퍼 데몬 설정 (<code>/etc/xinetd.d/</code>)</td>
+</tr>
+<tr>
+<td>방화벽</td>
+<td>iptables, firewalld, nftables, ufw</td>
+</tr>
+<tr>
+<td>원격 접속 제한</td>
+<td><code>/etc/ssh/sshd_config</code>의 <code>PermitRootLogin no</code>, <code>PasswordAuthentication no</code></td>
+</tr>
+<tr>
+<td>cron 접근 제어</td>
+<td><code>/etc/cron.allow</code>, <code>/etc/cron.deny</code></td>
+</tr>
+<tr>
+<td>무결성 검사</td>
+<td>Tripwire, AIDE (파일 해시를 저장해 두고 변조 탐지)</td>
+</tr>
+</tbody>
+</table></div>
+<pre><code class="language-bash"># iptables -A INPUT -p tcp --dport 22 -s 10.0.0.0/24 -j ACCEPT
+# iptables -A INPUT -p tcp --dport 22 -j DROP
+# iptables -L -n --line-numbers
+</code></pre>
+<p>iptables 체인: <strong>INPUT</strong>(들어오는), <strong>OUTPUT</strong>(나가는), <strong>FORWARD</strong>(통과하는). 타깃: ACCEPT, DROP(응답 없이 버림), REJECT(거부 응답).</p>
+<h3 id="s5">윈도우 보안</h3>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>요소</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>SAM</strong></td>
+<td>계정·비밀번호 해시(NTLM) 저장 데이터베이스 (<code>%SystemRoot%\System32\config\SAM</code>)</td>
+</tr>
+<tr>
+<td><strong>LSA</strong></td>
+<td>로컬 보안 인증. 로그인 검증, 보안 정책, 감사 로그 생성</td>
+</tr>
+<tr>
+<td><strong>SRM</strong></td>
+<td>보안 참조 모니터. 접근 권한 검사, 액세스 토큰 발급</td>
+</tr>
+<tr>
+<td>SID</td>
+<td>계정 고유 식별자. <strong>RID 500 = Administrator</strong>, 501 = Guest, 일반 사용자 1000 이상</td>
+</tr>
+<tr>
+<td>액세스 토큰</td>
+<td>로그인 시 발급되는 권한 정보</td>
+</tr>
+<tr>
+<td>ACL (DACL, SACL)</td>
+<td>객체 접근 권한 목록 / 감사 설정</td>
+</tr>
+<tr>
+<td>UAC</td>
+<td>관리자 권한이 필요할 때 사용자에게 확인</td>
+</tr>
+<tr>
+<td>BitLocker / EFS</td>
+<td>드라이브 전체 암호화 / 파일 단위 암호화</td>
+</tr>
+<tr>
+<td>레지스트리</td>
+<td>시스템 설정 DB. HKLM, HKCU, HKCR, HKU, HKCC. 악성코드 자동 실행 위치: <code>...\CurrentVersion\Run</code></td>
+</tr>
+</tbody>
+</table></div>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>이벤트 로그</th>
+<th>내용</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>응용 프로그램</td>
+<td>프로그램 오류·정보</td>
+</tr>
+<tr>
+<td>보안</td>
+<td>로그온 성공·실패, 권한 사용, 개체 접근 (감사 정책 설정 필요). 이벤트 ID <strong>4624 로그온 성공, 4625 실패</strong>, 4634 로그오프, 4720 계정 생성</td>
+</tr>
+<tr>
+<td>시스템</td>
+<td>드라이버·서비스</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>공유 폴더 보안</strong>: 기본 관리 공유(C$, ADMIN$, IPC$) 제거·제한, <code>net share</code>로 확인. <strong>NTFS 권한</strong>이 FAT보다 세밀하다.</p>
+<h3 id="s6">악성코드</h3>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>종류</th>
+<th>특징</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>바이러스</td>
+<td>다른 파일에 기생, 숙주 필요. 부트·파일·매크로 바이러스. 1세대 원시형 → 2세대 암호형 → 3세대 은폐형(스텔스) → 4세대 갑옷형(아머드) → 5세대 매크로</td>
+</tr>
+<tr>
+<td>웜</td>
+<td>스스로 복제해 네트워크로 전파. 숙주 불필요</td>
+</tr>
+<tr>
+<td>트로이 목마</td>
+<td>정상 프로그램으로 위장. 자기 복제 없음</td>
+</tr>
+<tr>
+<td>백도어</td>
+<td>인증 없이 접근하는 비밀 통로</td>
+</tr>
+<tr>
+<td>루트킷</td>
+<td>공격 흔적·악성 프로세스를 숨기는 도구 모음</td>
+</tr>
+<tr>
+<td>랜섬웨어</td>
+<td>파일 암호화 후 금전 요구</td>
+</tr>
+<tr>
+<td>봇넷</td>
+<td>감염된 좀비 PC 네트워크, C&amp;C 서버가 명령</td>
+</tr>
+<tr>
+<td>스파이웨어 / 애드웨어</td>
+<td>정보 수집 / 광고</td>
+</tr>
+<tr>
+<td>파일리스 악성코드</td>
+<td>파일 없이 메모리·PowerShell·레지스트리에서 동작</td>
+</tr>
+<tr>
+<td>키로거</td>
+<td>키 입력 탈취</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>악성코드 분석</strong>: <strong>정적 분석</strong>(실행하지 않고 코드·문자열·헤더 분석, 디스어셈블러 IDA), <strong>동적 분석</strong>(가상 환경·샌드박스에서 실행하며 행위 관찰). 패킹(실행 압축, UPX)을 풀어야 분석이 가능한 경우가 많다.</p>
+<h3 id="s7">클라우드·가상화·IoT·모바일 보안</h3>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>영역</th>
+<th>주요 위협·대책</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>클라우드</td>
+<td><strong>책임 공유 모델</strong>(IaaS는 고객 책임이 크고, SaaS로 갈수록 제공자 책임이 커짐), 잘못된 설정, 접근 키 유출, CASB, CSPM</td>
+</tr>
+<tr>
+<td>컨테이너</td>
+<td>취약한 이미지, 권한 상승(privileged 컨테이너), 이미지 스캔, 최소 권한</td>
+</tr>
+<tr>
+<td>가상화</td>
+<td>VM 탈출(VM Escape), 하이퍼바이저 보안</td>
+</tr>
+<tr>
+<td>IoT</td>
+<td>기본 비밀번호, 펌웨어 취약점, 미라이(Mirai) 봇넷</td>
+</tr>
+<tr>
+<td>모바일</td>
+<td>루팅·탈옥, 악성 앱, 앱 위변조. 안드로이드 권한 모델, iOS 샌드박스</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="s8">시스템 보안 점검·대응 도구</h3>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>도구</th>
+<th>용도</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Nmap</td>
+<td>포트·서비스·OS 스캐닝</td>
+</tr>
+<tr>
+<td>Nessus, OpenVAS</td>
+<td>취약점 스캐너</td>
+</tr>
+<tr>
+<td>Tripwire, AIDE</td>
+<td>파일 무결성 점검</td>
+</tr>
+<tr>
+<td>tcpdump, Wireshark</td>
+<td>패킷 캡처·분석</td>
+</tr>
+<tr>
+<td>Snort, Suricata</td>
+<td>네트워크 IDS/IPS</td>
+</tr>
+<tr>
+<td>EDR</td>
+<td>단말의 이상 행위 탐지·대응</td>
+</tr>
+<tr>
+<td>John the Ripper, Hashcat</td>
+<td>패스워드 크래킹 (점검용)</td>
+</tr>
+<tr>
+<td>lsof, netstat, ss, ps</td>
+<td>열린 파일·포트·프로세스 확인</td>
+</tr>
+</tbody>
+</table></div>
+<ol class="quiz">
+<li class="q" data-ans="3"><div class="q-text"><p>리눅스에서 로그인 실패 기록을 저장하며 lastb 명령으로 확인하는 로그는?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>utmp</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>wtmp</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>btmp</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>lastlog</span></button></li>
+</ol><div class="ans"><p><b>정답 ③</b> btmp. wtmp는 로그인·로그아웃 이력(last), utmp는 현재 로그인(w, who).</p></div></li>
+<li class="q" data-ans="1"><div class="q-text"><p>실행하는 동안 파일 소유자의 권한으로 동작하게 하는 특수 권한은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>SetUID</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>SetGID</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>Sticky Bit</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>umask</span></button></li>
+</ol><div class="ans"><p><b>정답 ①</b> SetUID(4000). root 소유 SetUID 파일은 점검 대상이다.</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>프로세스의 스택·힙·라이브러리 주소를 실행할 때마다 무작위로 배치하는 기법은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>DEP</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>ASLR</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>스택 가드</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>카나리</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> ASLR이다. DEP는 데이터 영역의 코드 실행을 막는다.</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>윈도우에서 계정과 비밀번호 해시를 저장하는 데이터베이스는?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>LSA</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>SAM</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>SRM</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>SID</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> SAM이다.</p></div></li>
+<li class="q" data-ans="3"><div class="q-text"><p>syslog 우선순위 중 가장 높은 것은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>crit</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>alert</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>emerg</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>err</span></button></li>
+</ol><div class="ans"><p><b>정답 ③</b> emerg &gt; alert &gt; crit &gt; err &gt; warning &gt; notice &gt; info &gt; debug.</p></div></li>
+<li class="q" data-ans="3"><div class="q-text"><p>자기 복제 기능이 없고 정상 프로그램으로 위장하는 악성코드는?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>바이러스</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>웜</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>트로이 목마</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>봇</span></button></li>
+</ol><div class="ans"><p><b>정답 ③</b> 트로이 목마는 자기 복제를 하지 않는다.</p></div></li>
+<li class="q" data-ans="4"><div class="q-text"><p>참조 모니터가 만족해야 하는 조건이 아닌 것은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>우회 불가</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>변조 불가</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>검증 가능</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>암호화 필수</span></button></li>
+</ol><div class="ans"><p><b>정답 ④</b> 우회 불가, 변조 불가, 검증 가능.</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>윈도우 보안 이벤트 로그에서 로그온 실패를 뜻하는 이벤트 ID는?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>4624</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>4625</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>4634</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>4720</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> 4624 성공, 4625 실패, 4634 로그오프, 4720 계정 생성.</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>TCP Wrapper에서 먼저 검사하는 파일은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>/etc/hosts.deny</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>/etc/hosts.allow</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>/etc/inetd.conf</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>/etc/services</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> hosts.allow를 먼저 보고, 없으면 hosts.deny를 본다.</p></div></li>
+<li class="q" data-ans="3"><div class="q-text"><p>클라우드 책임 공유 모델에서 고객의 보안 책임이 가장 큰 서비스 모델은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>SaaS</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>PaaS</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>IaaS</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>모두 같다</span></button></li>
+</ol><div class="ans"><p><b>정답 ③</b> IaaS는 OS부터 고객이 관리한다.</p></div></li>
+</ol>
+  </div>
+</section>
+
+<section class="chapter" id="ch2" data-title="네트워크 기초" data-group="2과목 · 네트워크 보안">
+  <header class="ch-head reveal">
+    <p class="ch-group">2과목 · 네트워크 보안</p>
+    <h2>네트워크 기초</h2>
+    <button type="button" class="ch-pdf" data-ch="ch2"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 1.5h5.5L12.5 4.5V14.5h-8.5z M9.5 1.5v3h3 M6 9.5l2 2 2-2 M8 6.5v5"/></svg>이 장만 PDF로</button>
+  </header>
+  <div class="ch-body">
+<h3 id="s9">네트워크 기초</h3>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>구분</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>LAN</td>
+<td>건물·학교 같은 좁은 지역. 이더넷</td>
+</tr>
+<tr>
+<td>MAN</td>
+<td>도시 규모</td>
+</tr>
+<tr>
+<td>WAN</td>
+<td>국가·대륙 간 넓은 지역</td>
+</tr>
+</tbody>
+</table></div>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>토폴로지</th>
+<th>특징</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>성형(Star)</td>
+<td>중앙 장비에 모든 노드 연결. 중앙 고장 시 전체 마비, 관리 쉬움</td>
+</tr>
+<tr>
+<td>버스형(Bus)</td>
+<td>하나의 회선에 여러 노드 연결</td>
+</tr>
+<tr>
+<td>링형(Ring)</td>
+<td>원형으로 연결. 토큰 링</td>
+</tr>
+<tr>
+<td>망형(Mesh)</td>
+<td>모든 노드가 서로 연결. 신뢰성 높음. 링크 수 = n(n−1)/2</td>
+</tr>
+<tr>
+<td>트리형</td>
+<td>계층 구조</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="s10">OSI 7계층</h3>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>계층</th>
+<th>이름</th>
+<th>역할</th>
+<th>데이터 단위</th>
+<th>프로토콜·장비</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>7</td>
+<td>응용 (Application)</td>
+<td>사용자에게 서비스 제공</td>
+<td>데이터</td>
+<td>HTTP, FTP, SMTP, DNS, Telnet, SSH</td>
+</tr>
+<tr>
+<td>6</td>
+<td>표현 (Presentation)</td>
+<td>데이터 형식 변환, <strong>암호화, 압축</strong></td>
+<td>데이터</td>
+<td>JPEG, MPEG, ASCII, SSL 일부</td>
+</tr>
+<tr>
+<td>5</td>
+<td>세션 (Session)</td>
+<td>연결 설정·유지·종료, <strong>동기화(동기점)</strong></td>
+<td>데이터</td>
+<td>NetBIOS, RPC</td>
+</tr>
+<tr>
+<td>4</td>
+<td>전송 (Transport)</td>
+<td>종단 간 신뢰성, 흐름·오류 제어, 포트 번호</td>
+<td><strong>세그먼트</strong></td>
+<td><strong>TCP, UDP</strong></td>
+</tr>
+<tr>
+<td>3</td>
+<td>네트워크 (Network)</td>
+<td>경로 설정(라우팅), 논리 주소(IP)</td>
+<td><strong>패킷</strong></td>
+<td><strong>IP, ICMP, ARP</strong>, OSPF, BGP / <strong>라우터</strong></td>
+</tr>
+<tr>
+<td>2</td>
+<td>데이터 링크 (Data Link)</td>
+<td>인접 노드 간 전송, MAC 주소, 오류 검출</td>
+<td><strong>프레임</strong></td>
+<td>Ethernet, HDLC, PPP / <strong>스위치, 브리지</strong></td>
+</tr>
+<tr>
+<td>1</td>
+<td>물리 (Physical)</td>
+<td>전기 신호 전송</td>
+<td><strong>비트</strong></td>
+<td>RS-232C / <strong>허브, 리피터</strong></td>
+</tr>
+</tbody>
+</table></div>
+<p>외우는 법: 아래부터 <strong>"물데네전세표응"</strong> (Please Do Not Throw Sausage Pizza Away).</p>
+<p><strong>캡슐화</strong>: 송신 측은 위 계층에서 아래로 내려가며 각 계층 헤더를 붙이고, 수신 측은 아래에서 위로 올라가며 헤더를 떼어낸다.</p>
+<h3 id="s11">TCP/IP 4계층</h3>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>TCP/IP 계층</th>
+<th>OSI 대응</th>
+<th>프로토콜</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>응용 계층</td>
+<td>응용·표현·세션</td>
+<td>HTTP(80), HTTPS(443), FTP(20/21), SSH(22), Telnet(23), SMTP(25), DNS(53), DHCP(67/68), TFTP(69), POP3(110), IMAP(143), SNMP(161)</td>
+</tr>
+<tr>
+<td>전송 계층</td>
+<td>전송</td>
+<td>TCP, UDP</td>
+</tr>
+<tr>
+<td>인터넷 계층</td>
+<td>네트워크</td>
+<td>IP, ICMP, IGMP, ARP, RARP</td>
+</tr>
+<tr>
+<td>네트워크 액세스 계층</td>
+<td>데이터 링크·물리</td>
+<td>Ethernet, Wi-Fi(IEEE 802.11)</td>
+</tr>
+</tbody>
+</table></div>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>구분</th>
+<th>TCP</th>
+<th>UDP</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>연결</td>
+<td>연결 지향 (3-way handshake)</td>
+<td>비연결</td>
+</tr>
+<tr>
+<td>신뢰성</td>
+<td>높음 — 순서 보장, 재전송, 흐름·혼잡 제어</td>
+<td>낮음 — 보장 안 함</td>
+</tr>
+<tr>
+<td>속도</td>
+<td>느림</td>
+<td>빠름</td>
+</tr>
+<tr>
+<td>헤더</td>
+<td>20바이트 이상</td>
+<td>8바이트</td>
+</tr>
+<tr>
+<td>용도</td>
+<td>웹, 메일, 파일 전송</td>
+<td>DNS 질의, 실시간 스트리밍, VoIP, 게임</td>
+</tr>
+</tbody>
+</table></div>
+<figure class="fig" id="fig-tcp3">
+<svg viewBox="0 0 640 330" role="img" aria-label="TCP 3방향 핸드셰이크와 4방향 종료">
+<text x="110" y="28" text-anchor="middle" font-size="16" font-weight="700" fill="var(--text)">클라이언트</text>
+<text x="530" y="28" text-anchor="middle" font-size="16" font-weight="700" fill="var(--text)">서버</text>
+<line x1="110" y1="40" x2="110" y2="320" stroke="var(--line)" stroke-width="2"/>
+<line x1="530" y1="40" x2="530" y2="320" stroke="var(--line)" stroke-width="2"/>
+<defs><marker id="ta" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L8 4L0 8z" fill="var(--accent)"/></marker></defs>
+<g class="tm" style="--d:0ms"><line x1="112" y1="60" x2="526" y2="100" stroke="var(--accent)" stroke-width="2" marker-end="url(#ta)"/><text x="320" y="70" text-anchor="middle" font-size="14" fill="var(--text)">① SYN  seq=100</text></g>
+<g class="tm" style="--d:700ms"><line x1="528" y1="110" x2="114" y2="150" stroke="var(--accent)" stroke-width="2" marker-end="url(#ta)"/><text x="320" y="120" text-anchor="middle" font-size="14" fill="var(--text)">② SYN + ACK  seq=300, ack=101</text></g>
+<g class="tm" style="--d:1400ms"><line x1="112" y1="160" x2="526" y2="200" stroke="var(--accent)" stroke-width="2" marker-end="url(#ta)"/><text x="320" y="170" text-anchor="middle" font-size="14" fill="var(--text)">③ ACK  ack=301</text></g>
+<g class="tm" style="--d:2100ms"><rect x="20" y="215" width="600" height="30" rx="4" fill="var(--accent-2)"/><text x="320" y="235" text-anchor="middle" font-size="14" font-weight="700" fill="var(--text)">ESTABLISHED — 데이터 송수신</text></g>
+<g class="tm" style="--d:2800ms" font-size="12.5" fill="var(--text-2)"><text x="20" y="62">SYN_SENT</text><text x="545" y="112">SYN_RECEIVED</text><text x="20" y="152">ESTABLISHED</text><text x="545" y="202">ESTABLISHED</text></g>
+<g class="tm" style="--d:3400ms" font-size="13" fill="var(--text)"><text x="320" y="275" text-anchor="middle">종료는 4단계: FIN → ACK → FIN → ACK</text><text x="320" y="300" text-anchor="middle" fill="var(--text-2)">먼저 끊은 쪽은 TIME_WAIT 상태로 잠시 기다린다</text></g>
+</svg>
+<figcaption>연결할 때 세 번 주고받는다. 상대의 순서번호(seq)에 1을 더해 확인번호(ack)로 돌려주는 것이 핵심이다. SYN만 잔뜩 보내고 ③을 보내지 않는 공격이 SYN 플러딩이다.</figcaption>
+</figure>
+
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>프로토콜</th>
+<th>역할</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>IP</td>
+<td>패킷의 주소 지정·경로 선택. 비연결·비신뢰</td>
+</tr>
+<tr>
+<td>ICMP</td>
+<td>오류 보고·진단 메시지 (ping, traceroute)</td>
+</tr>
+<tr>
+<td>ARP</td>
+<td><strong>IP 주소 → MAC 주소</strong></td>
+</tr>
+<tr>
+<td>RARP</td>
+<td>MAC 주소 → IP 주소</td>
+</tr>
+<tr>
+<td>IGMP</td>
+<td>멀티캐스트 그룹 관리</td>
+</tr>
+<tr>
+<td>DHCP</td>
+<td>IP 주소 자동 할당</td>
+</tr>
+<tr>
+<td>DNS</td>
+<td>도메인 이름 ↔ IP 주소 변환</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="s12">IP 주소와 서브네팅</h3>
+<h4>IPv4 클래스</h4>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>클래스</th>
+<th>첫 옥텟</th>
+<th>기본 마스크</th>
+<th>용도</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A</td>
+<td>0~127</td>
+<td>255.0.0.0 (/8)</td>
+<td>대규모</td>
+</tr>
+<tr>
+<td>B</td>
+<td>128~191</td>
+<td>255.255.0.0 (/16)</td>
+<td>중규모</td>
+</tr>
+<tr>
+<td>C</td>
+<td>192~223</td>
+<td>255.255.255.0 (/24)</td>
+<td>소규모</td>
+</tr>
+<tr>
+<td>D</td>
+<td>224~239</td>
+<td></td>
+<td>멀티캐스트</td>
+</tr>
+<tr>
+<td>E</td>
+<td>240~255</td>
+<td></td>
+<td>연구용</td>
+</tr>
+</tbody>
+</table></div>
+<ul>
+<li>사설 IP: <strong>10.0.0.0/8, 172.16.0.0/12 (172.16~172.31), 192.168.0.0/16</strong></li>
+<li>루프백: 127.0.0.1</li>
+<li><strong>NAT</strong>: 사설 IP를 공인 IP로 변환. 공인 IP 절약, 내부망 숨김</li>
+</ul>
+<h4>서브넷 계산</h4>
+<figure class="fig" id="fig-subnet">
+<div class="sn">
+ <div class="sn-in">
+  <label>IP 주소<input type="text" class="sn-ip" value="192.168.10.70" inputmode="decimal" aria-label="IP 주소"></label>
+  <label>프리픽스 /<input type="number" class="sn-px" value="26" min="0" max="32" aria-label="프리픽스 길이"></label>
+ </div>
+ <div class="sn-bits" aria-hidden="true"></div>
+ <dl class="sn-out">
+  <div><dt>서브넷 마스크</dt><dd data-o="mask"></dd></div>
+  <div><dt>네트워크 주소</dt><dd data-o="net"></dd></div>
+  <div><dt>브로드캐스트 주소</dt><dd data-o="bc"></dd></div>
+  <div><dt>사용 가능 범위</dt><dd data-o="range"></dd></div>
+  <div><dt>호스트 수</dt><dd data-o="hosts"></dd></div>
+  <div><dt>클래스 · 종류</dt><dd data-o="cls"></dd></div>
+ </dl>
+</div>
+<figcaption>IP와 프리픽스를 바꿔 보자. 위 32칸에서 진한 칸이 네트워크 부분, 옅은 칸이 호스트 부분이다. 호스트 부분이 전부 0이면 네트워크 주소, 전부 1이면 브로드캐스트 주소라서 호스트 수는 2^(호스트 비트) − 2다.</figcaption>
+</figure>
+
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>프리픽스</th>
+<th>마스크</th>
+<th>블록 크기</th>
+<th>사용 가능 호스트</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>/24</td>
+<td>255.255.255.0</td>
+<td>256</td>
+<td>254</td>
+</tr>
+<tr>
+<td>/25</td>
+<td>.128</td>
+<td>128</td>
+<td>126</td>
+</tr>
+<tr>
+<td>/26</td>
+<td>.192</td>
+<td>64</td>
+<td>62</td>
+</tr>
+<tr>
+<td>/27</td>
+<td>.224</td>
+<td>32</td>
+<td>30</td>
+</tr>
+<tr>
+<td>/28</td>
+<td>.240</td>
+<td>16</td>
+<td>14</td>
+</tr>
+<tr>
+<td>/29</td>
+<td>.248</td>
+<td>8</td>
+<td>6</td>
+</tr>
+<tr>
+<td>/30</td>
+<td>.252</td>
+<td>4</td>
+<td>2</td>
+</tr>
+</tbody>
+</table></div>
+<aside class="box box-ex">
+<p class="box-t">FLSM 서브넷 나누기</p>
+<p>192.168.1.0/24를 4개의 서브넷으로 똑같이 나누면 → 2비트를 빌려 /26 (블록 64).
+| 서브넷 | 네트워크 | 사용 가능 | 브로드캐스트 |
+|---|---|---|---|
+| 1 | 192.168.1.0 | .1 ~ .62 | .63 |
+| 2 | 192.168.1.64 | .65 ~ .126 | .127 |
+| 3 | 192.168.1.128 | .129 ~ .190 | .191 |
+| 4 | 192.168.1.192 | .193 ~ .254 | .255 |</p>
+</aside>
+<h4>IPv6</h4>
+<ul>
+<li><strong>128비트</strong>, 16비트씩 8부분을 16진수로 콜론 구분 (2001:0db8::1)</li>
+<li>연속된 0은 <code>::</code>로 <strong>한 번만</strong> 생략, 각 부분 앞의 0 생략 가능</li>
+<li><strong>유니캐스트, 멀티캐스트, 애니캐스트</strong> (브로드캐스트 없음)</li>
+<li>자동 주소 설정, IPsec 기본, 헤더 단순화, QoS 향상</li>
+<li>IPv4 → IPv6 전환: <strong>듀얼 스택</strong>, <strong>터널링</strong>, <strong>주소 변환(NAT-PT)</strong></li>
+</ul>
+<h3 id="s13">네트워크 장비</h3>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>장비</th>
+<th>계층</th>
+<th>역할</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>리피터</td>
+<td>1</td>
+<td>신호 증폭·재생</td>
+</tr>
+<tr>
+<td>허브</td>
+<td>1</td>
+<td>여러 장치 연결, 모든 포트로 전달 (더미 허브 / 스위칭 허브)</td>
+</tr>
+<tr>
+<td>브리지</td>
+<td>2</td>
+<td>두 LAN 연결, MAC 주소로 필터링</td>
+</tr>
+<tr>
+<td>스위치</td>
+<td>2</td>
+<td>MAC 주소 테이블로 목적지 포트에만 전달. <strong>VLAN</strong> 지원 (L3 스위치는 라우팅도)</td>
+</tr>
+<tr>
+<td>라우터</td>
+<td>3</td>
+<td>서로 다른 네트워크 연결, <strong>최적 경로</strong> 선택</td>
+</tr>
+<tr>
+<td>게이트웨이</td>
+<td>4~7</td>
+<td>서로 다른 프로토콜의 네트워크 연결</td>
+</tr>
+</tbody>
+</table></div>
+<h4>라우팅 프로토콜</h4>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>구분</th>
+<th>프로토콜</th>
+<th>특징</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>내부 (IGP)</td>
+<td><strong>RIP</strong></td>
+<td>거리 벡터, <strong>홉 수</strong>로 경로 결정, 최대 15홉, 30초마다 갱신</td>
+</tr>
+<tr>
+<td></td>
+<td><strong>OSPF</strong></td>
+<td>링크 상태, <strong>다익스트라</strong> 최단 경로, 대규모 네트워크, 변화 시에만 갱신</td>
+</tr>
+<tr>
+<td></td>
+<td>IGRP / EIGRP</td>
+<td>시스코. 대역폭·지연 등 복합 메트릭</td>
+</tr>
+<tr>
+<td>외부 (EGP)</td>
+<td><strong>BGP</strong></td>
+<td>자치 시스템(AS) 사이 라우팅</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="s14">흐름 제어·오류 제어·다중화</h3>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>기법</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>정지-대기 (Stop-and-Wait)</td>
+<td>한 프레임 보내고 ACK를 받은 뒤 다음 전송</td>
+</tr>
+<tr>
+<td>슬라이딩 윈도우</td>
+<td>ACK 없이 윈도우 크기만큼 연속 전송. TCP 흐름 제어</td>
+</tr>
+<tr>
+<td>Go-Back-N ARQ</td>
+<td>오류 난 프레임부터 그 뒤 전부 재전송</td>
+</tr>
+<tr>
+<td>Selective Repeat ARQ</td>
+<td>오류 난 프레임만 재전송</td>
+</tr>
+<tr>
+<td>패리티·CRC</td>
+<td>오류 <strong>검출</strong></td>
+</tr>
+<tr>
+<td>해밍 코드</td>
+<td>오류 검출 + <strong>정정</strong> (FEC, 전진 오류 수정)</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>다중화</strong>: 하나의 회선을 여러 신호가 나눠 씀. FDM(주파수 분할), TDM(시간 분할), CDM(코드 분할), WDM(파장 분할, 광섬유).</p>
+<p><strong>교환 방식</strong>: 회선 교환(전화, 전용 경로), 패킷 교환(데이터를 패킷으로 나눠 전송 — <strong>가상 회선</strong> 방식과 <strong>데이터그램</strong> 방식).</p>
+<h3 id="s15">무선·최신 네트워크 용어</h3>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>용어</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CSMA/CD</td>
+<td>유선 이더넷. 충돌을 <strong>감지</strong>하면 재전송</td>
+</tr>
+<tr>
+<td>CSMA/CA</td>
+<td>무선 LAN. 충돌을 <strong>회피</strong>하기 위해 전송 전 대기</td>
+</tr>
+<tr>
+<td>Ad-hoc 네트워크</td>
+<td>기지국 없이 단말끼리 구성하는 임시 네트워크</td>
+</tr>
+<tr>
+<td>메시 네트워크</td>
+<td>대규모 디바이스가 그물처럼 연결</td>
+</tr>
+<tr>
+<td>SDN</td>
+<td>소프트웨어로 네트워크를 중앙에서 제어 (제어부와 전달부 분리)</td>
+</tr>
+<tr>
+<td>NFV</td>
+<td>네트워크 장비 기능을 가상화</td>
+</tr>
+<tr>
+<td>피코넷</td>
+<td>블루투스·UWB로 구성된 소규모 무선 네트워크</td>
+</tr>
+<tr>
+<td>VPN</td>
+<td>공중망 위에 암호화된 사설 터널</td>
+</tr>
+<tr>
+<td>MQTT</td>
+<td>IoT용 경량 발행-구독 메시지 프로토콜</td>
+</tr>
+</tbody>
+</table></div>
+<ol class="quiz">
+<li class="q" data-ans="2"><div class="q-text"><p>OSI 7계층 중 데이터의 암호화와 압축을 담당하는 계층은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>세션 계층</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>표현 계층</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>응용 계층</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>전송 계층</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> 표현 계층이다. 세션 계층은 동기화와 대화 관리.</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>IP 주소를 MAC 주소로 변환하는 프로토콜은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>RARP</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>ARP</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>ICMP</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>DNS</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> ARP이다.</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>192.168.10.0/24 네트워크를 /27로 나눌 때 만들어지는 서브넷 수와 서브넷당 사용 가능한 호스트 수는?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>4개, 62</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>8개, 30</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>8개, 32</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>16개, 14</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> 3비트를 빌려 2³ = 8개, 호스트 비트 5개 → 32 − 2 = 30.</p></div></li>
+<li class="q" data-ans="3"><div class="q-text"><p>다음 중 UDP를 사용하는 것으로 가장 적절한 것은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>웹 페이지 전송</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>이메일 전송</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>실시간 음성 통화</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>파일 다운로드</span></button></li>
+</ol><div class="ans"><p><b>정답 ③</b> 실시간 서비스는 속도가 중요해 UDP를 쓴다.</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>링크 상태 방식으로 다익스트라 알고리즘을 사용하는 내부 라우팅 프로토콜은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>RIP</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>OSPF</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>BGP</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>EGP</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> OSPF. RIP는 거리 벡터(홉 수).</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>IPv6에 대한 설명으로 틀린 것은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>128비트 주소를 사용한다</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>브로드캐스트 방식을 사용한다</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>16진수로 표기한다</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>연속된 0은 ::로 한 번 생략할 수 있다</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> IPv6에는 브로드캐스트가 없다.</p></div></li>
+<li class="q" data-ans="3"><div class="q-text"><p>오류를 검출할 뿐 아니라 정정까지 할 수 있는 코드는?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>패리티 비트</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>CRC</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>해밍 코드</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>체크섬</span></button></li>
+</ol><div class="ans"><p><b>정답 ③</b> 해밍 코드는 1비트 오류를 정정할 수 있다.</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>5개의 노드를 망형(Mesh)으로 모두 연결할 때 필요한 회선 수는?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>5</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>10</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>20</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>25</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> n(n−1)/2 = 5 × 4 / 2 = 10.</p></div></li>
+</ol>
+  </div>
+</section>
+
+<section class="chapter" id="ch3" data-title="네트워크 공격과 보안 기술" data-group="2과목 · 네트워크 보안">
+  <header class="ch-head reveal">
+    <p class="ch-group">2과목 · 네트워크 보안</p>
+    <h2>네트워크 공격과 보안 기술</h2>
+    <button type="button" class="ch-pdf" data-ch="ch3"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 1.5h5.5L12.5 4.5V14.5h-8.5z M9.5 1.5v3h3 M6 9.5l2 2 2-2 M8 6.5v5"/></svg>이 장만 PDF로</button>
+  </header>
+  <div class="ch-body">
+<h3 id="s16">패킷 구조와 분석</h3>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>헤더</th>
+<th>주요 필드</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>IP (20바이트 이상)</td>
+<td>버전, 헤더 길이, TOS, 전체 길이, 식별자, <strong>플래그(DF, MF)</strong>, <strong>단편 오프셋</strong>, <strong>TTL</strong>, 프로토콜(1 ICMP, 6 TCP, 17 UDP), 체크섬, 출발지·목적지 IP</td>
+</tr>
+<tr>
+<td>TCP (20바이트 이상)</td>
+<td>출발지·목적지 포트, <strong>순서 번호(seq)</strong>, <strong>확인 번호(ack)</strong>, 헤더 길이, <strong>플래그(URG, ACK, PSH, RST, SYN, FIN)</strong>, 윈도우 크기, 체크섬</td>
+</tr>
+<tr>
+<td>UDP (8바이트)</td>
+<td>출발지·목적지 포트, 길이, 체크섬</td>
+</tr>
+</tbody>
+</table></div>
+<ul>
+<li><strong>TTL</strong>: 라우터를 지날 때마다 1 감소, 0이면 폐기. 초기값으로 OS 추정 가능(리눅스 64, 윈도우 128)</li>
+<li><strong>단편화</strong>: MTU보다 큰 패킷을 나눔. MF(More Fragments) 플래그와 오프셋으로 재조립</li>
+</ul>
+<pre><code class="language-text"># tcpdump -nn -i eth0 'tcp[tcpflags] &amp; tcp-syn != 0'
+10:01:02.123 IP 203.0.113.7.51022 &gt; 10.0.0.5.80: Flags [S], seq 100, win 64240
+10:01:02.124 IP 10.0.0.5.80 &gt; 203.0.113.7.51022: Flags [S.], seq 300, ack 101
+</code></pre>
+<p>tcpdump 플래그 표기: <code>[S]</code> SYN, <code>[S.]</code> SYN+ACK, <code>[.]</code> ACK, <code>[P.]</code> PSH+ACK, <code>[F.]</code> FIN+ACK, <code>[R]</code> RST.</p>
+<h3 id="s17">서비스 거부 공격 (DoS / DDoS)</h3>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>공격</th>
+<th>원리</th>
+<th>대응</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>SYN 플러딩</strong></td>
+<td>SYN만 대량 전송, 백로그 큐 고갈 (SYN_RECEIVED 상태 누적)</td>
+<td><strong>SYN 쿠키</strong>, 백로그 큐 확대, 타임아웃 단축, First SYN Drop</td>
+</tr>
+<tr>
+<td><strong>UDP 플러딩</strong></td>
+<td>대량 UDP로 대역폭 고갈</td>
+<td>불필요 UDP 차단, 임계치</td>
+</tr>
+<tr>
+<td><strong>ICMP 플러딩 / 스머프</strong></td>
+<td>피해자 IP로 위조한 ICMP Echo를 <strong>브로드캐스트</strong>로 보내 증폭</td>
+<td>라우터에서 <strong>directed-broadcast 차단</strong>, ICMP 제한</td>
+</tr>
+<tr>
+<td><strong>Ping of Death</strong></td>
+<td>65,535바이트를 넘는 ICMP 패킷</td>
+<td>큰 ICMP 차단, 패치</td>
+</tr>
+<tr>
+<td><strong>랜드 어택</strong></td>
+<td>출발지 IP = 목적지 IP</td>
+<td>출발지·목적지가 같은 패킷 차단</td>
+</tr>
+<tr>
+<td><strong>티어드롭</strong></td>
+<td>단편 오프셋을 겹치게 조작, 재조립 오류</td>
+<td>패치, 비정상 단편 차단</td>
+</tr>
+<tr>
+<td>봉크 / 보잉크</td>
+<td>순서 번호를 조작해 재전송·재조립 오류</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>반사·증폭 (DRDoS)</strong></td>
+<td>출발지를 피해자로 위조해 DNS·NTP·Memcached·SSDP 서버에 요청 → 큰 응답이 피해자에게</td>
+<td>오픈 리졸버 차단, NTP monlist 비활성</td>
+</tr>
+<tr>
+<td><strong>HTTP GET 플러딩</strong></td>
+<td>정상 HTTP 요청 대량</td>
+<td>임계치, CAPTCHA, 웹 방화벽</td>
+</tr>
+<tr>
+<td><strong>CC 공격</strong></td>
+<td><code>Cache-Control: no-cache</code>로 캐시 서버 우회해 원 서버에 부하</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>Slowloris</strong></td>
+<td>HTTP 헤더를 끝(<code>\r\n\r\n</code>) 없이 천천히 보내 연결 점유</td>
+<td>연결 타임아웃, 동시 연결 제한</td>
+</tr>
+<tr>
+<td><strong>RUDY (Slow POST)</strong></td>
+<td>Content-Length를 크게 하고 본문을 아주 느리게 전송</td>
+<td></td>
+</tr>
+<tr>
+<td>Slow Read</td>
+<td>수신 윈도우를 작게 해 응답을 천천히 받음</td>
+<td></td>
+</tr>
+</tbody>
+</table></div>
+<p>DDoS 구성: <strong>공격자 → 마스터(핸들러) → 에이전트(좀비, 데몬)</strong>. 도구: Trinoo(UDP), TFN, TFN2K, Stacheldraht. 대응: 회선 증설, <strong>DDoS 방어 장비·클린존(스크러빙 센터)</strong>, 블랙홀 라우팅, CDN.</p>
+<h3 id="s18">스캐닝</h3>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>스캔</th>
+<th>방식</th>
+<th>열린 포트 응답</th>
+<th>닫힌 포트 응답</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>TCP Connect</td>
+<td>3-way 전부 완료</td>
+<td>SYN/ACK</td>
+<td>RST/ACK</td>
+</tr>
+<tr>
+<td><strong>TCP SYN (Half-open, 스텔스)</strong></td>
+<td>SYN만 보내고 RST로 끊음. 로그가 덜 남음</td>
+<td>SYN/ACK</td>
+<td>RST/ACK</td>
+</tr>
+<tr>
+<td><strong>FIN</strong></td>
+<td>FIN만</td>
+<td><strong>응답 없음</strong></td>
+<td>RST</td>
+</tr>
+<tr>
+<td><strong>NULL</strong></td>
+<td>플래그 없음</td>
+<td>응답 없음</td>
+<td>RST</td>
+</tr>
+<tr>
+<td><strong>XMAS</strong></td>
+<td>FIN·PSH·URG</td>
+<td>응답 없음</td>
+<td>RST</td>
+</tr>
+<tr>
+<td>ACK</td>
+<td>방화벽 필터링 여부 확인</td>
+<td>RST(필터링 안 됨)</td>
+<td></td>
+</tr>
+<tr>
+<td>UDP</td>
+<td>UDP 패킷</td>
+<td>응답 없음(또는 UDP 응답)</td>
+<td><strong>ICMP Port Unreachable</strong></td>
+</tr>
+</tbody>
+</table></div>
+<pre><code class="language-bash">nmap -sT target      # TCP Connect
+nmap -sS target      # SYN 스캔
+nmap -sF / -sN / -sX # FIN / NULL / XMAS
+nmap -sU target      # UDP
+nmap -sV -O target   # 서비스 버전, OS 탐지
+</code></pre>
+<h3 id="s19">스니핑과 스푸핑</h3>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>공격</th>
+<th>설명</th>
+<th>대응</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>스니핑</td>
+<td>NIC를 <strong>무차별 모드(Promiscuous)</strong>로 두고 패킷 엿보기</td>
+<td>암호화(SSH, TLS), 스위치 환경, 무차별 모드 탐지</td>
+</tr>
+<tr>
+<td>스위치 재밍 (MAC 플러딩)</td>
+<td>가짜 MAC으로 스위치 MAC 테이블을 가득 채워 <strong>허브처럼</strong> 동작하게</td>
+<td>포트 보안(Port Security)</td>
+</tr>
+<tr>
+<td><strong>ARP 스푸핑</strong></td>
+<td>가짜 ARP 응답으로 게이트웨이의 MAC을 공격자 MAC으로 바꿔 중간자 공격</td>
+<td><strong>정적 ARP 테이블</strong>(<code>arp -s</code>), Dynamic ARP Inspection, arpwatch</td>
+</tr>
+<tr>
+<td>ARP 리다이렉트</td>
+<td>공격자가 자신을 라우터라고 속임</td>
+<td></td>
+</tr>
+<tr>
+<td>ICMP 리다이렉트</td>
+<td>가짜 ICMP Redirect로 경로 변경</td>
+<td>ICMP Redirect 무시 설정</td>
+</tr>
+<tr>
+<td><strong>IP 스푸핑</strong></td>
+<td>출발지 IP 위조. 트러스트 관계(rlogin) 악용</td>
+<td>인그레스·이그레스 필터링, 트러스트 제거</td>
+</tr>
+<tr>
+<td><strong>DNS 스푸핑</strong></td>
+<td>가짜 DNS 응답으로 피싱 사이트 유도</td>
+<td>DNSSEC, hosts 파일 고정</td>
+</tr>
+<tr>
+<td><strong>DNS 캐시 포이즈닝</strong></td>
+<td>DNS 서버 캐시를 오염</td>
+<td>DNSSEC, 소스 포트 무작위화</td>
+</tr>
+<tr>
+<td><strong>세션 하이재킹</strong></td>
+<td>순서 번호를 예측·가로채 세션 탈취. 비동기화 상태·ACK Storm 발생</td>
+<td>암호화, 세션 재인증</td>
+</tr>
+<tr>
+<td>DHCP 스푸핑 / Starvation</td>
+<td>가짜 DHCP 서버 / IP 풀 고갈</td>
+<td><strong>DHCP 스누핑</strong></td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>ARP 캐시 확인</strong>: <code>arp -a</code>에서 게이트웨이 IP의 MAC이 공격자 PC MAC과 같거나, 서로 다른 IP의 MAC이 같으면 ARP 스푸핑 의심.</p>
+<h3 id="s20">무선 네트워크 보안</h3>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>방식</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>WEP</td>
+<td>RC4, 24비트 IV. <strong>취약해 사용 금지</strong></td>
+</tr>
+<tr>
+<td>WPA</td>
+<td>TKIP. WEP 보완</td>
+</tr>
+<tr>
+<td><strong>WPA2</strong></td>
+<td><strong>AES-CCMP</strong>. 개인(PSK) / 기업(802.1X + RADIUS)</td>
+</tr>
+<tr>
+<td><strong>WPA3</strong></td>
+<td><strong>SAE</strong>(동시 인증)로 사전 대입 공격 방어, 개방망 암호화(OWE)</td>
+</tr>
+<tr>
+<td>802.1X / EAP</td>
+<td>포트 기반 인증. EAP-TLS, PEAP</td>
+</tr>
+</tbody>
+</table></div>
+<p>무선 공격: 이블 트윈(가짜 AP), 워드라이빙, KRACK(WPA2 재설치 키 공격), 디인증(Deauth) 공격.</p>
+<h3 id="s21">네트워크 보안 기술</h3>
+<h4>방화벽</h4>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>유형</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>패킷 필터링</td>
+<td>IP·포트·프로토콜(3~4계층)로 허용·차단. 빠름, 내용 검사 못함</td>
+</tr>
+<tr>
+<td>상태 기반 (Stateful)</td>
+<td>연결 상태 테이블을 유지해 정상 세션의 응답만 허용</td>
+</tr>
+<tr>
+<td>애플리케이션 게이트웨이 (프록시)</td>
+<td>7계층까지 검사. 안전하지만 느림</td>
+</tr>
+<tr>
+<td>서킷 게이트웨이</td>
+<td>5계층 세션 수준 중계 (SOCKS)</td>
+</tr>
+<tr>
+<td>하이브리드</td>
+<td>여러 방식 결합</td>
+</tr>
+</tbody>
+</table></div>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>구축 형태</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>스크리닝 라우터</td>
+<td>라우터의 패킷 필터링</td>
+</tr>
+<tr>
+<td>배스천 호스트</td>
+<td>외부에 노출된 강화 호스트</td>
+</tr>
+<tr>
+<td>듀얼 홈드 게이트웨이</td>
+<td>NIC 2개로 내·외부 분리</td>
+</tr>
+<tr>
+<td>스크린드 호스트</td>
+<td>스크리닝 라우터 + 배스천 호스트</td>
+</tr>
+<tr>
+<td><strong>스크린드 서브넷</strong></td>
+<td>외부 라우터와 내부 라우터 사이에 <strong>DMZ</strong>를 둠. 가장 안전</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>방화벽 규칙은 위에서부터 차례로 검사</strong>하고 처음 일치한 규칙을 적용한다. 마지막에 <strong>기본 차단(Deny All)</strong>.</p>
+<h4>IDS와 IPS</h4>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>구분</th>
+<th>내용</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>오용(지식, 시그니처) 탐지</td>
+<td>알려진 공격 패턴과 비교. 오탐 적음, <strong>새로운 공격은 못 잡음</strong></td>
+</tr>
+<tr>
+<td>이상(행위) 탐지</td>
+<td>정상 기준에서 벗어난 행위. 새로운 공격 탐지 가능, <strong>오탐 많음</strong></td>
+</tr>
+<tr>
+<td>NIDS / HIDS</td>
+<td>네트워크 기반 / 호스트 기반</td>
+</tr>
+<tr>
+<td>오탐 (False Positive)</td>
+<td>정상을 공격으로 판단</td>
+</tr>
+<tr>
+<td>미탐 (False Negative)</td>
+<td>공격을 놓침 (더 위험)</td>
+</tr>
+</tbody>
+</table></div>
+<pre><code class="language-text">Snort 규칙 예:
+alert tcp any any -&gt; 10.0.0.0/24 80 (msg:&quot;SQL Injection&quot;; content:&quot;union select&quot;; nocase; sid:1000001;)
+액션  프로토콜 출발지IP 출발지포트 -&gt; 목적지IP 목적지포트 (옵션)
+</code></pre>
+<p>Snort 액션: alert, log, pass, drop, reject, sdrop. 옵션: <code>content</code>(문자열), <code>nocase</code>(대소문자 무시), <code>offset</code>/<code>depth</code>(검사 위치), <code>flags</code>(TCP 플래그), <code>threshold</code>(임계치), <code>sid</code>(규칙 ID).</p>
+<h4>VPN과 보안 프로토콜</h4>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>프로토콜</th>
+<th>계층</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PPTP / L2TP</td>
+<td>2</td>
+<td>터널링 (L2TP는 IPSec과 함께 사용)</td>
+</tr>
+<tr>
+<td><strong>IPSec</strong></td>
+<td>3</td>
+<td><strong>AH</strong>(인증·무결성, 암호화 없음), <strong>ESP</strong>(암호화 + 인증). <strong>전송 모드</strong>(페이로드만 보호, 종단 간), <strong>터널 모드</strong>(IP 헤더까지 새로 감쌈, 게이트웨이 간). 키 교환 <strong>IKE</strong>, 보안 연관 SA</td>
+</tr>
+<tr>
+<td><strong>SSL/TLS</strong></td>
+<td>4~7</td>
+<td>웹 암호화(HTTPS). 핸드셰이크 → 레코드 프로토콜. TLS 1.3 권장</td>
+</tr>
+<tr>
+<td>SSH</td>
+<td>7</td>
+<td>원격 접속 암호화 (22번)</td>
+</tr>
+</tbody>
+</table></div>
+<h4>최신 보안 아키텍처</h4>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>기술</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>NAC</td>
+<td>단말이 네트워크에 붙을 때 인증·보안 상태 점검 후 접근 허용</td>
+</tr>
+<tr>
+<td>ESM / SIEM</td>
+<td>여러 장비 로그 통합 수집·상관 분석·실시간 관제</td>
+</tr>
+<tr>
+<td>SOAR</td>
+<td>보안 대응 자동화·오케스트레이션</td>
+</tr>
+<tr>
+<td><strong>제로 트러스트</strong></td>
+<td>"절대 신뢰하지 말고 항상 검증". 최소 권한, 마이크로 세그멘테이션, 지속적 인증. <strong>ZTNA</strong></td>
+</tr>
+<tr>
+<td><strong>SASE</strong></td>
+<td>SD-WAN + 보안 기능(SWG, CASB, ZTNA, FWaaS)을 클라우드로 통합</td>
+</tr>
+<tr>
+<td><strong>XDR</strong></td>
+<td>엔드포인트·네트워크·클라우드·메일 데이터를 통합해 탐지·대응</td>
+</tr>
+<tr>
+<td>허니팟 / 허니넷</td>
+<td>공격자를 유인하는 미끼 시스템</td>
+</tr>
+<tr>
+<td>DPI</td>
+<td>패킷 내용(페이로드)까지 검사</td>
+</tr>
+<tr>
+<td>IP 역추적</td>
+<td>공격 패킷의 실제 출발지 추적</td>
+</tr>
+</tbody>
+</table></div>
+<ol class="quiz">
+<li class="q" data-ans="4"><div class="q-text"><p>열린 포트에 보내면 응답이 없고 닫힌 포트에서는 RST가 돌아오는 스캔이 아닌 것은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>FIN 스캔</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>NULL 스캔</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>XMAS 스캔</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>SYN 스캔</span></button></li>
+</ol><div class="ans"><p><b>정답 ④</b> SYN 스캔은 열린 포트에서 SYN/ACK가 돌아온다.</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>출발지 IP를 피해자로 위조한 ICMP Echo Request를 브로드캐스트 주소로 보내는 공격은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>랜드 어택</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>스머프 공격</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>티어드롭</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>SYN 플러딩</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> 스머프다. 라우터에서 directed-broadcast를 차단해 막는다.</p></div></li>
+<li class="q" data-ans="1"><div class="q-text"><p>SYN 플러딩 공격의 대응책으로 가장 적절한 것은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>SYN 쿠키 사용</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>ARP 테이블 정적 설정</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>DNSSEC 적용</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>WEP 사용</span></button></li>
+</ol><div class="ans"><p><b>정답 ①</b> SYN 쿠키는 백로그 큐에 상태를 저장하지 않고 연결을 처리한다.</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>HTTP 헤더의 끝을 알리는 개행 문자를 보내지 않아 연결을 오래 점유하는 공격은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>RUDY</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>Slowloris</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>HTTP GET 플러딩</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>CC 공격</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> Slowloris다. RUDY는 POST 본문을 천천히 보낸다.</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>IPSec에서 데이터 암호화 기능을 제공하는 프로토콜은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>AH</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>ESP</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>IKE</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>SA</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> ESP는 암호화와 인증, AH는 인증·무결성만.</p></div></li>
+<li class="q" data-ans="3"><div class="q-text"><p>오용 탐지 방식 IDS의 특징으로 옳은 것은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>새로운 공격을 잘 탐지한다</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>오탐이 많다</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>알려진 공격 패턴(시그니처)을 사용한다</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>정상 행위 프로파일을 학습한다</span></button></li>
+</ol><div class="ans"><p><b>정답 ③</b> 오용 탐지는 시그니처 기반, 이상 탐지는 정상 행위 기반.</p></div></li>
+<li class="q" data-ans="4"><div class="q-text"><p>외부 라우터와 내부 라우터 사이에 DMZ를 두는 방화벽 구축 형태는?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>스크리닝 라우터</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>듀얼 홈드 게이트웨이</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>스크린드 호스트</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>스크린드 서브넷</span></button></li>
+</ol><div class="ans"><p><b>정답 ④</b> 가장 안전한 구조다.</p></div></li>
+<li class="q" data-ans="1"><div class="q-text"><p>ARP 스푸핑의 대응책으로 가장 적절한 것은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>정적 ARP 테이블 설정</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>SYN 쿠키</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>방화벽 기본 허용</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>WEP 암호화</span></button></li>
+</ol><div class="ans"><p><b>정답 ①</b> 게이트웨이 MAC을 정적으로 고정한다. 스위치의 DAI 기능도 있다.</p></div></li>
+<li class="q" data-ans="1"><div class="q-text"><p>피해자로 위조한 요청을 DNS·NTP 서버에 보내 큰 응답을 피해자에게 보내는 공격은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>DRDoS (반사·증폭 공격)</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>세션 하이재킹</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>스위치 재밍</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>IP 스푸핑만</span></button></li>
+</ol><div class="ans"><p><b>정답 ①</b> 반사·증폭 공격이다.</p></div></li>
+<li class="q" data-ans="3"><div class="q-text"><p>WPA3에서 사전 대입 공격을 막기 위해 도입한 인증 방식은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>TKIP</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>PSK</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>SAE</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>WEP</span></button></li>
+</ol><div class="ans"><p><b>정답 ③</b> SAE(Simultaneous Authentication of Equals).</p></div></li>
+</ol>
+  </div>
+</section>
+
+<section class="chapter" id="ch4" data-title="어플리케이션 보안" data-group="3과목 · 어플리케이션 보안">
+  <header class="ch-head reveal">
+    <p class="ch-group">3과목 · 어플리케이션 보안</p>
+    <h2>어플리케이션 보안</h2>
+    <button type="button" class="ch-pdf" data-ch="ch4"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 1.5h5.5L12.5 4.5V14.5h-8.5z M9.5 1.5v3h3 M6 9.5l2 2 2-2 M8 6.5v5"/></svg>이 장만 PDF로</button>
+  </header>
+  <div class="ch-body">
+<h3 id="s22">인터넷 응용 서비스 보안</h3>
+<h4>FTP</h4>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>항목</th>
+<th>내용</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>포트</td>
+<td>20(데이터), 21(제어)</td>
+</tr>
+<tr>
+<td>Active 모드</td>
+<td>서버가 20번에서 클라이언트로 데이터 연결</td>
+</tr>
+<tr>
+<td>Passive 모드</td>
+<td>클라이언트가 서버의 임의 포트로 데이터 연결 (방화벽 환경에 유리)</td>
+</tr>
+<tr>
+<td>위협</td>
+<td>평문 전송(스니핑), <strong>익명(Anonymous) FTP</strong>, <strong>FTP 바운스 공격</strong>(PORT 명령으로 제3 호스트 포트 스캔), tftp(인증 없음)</td>
+</tr>
+<tr>
+<td>대책</td>
+<td><strong>SFTP</strong>(SSH 기반, 22번), FTPS(TLS), 익명 접속 금지, <code>ftpusers</code>에 root 등록(접속 차단)</td>
+</tr>
+</tbody>
+</table></div>
+<h4>메일</h4>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>프로토콜</th>
+<th>용도</th>
+<th>포트</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SMTP</td>
+<td>메일 발송</td>
+<td>25 (제출 587, SMTPS 465)</td>
+</tr>
+<tr>
+<td>POP3</td>
+<td>메일 수신 (서버에서 내려받음)</td>
+<td>110 (POP3S 995)</td>
+</tr>
+<tr>
+<td>IMAP</td>
+<td>메일 수신 (서버에 보관·동기화)</td>
+<td>143 (IMAPS 993)</td>
+</tr>
+</tbody>
+</table></div>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>메일 보안</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>PGP</strong></td>
+<td>필 짐머만 개발. 전자서명·암호화·압축·Radix-64 인코딩. 신뢰의 웹</td>
+</tr>
+<tr>
+<td><strong>S/MIME</strong></td>
+<td>X.509 인증서(PKI) 기반 메일 암호화·서명</td>
+</tr>
+<tr>
+<td>PEM</td>
+<td>IETF의 프라이버시 강화 메일 (거의 미사용)</td>
+</tr>
+<tr>
+<td><strong>SPF</strong></td>
+<td>발신 도메인의 허용 메일 서버 IP를 DNS TXT에 등록</td>
+</tr>
+<tr>
+<td><strong>DKIM</strong></td>
+<td>발신 서버가 메일에 전자서명, 수신 측이 DNS 공개키로 검증</td>
+</tr>
+<tr>
+<td><strong>DMARC</strong></td>
+<td>SPF·DKIM 결과에 따른 처리 정책(none/quarantine/reject)과 보고</td>
+</tr>
+<tr>
+<td>스팸 대책</td>
+<td>RBL(실시간 차단 목록), 스팸어쌔신, 베이지안 필터, 오픈 릴레이 차단</td>
+</tr>
+</tbody>
+</table></div>
+<h4>DNS</h4>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>항목</th>
+<th>내용</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>동작</td>
+<td>재귀 질의(클라이언트 → 로컬 DNS), 반복 질의(로컬 DNS → 루트 → TLD → 권한 DNS)</td>
+</tr>
+<tr>
+<td>레코드</td>
+<td>A(IPv4), AAAA(IPv6), CNAME(별칭), MX(메일 서버), NS(네임 서버), PTR(역방향), SOA(권한 시작), TXT</td>
+</tr>
+<tr>
+<td>위협</td>
+<td>DNS 스푸핑, <strong>캐시 포이즈닝</strong>, 존 트랜스퍼(Zone Transfer)로 정보 유출, DNS 증폭 DDoS, DNS 터널링</td>
+</tr>
+<tr>
+<td>대책</td>
+<td><strong>DNSSEC</strong>(응답에 전자서명 — 위조 방지, 기밀성은 제공 안 함), <code>allow-transfer</code>로 존 전송 제한, 재귀 질의 제한, DoH·DoT(DNS 암호화)</td>
+</tr>
+</tbody>
+</table></div>
+<h4>웹 서버 보안 설정</h4>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>항목</th>
+<th>Apache 설정 예</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>디렉터리 목록 노출 차단</td>
+<td><code>Options -Indexes</code></td>
+</tr>
+<tr>
+<td>서버 정보 숨김</td>
+<td><code>ServerTokens Prod</code>, <code>ServerSignature Off</code></td>
+</tr>
+<tr>
+<td>심볼릭 링크 차단</td>
+<td><code>Options -FollowSymLinks</code></td>
+</tr>
+<tr>
+<td>업로드 크기 제한</td>
+<td><code>LimitRequestBody</code></td>
+</tr>
+<tr>
+<td>불필요한 메서드 제한</td>
+<td><code>&lt;LimitExcept GET POST&gt;</code> (PUT, DELETE, TRACE 차단)</td>
+</tr>
+<tr>
+<td>실행 권한</td>
+<td>업로드 디렉터리에서 스크립트 실행 금지</td>
+</tr>
+<tr>
+<td>웹 서버 계정</td>
+<td>root가 아닌 전용 계정으로 실행</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="s23">웹 애플리케이션 공격</h3>
+<h4>OWASP Top 10 (2021)</h4>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>순위</th>
+<th>항목</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A01</td>
+<td>접근 통제 실패 (Broken Access Control)</td>
+</tr>
+<tr>
+<td>A02</td>
+<td>암호화 실패 (Cryptographic Failures)</td>
+</tr>
+<tr>
+<td>A03</td>
+<td><strong>인젝션</strong> (SQL, OS 명령, XSS 포함)</td>
+</tr>
+<tr>
+<td>A04</td>
+<td>안전하지 않은 설계</td>
+</tr>
+<tr>
+<td>A05</td>
+<td>보안 설정 오류</td>
+</tr>
+<tr>
+<td>A06</td>
+<td>취약하고 오래된 구성 요소</td>
+</tr>
+<tr>
+<td>A07</td>
+<td>식별 및 인증 실패</td>
+</tr>
+<tr>
+<td>A08</td>
+<td>소프트웨어 및 데이터 무결성 실패</td>
+</tr>
+<tr>
+<td>A09</td>
+<td>보안 로깅 및 모니터링 실패</td>
+</tr>
+<tr>
+<td>A10</td>
+<td>서버 측 요청 위조 (SSRF)</td>
+</tr>
+</tbody>
+</table></div>
+<h4>주요 공격과 대응</h4>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>공격</th>
+<th>원리</th>
+<th>대응</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>SQL 삽입</strong></td>
+<td><code>' OR '1'='1' --</code>로 인증 우회, UNION으로 데이터 탈취, Blind SQLi(참·거짓·시간 차로 추론)</td>
+<td><strong>Prepared Statement</strong>(바인드 변수), 입력 검증, 최소 권한 DB 계정, 오류 메시지 숨김</td>
+</tr>
+<tr>
+<td><strong>XSS</strong></td>
+<td>악성 스크립트를 페이지에 삽입. <strong>저장형</strong>(게시판에 저장), <strong>반사형</strong>(URL 파라미터가 응답에 반사), <strong>DOM 기반</strong>(클라이언트 스크립트에서 발생)</td>
+<td>출력 시 <strong>HTML 엔티티 인코딩</strong>(<code>&lt;</code> → <code>&amp;lt;</code>), 입력 필터링, <strong>HttpOnly</strong> 쿠키, CSP</td>
+</tr>
+<tr>
+<td><strong>CSRF</strong></td>
+<td>로그인한 사용자가 모르게 요청(송금·비밀번호 변경)을 보내게 함</td>
+<td><strong>CSRF 토큰</strong>, 재인증, Referer 검사, SameSite 쿠키</td>
+</tr>
+<tr>
+<td>SSRF</td>
+<td>서버가 공격자가 지정한 내부 주소로 요청을 보내게 함</td>
+<td>허용 목록, 내부 주소 차단</td>
+</tr>
+<tr>
+<td>운영체제 명령어 삽입</td>
+<td><code>; rm -rf</code>, <code>| cat /etc/passwd</code></td>
+<td>입력값을 명령에 쓰지 않음, 허용 목록</td>
+</tr>
+<tr>
+<td>파일 업로드</td>
+<td>웹셸(.php, .jsp) 업로드 후 실행</td>
+<td>확장자 허용 목록, 저장 경로 웹 루트 밖, 실행 권한 제거, 파일명 변경</td>
+</tr>
+<tr>
+<td>파일 다운로드 / 경로 조작</td>
+<td><code>../../etc/passwd</code>로 임의 파일 다운로드</td>
+<td><code>../</code> 필터링, 파일 ID로 접근</td>
+</tr>
+<tr>
+<td>디렉터리 리스팅</td>
+<td>폴더 목록 노출</td>
+<td><code>Options -Indexes</code></td>
+</tr>
+<tr>
+<td>세션 고정·하이재킹</td>
+<td>세션 ID 탈취·고정</td>
+<td>로그인 시 세션 ID 재발급, Secure·HttpOnly 쿠키, 타임아웃</td>
+</tr>
+<tr>
+<td>불충분한 인가</td>
+<td>URL만 바꿔 다른 사용자 데이터 열람 (IDOR)</td>
+<td>서버 측 권한 검사</td>
+</tr>
+<tr>
+<td>정보 노출</td>
+<td>상세 오류, 주석, 백업 파일(.bak)</td>
+<td>커스텀 오류 페이지, 불필요 파일 삭제</td>
+</tr>
+<tr>
+<td>쿠키 변조</td>
+<td>클라이언트 쿠키 값 조작</td>
+<td>서버 세션 사용, 쿠키 암호화·서명</td>
+</tr>
+</tbody>
+</table></div>
+<aside class="box box-ex">
+<p class="box-t">SQL 삽입 예</p>
+<pre><code class="language-sql">-- 원래 쿼리
+SELECT * FROM users WHERE id = '입력ID' AND pw = '입력PW';
+-- 입력ID에  admin' --  를 넣으면
+SELECT * FROM users WHERE id = 'admin' --' AND pw = '';
+-- 뒤쪽은 주석이 되어 비밀번호 검사 없이 로그인
+</code></pre>
+<pre><code class="language-java">// 대응: PreparedStatement
+PreparedStatement ps = con.prepareStatement(&quot;SELECT * FROM users WHERE id = ? AND pw = ?&quot;);
+ps.setString(1, id); ps.setString(2, pw);
+</code></pre>
+</aside>
+<h4>웹 보안 장비와 진단</h4>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>항목</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>WAF</strong> (웹 방화벽)</td>
+<td>HTTP 트래픽을 검사해 SQL 삽입·XSS·업로드 공격 차단. 오픈소스 ModSecurity</td>
+</tr>
+<tr>
+<td>웹셸 탐지</td>
+<td>웹셸 탐지 솔루션, 파일 무결성 감시</td>
+</tr>
+<tr>
+<td>웹 취약점 스캐너</td>
+<td>Burp Suite(프록시), OWASP ZAP, Nikto</td>
+</tr>
+<tr>
+<td>모의 해킹 (침투 테스트)</td>
+<td>허가받은 공격으로 취약점 확인</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="s24">데이터베이스 보안</h3>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>항목</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>위협</td>
+<td><strong>집성(Aggregation)</strong> — 낮은 등급 정보를 모아 높은 등급 정보를 알아냄 / <strong>추론(Inference)</strong> — 공개 정보로 비공개 정보를 유추</td>
+</tr>
+<tr>
+<td>접근 통제</td>
+<td>계정별 최소 권한, GRANT·REVOKE, <strong>뷰(View)</strong>로 필요한 열만 노출</td>
+</tr>
+<tr>
+<td>암호화 방식</td>
+<td><strong>API 방식</strong>(애플리케이션에서 암호화), <strong>플러그인 방식</strong>(DB에 모듈 설치), <strong>TDE</strong>(DBMS 내장 투명 암호화), <strong>파일 암호화</strong>(OS 수준), 하드웨어(HSM)</td>
+</tr>
+<tr>
+<td>감사</td>
+<td>DB 접근 제어 솔루션, 쿼리 로그</td>
+</tr>
+<tr>
+<td>기타</td>
+<td>기본 계정·비밀번호 변경, 불필요 계정 삭제, 패치</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>추론 대응</strong>: 다중 인스턴스화(Polyinstantiation — 등급별로 다른 값), 통계 질의 제한, 데이터 섭동.</p>
+<h3 id="s25">전자상거래 보안</h3>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>기술</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>SET</strong></td>
+<td>비자·마스터카드의 신용카드 결제 프로토콜. <strong>이중 서명</strong>(주문 정보는 상점만, 결제 정보는 은행만 보게 함)</td>
+</tr>
+<tr>
+<td>SSL/TLS</td>
+<td>웹 통신 암호화 (전자상거래에서 가장 널리 사용)</td>
+</tr>
+<tr>
+<td>전자화폐</td>
+<td>IC카드형, 네트워크형</td>
+</tr>
+<tr>
+<td>전자 지불</td>
+<td>신용카드, 전자 수표, 계좌이체, 간편결제</td>
+</tr>
+<tr>
+<td>PCI-DSS</td>
+<td>카드 정보 보호 국제 표준</td>
+</tr>
+<tr>
+<td>전자 입찰</td>
+<td>독립성, 비밀성, 무결성, 공평성, 안전성</td>
+</tr>
+<tr>
+<td>FIDO</td>
+<td>비밀번호 없이 생체 인증으로 로그인 (UAF, U2F, FIDO2)</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="s26">소프트웨어 개발 보안</h3>
+<p><strong>Secure SDLC</strong>: 요구사항(보안 요구사항 정의) → 설계(위협 모델링) → 구현(시큐어 코딩) → 테스트(취약점 진단, 침투 테스트) → 배포·운영(패치, 모니터링).</p>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>진단 방법</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>정적 분석 (SAST)</td>
+<td>소스 코드를 실행하지 않고 분석</td>
+</tr>
+<tr>
+<td>동적 분석 (DAST)</td>
+<td>실행 중인 애플리케이션을 공격하며 분석</td>
+</tr>
+<tr>
+<td>시큐어 코딩 가이드</td>
+<td>행정안전부·KISA 47개 항목: 입력 데이터 검증 및 표현, 보안 기능, 시간 및 상태, 에러 처리, 코드 오류, 캡슐화, API 오용</td>
+</tr>
+<tr>
+<td>소스코드 품질</td>
+<td>코드 리뷰, 정적 분석 도구 (SonarQube, Fortify)</td>
+</tr>
+</tbody>
+</table></div>
+<ol class="quiz">
+<li class="q" data-ans="2"><div class="q-text"><p>게시판에 저장된 악성 스크립트가 글을 읽는 다른 사용자의 브라우저에서 실행되는 공격은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>반사형 XSS</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>저장형 XSS</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>CSRF</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>SQL 삽입</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> 저장형(Stored) XSS다.</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>로그인한 사용자가 의도하지 않은 요청을 서버로 보내게 하는 공격의 대응으로 가장 적절한 것은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>HttpOnly 쿠키</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>CSRF 토큰 검증</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>Prepared Statement</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>DNSSEC</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> CSRF 대응이다.</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>발신 서버가 메일에 전자서명을 하고 수신 측이 DNS에 공개된 키로 검증하는 메일 인증 기술은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>SPF</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>DKIM</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>DMARC</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>PGP</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> DKIM이다. SPF는 허용 IP 목록, DMARC는 정책.</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>Apache 웹 서버에서 디렉터리 목록 노출을 막는 설정은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>ServerTokens Prod</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>Options -Indexes</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>AllowOverride None</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>LimitRequestBody</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> Indexes 옵션을 제거한다.</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>DNS 응답에 전자서명을 붙여 위·변조를 막지만, 기밀성은 제공하지 않는 기술은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>DoH</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>DNSSEC</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>TSIG</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>DNS 터널링</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> DNSSEC는 무결성·출처 인증을 제공한다.</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>낮은 등급의 정보를 모아 높은 등급의 정보를 알아내는 데이터베이스 보안 위협은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>추론</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>집성</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>다중 인스턴스화</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>섭동</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> 집성(Aggregation)이다.</p></div></li>
+<li class="q" data-ans="3"><div class="q-text"><p>DBMS 엔진에 내장되어 응용 프로그램 수정 없이 데이터 파일을 암호화하는 방식은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>API 방식</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>플러그인 방식</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>TDE 방식</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>파일 암호화 방식</span></button></li>
+</ol><div class="ans"><p><b>정답 ③</b> TDE(Transparent Data Encryption).</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>SET에서 주문 정보와 결제 정보를 분리해 상점과 은행이 각자 필요한 정보만 보게 하는 기술은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>은닉 서명</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>이중 서명</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>그룹 서명</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>위임 서명</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> 이중 서명이다.</p></div></li>
+<li class="q" data-ans="1"><div class="q-text"><p>FTP PORT 명령을 악용해 제3의 호스트를 스캔하는 공격은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>FTP 바운스 공격</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>익명 FTP 공격</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>tftp 공격</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>디렉터리 리스팅</span></button></li>
+</ol><div class="ans"><p><b>정답 ①</b> FTP 바운스 공격이다.</p></div></li>
+</ol>
+  </div>
+</section>
+
+<section class="chapter" id="ch5" data-title="암호, 인증, 접근통제" data-group="4과목 · 정보보안 일반">
+  <header class="ch-head reveal">
+    <p class="ch-group">4과목 · 정보보안 일반</p>
+    <h2>암호, 인증, 접근통제</h2>
+    <button type="button" class="ch-pdf" data-ch="ch5"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 1.5h5.5L12.5 4.5V14.5h-8.5z M9.5 1.5v3h3 M6 9.5l2 2 2-2 M8 6.5v5"/></svg>이 장만 PDF로</button>
+  </header>
+  <div class="ch-body">
+<h3 id="s27">암호학 기초</h3>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>용어</th>
+<th>뜻</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>평문 / 암호문</td>
+<td>암호화 전 / 후</td>
+</tr>
+<tr>
+<td>암호화 / 복호화</td>
+<td>평문 → 암호문 / 암호문 → 평문</td>
+</tr>
+<tr>
+<td>키</td>
+<td>암호화·복호화에 쓰는 비밀 값</td>
+</tr>
+<tr>
+<td><strong>케르크호프스 원리</strong></td>
+<td>알고리즘은 공개해도 <strong>키만 비밀이면 안전</strong>해야 한다</td>
+</tr>
+</tbody>
+</table></div>
+<h4>고전 암호</h4>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>방식</th>
+<th>설명</th>
+<th>예</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>치환(대체)</strong></td>
+<td>문자를 다른 문자로 바꿈</td>
+<td>시저 암호(3칸 이동), 비즈네르, 플레이페어, 단일·다중 문자 치환</td>
+</tr>
+<tr>
+<td><strong>전치</strong></td>
+<td>문자 순서를 섞음</td>
+<td>스키테일, 행렬 전치</td>
+</tr>
+<tr>
+<td>일회용 패드 (OTP)</td>
+<td>평문과 같은 길이의 무작위 키를 한 번만 사용</td>
+<td>이론적으로 완전 안전</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>섀넌의 원리</strong>: <strong>혼돈(Confusion)</strong> — 키와 암호문의 관계를 복잡하게(치환), <strong>확산(Diffusion)</strong> — 평문 한 비트 변화가 암호문 전체에 퍼지게(전치). 둘을 반복하는 것이 <strong>곱 암호(Product Cipher)</strong>.</p>
+<h3 id="s28">대칭키 암호</h3>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>구분</th>
+<th>블록 암호</th>
+<th>스트림 암호</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>단위</td>
+<td>고정 크기 블록</td>
+<td>비트·바이트 단위로 키 스트림과 XOR</td>
+</tr>
+<tr>
+<td>예</td>
+<td>DES, 3DES, AES, SEED, ARIA, IDEA, LEA, HIGHT</td>
+<td>RC4, A5/1, LFSR, ChaCha20</td>
+</tr>
+</tbody>
+</table></div>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>알고리즘</th>
+<th>블록</th>
+<th>키</th>
+<th>구조</th>
+<th>비고</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>DES</strong></td>
+<td>64비트</td>
+<td><strong>56비트</strong></td>
+<td><strong>Feistel</strong>, 16라운드</td>
+<td>미국 표준(1977). 키가 짧아 취약</td>
+</tr>
+<tr>
+<td>3DES</td>
+<td>64비트</td>
+<td>112/168비트</td>
+<td>DES 3번 (암호-복호-암호)</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>AES</strong></td>
+<td><strong>128비트</strong></td>
+<td>128/192/256비트</td>
+<td><strong>SPN</strong>, 10/12/14라운드</td>
+<td>미국 표준(2001), 원래 이름 Rijndael</td>
+</tr>
+<tr>
+<td><strong>SEED</strong></td>
+<td>128비트</td>
+<td>128/256비트</td>
+<td>Feistel, 16라운드</td>
+<td><strong>한국</strong> (KISA, 1999)</td>
+</tr>
+<tr>
+<td><strong>ARIA</strong></td>
+<td>128비트</td>
+<td>128/192/256비트</td>
+<td><strong>SPN</strong> (ISPN), 12/14/16라운드</td>
+<td><strong>한국</strong> 국가 표준 (학·연·관)</td>
+</tr>
+<tr>
+<td><strong>LEA</strong></td>
+<td>128비트</td>
+<td>128/192/256비트</td>
+<td>ARX</td>
+<td>한국 경량 암호</td>
+</tr>
+<tr>
+<td><strong>HIGHT</strong></td>
+<td>64비트</td>
+<td>128비트</td>
+<td></td>
+<td>한국 경량 암호 (RFID, IoT)</td>
+</tr>
+<tr>
+<td>IDEA</td>
+<td>64비트</td>
+<td>128비트</td>
+<td></td>
+<td>PGP에 사용</td>
+</tr>
+</tbody>
+</table></div>
+<ul>
+<li><strong>Feistel 구조</strong>: 블록을 반으로 나눠 라운드마다 한쪽에 함수를 적용하고 XOR 후 교환. <strong>암호화·복호화 구조가 같다</strong> (DES, SEED)</li>
+<li><strong>SPN 구조</strong>: 치환(S-box) + 순열(P-box)을 반복. 병렬 처리에 유리 (AES, ARIA)</li>
+</ul>
+<h4>블록 암호 운용 모드</h4>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>모드</th>
+<th>특징</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>ECB</strong></td>
+<td>블록마다 독립 암호화. 같은 평문 → 같은 암호문 (패턴 노출, 취약)</td>
+</tr>
+<tr>
+<td><strong>CBC</strong></td>
+<td>이전 암호문과 XOR 후 암호화. <strong>IV</strong> 필요. 오류가 다음 블록에 전파</td>
+</tr>
+<tr>
+<td>CFB</td>
+<td>이전 암호문을 암호화해 평문과 XOR (스트림처럼)</td>
+</tr>
+<tr>
+<td>OFB</td>
+<td>암호화 결과를 다시 입력. 오류 전파 없음</td>
+</tr>
+<tr>
+<td><strong>CTR</strong></td>
+<td>카운터를 암호화해 평문과 XOR. <strong>병렬 처리</strong> 가능</td>
+</tr>
+<tr>
+<td>GCM</td>
+<td>CTR + 인증(무결성). TLS 1.3에서 사용 (AEAD)</td>
+</tr>
+</tbody>
+</table></div>
+<h4>암호 공격</h4>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>공격</th>
+<th>공격자가 가진 정보</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>암호문 단독 공격 (COA)</td>
+<td>암호문만</td>
+</tr>
+<tr>
+<td>기지 평문 공격 (KPA)</td>
+<td>일부 평문-암호문 쌍</td>
+</tr>
+<tr>
+<td>선택 평문 공격 (CPA)</td>
+<td>원하는 평문을 암호화해 볼 수 있음</td>
+</tr>
+<tr>
+<td>선택 암호문 공격 (CCA)</td>
+<td>원하는 암호문을 복호화해 볼 수 있음</td>
+</tr>
+</tbody>
+</table></div>
+<p>그 밖에 전수 공격(무차별 대입), 차분 공격, 선형 공격, 중간자 공격, 생일 공격(해시 충돌), 부채널 공격(전력·시간 측정).</p>
+<h3 id="s29">공개키(비대칭) 암호</h3>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>알고리즘</th>
+<th>기반 문제</th>
+<th>용도</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>RSA</strong></td>
+<td><strong>큰 수의 소인수분해</strong></td>
+<td>암호화, 전자서명</td>
+</tr>
+<tr>
+<td><strong>Diffie-Hellman</strong></td>
+<td><strong>이산대수</strong></td>
+<td><strong>키 교환</strong> (중간자 공격에 취약 → 인증과 함께 사용)</td>
+</tr>
+<tr>
+<td><strong>ElGamal</strong></td>
+<td>이산대수</td>
+<td>암호화, 서명</td>
+</tr>
+<tr>
+<td>DSA</td>
+<td>이산대수</td>
+<td>전자서명 전용</td>
+</tr>
+<tr>
+<td><strong>ECC</strong></td>
+<td><strong>타원곡선 이산대수</strong></td>
+<td>짧은 키로 RSA와 같은 강도 (ECC 256비트 ≈ RSA 3072비트)</td>
+</tr>
+<tr>
+<td>Rabin</td>
+<td>제곱근 계산</td>
+<td></td>
+</tr>
+<tr>
+<td>KCDSA</td>
+<td>이산대수</td>
+<td>한국형 전자서명</td>
+</tr>
+</tbody>
+</table></div>
+<aside class="box box-ex">
+<p class="box-t">RSA 계산</p>
+<p>p = 3, q = 11 → n = 33, φ(n) = (p−1)(q−1) = 20.
+e = 3 (20과 서로소) → d는 e × d ≡ 1 (mod 20) → <strong>d = 7</strong> (3 × 7 = 21).
+평문 M = 4 → 암호문 C = 4³ mod 33 = 64 mod 33 = <strong>31</strong>. 복호화 31⁷ mod 33 = 4.
+공개키 (e, n) = (3, 33), 개인키 (d, n) = (7, 33).</p>
+</aside>
+<aside class="box box-ex">
+<p class="box-t">Diffie-Hellman</p>
+<p>공개 값 p = 23, g = 5. A의 비밀 a = 6, B의 비밀 b = 15.
+A → B: 5⁶ mod 23 = 8 / B → A: 5¹⁵ mod 23 = 19.
+공유 키: A는 19⁶ mod 23 = 2, B는 8¹⁵ mod 23 = <strong>2</strong> (같음).</p>
+</aside>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>대칭키 vs 공개키</th>
+<th>대칭키</th>
+<th>공개키</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>키 수 (n명)</td>
+<td>n(n−1)/2</td>
+<td>2n</td>
+</tr>
+<tr>
+<td>속도</td>
+<td>빠름</td>
+<td>느림</td>
+</tr>
+<tr>
+<td>키 분배</td>
+<td>어려움</td>
+<td>쉬움</td>
+</tr>
+<tr>
+<td>실제 사용</td>
+<td><strong>하이브리드</strong>: 공개키로 대칭키(세션 키)를 교환하고, 데이터는 대칭키로 암호화</td>
+<td></td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="s30">해시와 메시지 인증</h3>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>해시 성질</th>
+<th>의미</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>역상 저항성 (일방향성)</td>
+<td>해시값으로 원래 입력을 찾기 어려움</td>
+</tr>
+<tr>
+<td>제2 역상 저항성</td>
+<td>주어진 입력과 같은 해시를 갖는 다른 입력을 찾기 어려움</td>
+</tr>
+<tr>
+<td>충돌 저항성</td>
+<td>같은 해시값을 갖는 두 입력을 찾기 어려움</td>
+</tr>
+</tbody>
+</table></div>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>해시</th>
+<th>출력 길이</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MD5</td>
+<td>128비트 (충돌 발견, 사용 금지)</td>
+</tr>
+<tr>
+<td>SHA-1</td>
+<td>160비트 (취약)</td>
+</tr>
+<tr>
+<td><strong>SHA-256 / SHA-512</strong> (SHA-2)</td>
+<td>256 / 512비트</td>
+</tr>
+<tr>
+<td>SHA-3 (Keccak)</td>
+<td>224~512비트, 스펀지 구조</td>
+</tr>
+<tr>
+<td>HAS-160</td>
+<td>160비트, 한국</td>
+</tr>
+<tr>
+<td>LSH</td>
+<td>한국 경량 해시</td>
+</tr>
+</tbody>
+</table></div>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>메시지 인증</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>MAC</strong></td>
+<td>비밀키 + 메시지로 만든 인증 코드. <strong>무결성 + 메시지 출처 인증</strong>. 부인 방지는 안 됨 (양쪽이 같은 키)</td>
+</tr>
+<tr>
+<td><strong>HMAC</strong></td>
+<td>해시 함수 기반 MAC</td>
+</tr>
+<tr>
+<td>CMAC</td>
+<td>블록 암호 기반 MAC</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="s31">전자서명과 PKI</h3>
+<p><strong>전자서명</strong>: 송신자가 <strong>개인키</strong>로 메시지 해시를 서명 → 수신자가 송신자 <strong>공개키</strong>로 검증. 제공: <strong>인증, 무결성, 부인 방지</strong> (기밀성은 제공하지 않음).</p>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>조건</th>
+<th>의미</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>위조 불가</td>
+<td>서명자만 만들 수 있음</td>
+</tr>
+<tr>
+<td>서명자 인증</td>
+<td>누가 서명했는지 확인</td>
+</tr>
+<tr>
+<td>부인 방지</td>
+<td>서명 사실을 부인할 수 없음</td>
+</tr>
+<tr>
+<td>변경 불가</td>
+<td>서명된 문서는 바꿀 수 없음</td>
+</tr>
+<tr>
+<td>재사용 불가</td>
+<td>다른 문서에 쓸 수 없음</td>
+</tr>
+</tbody>
+</table></div>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>특수 서명</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>은닉(블라인드) 서명</strong></td>
+<td>서명자가 내용을 모른 채 서명. <strong>전자투표, 전자화폐</strong> (익명성)</td>
+</tr>
+<tr>
+<td><strong>이중 서명</strong></td>
+<td>SET에서 주문·결제 정보를 분리</td>
+</tr>
+<tr>
+<td>그룹 서명</td>
+<td>그룹 구성원 누구인지 숨기고 서명</td>
+</tr>
+<tr>
+<td>위임 서명</td>
+<td>대리 서명</td>
+</tr>
+<tr>
+<td>부인 방지 서명</td>
+<td>서명자의 협조 없이는 검증 불가</td>
+</tr>
+</tbody>
+</table></div>
+<h4>PKI (공개키 기반 구조)</h4>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>구성 요소</th>
+<th>역할</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>CA</strong> (인증기관)</td>
+<td>인증서 발급·폐지. 최상위 루트 CA</td>
+</tr>
+<tr>
+<td><strong>RA</strong> (등록기관)</td>
+<td>사용자 신원 확인, CA에 발급 요청</td>
+</tr>
+<tr>
+<td>디렉터리</td>
+<td>인증서·CRL 저장 (LDAP)</td>
+</tr>
+<tr>
+<td>사용자</td>
+<td></td>
+</tr>
+</tbody>
+</table></div>
+<ul>
+<li>인증서 표준 <strong>X.509 v3</strong>: 버전, 일련번호, 서명 알고리즘, 발급자, <strong>유효 기간</strong>, 주체, <strong>주체의 공개키</strong>, 확장 필드, CA의 서명</li>
+<li>인증서 폐지 확인: <strong>CRL</strong>(폐지 목록 — 주기적으로 내려받음), <strong>OCSP</strong>(실시간 질의 — 최신 상태)</li>
+</ul>
+<h3 id="s32">인증</h3>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>인증 유형</th>
+<th>예</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>지식 (Type 1)</td>
+<td>비밀번호, PIN</td>
+</tr>
+<tr>
+<td>소유 (Type 2)</td>
+<td><strong>OTP</strong>, 스마트카드, 보안 토큰</td>
+</tr>
+<tr>
+<td>존재·생체 (Type 3)</td>
+<td>지문, 홍채, 얼굴, 정맥</td>
+</tr>
+<tr>
+<td>행위</td>
+<td>서명, 음성, 걸음걸이</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>생체 인식 성능</strong>: <strong>FAR</strong>(타인 수락률, 오인식 — 보안상 위험), <strong>FRR</strong>(본인 거부율, 오거부 — 불편), <strong>CER/EER</strong>(FAR = FRR이 되는 지점, 낮을수록 정확).</p>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>인증 기술</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>커버로스 (Kerberos)</strong></td>
+<td><strong>대칭키</strong> 기반 SSO. <strong>KDC</strong> = <strong>AS</strong>(인증 서버) + <strong>TGS</strong>(티켓 발급 서버). 사용자는 TGT를 받아 서비스 티켓을 요청. <strong>시간 동기화</strong> 필요, KDC가 단일 장애점</td>
+</tr>
+<tr>
+<td>SESAME</td>
+<td>커버로스 + 공개키</td>
+</tr>
+<tr>
+<td><strong>SSO</strong></td>
+<td>한 번 로그인으로 여러 시스템 이용</td>
+</tr>
+<tr>
+<td>OAuth 2.0</td>
+<td>권한 위임 (비밀번호를 넘기지 않고 접근 토큰)</td>
+</tr>
+<tr>
+<td>SAML / OIDC</td>
+<td>인증 정보 교환 표준</td>
+</tr>
+<tr>
+<td>OTP</td>
+<td>S/KEY(해시 체인), 시간 동기(TOTP), 이벤트 동기(HOTP), 질의-응답</td>
+</tr>
+<tr>
+<td>영지식 증명</td>
+<td>비밀을 공개하지 않고 안다는 사실만 증명</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="s33">접근 통제</h3>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>정책</th>
+<th>결정 주체</th>
+<th>특징</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>DAC</strong> (임의적)</td>
+<td><strong>소유자</strong></td>
+<td>신분 기반. ACL. 유연하지만 트로이 목마에 취약</td>
+</tr>
+<tr>
+<td><strong>MAC</strong> (강제적)</td>
+<td><strong>시스템</strong> (보안 등급·범주 레이블)</td>
+<td>규칙 기반. 군사·정부</td>
+</tr>
+<tr>
+<td><strong>RBAC</strong> (역할 기반)</td>
+<td><strong>역할(직무)</strong></td>
+<td>인사 이동에 유연. 최소 권한, 직무 분리</td>
+</tr>
+<tr>
+<td>ABAC</td>
+<td>속성(사용자·자원·환경)</td>
+<td></td>
+</tr>
+</tbody>
+</table></div>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>보안 모델</th>
+<th>목표</th>
+<th>규칙</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>벨-라파둘라 (BLP)</strong></td>
+<td><strong>기밀성</strong></td>
+<td><strong>No Read Up</strong> (상위 읽기 금지, 단순 보안 속성), <strong>No Write Down</strong> (하위 쓰기 금지, * 속성)</td>
+</tr>
+<tr>
+<td><strong>비바 (Biba)</strong></td>
+<td><strong>무결성</strong></td>
+<td><strong>No Read Down</strong>, <strong>No Write Up</strong> (BLP와 반대)</td>
+</tr>
+<tr>
+<td><strong>클락-윌슨 (Clark-Wilson)</strong></td>
+<td>무결성 (상업용)</td>
+<td>정형화된 트랜잭션(TP)으로만 데이터 변경, 직무 분리, 감사</td>
+</tr>
+<tr>
+<td>만리장성 (브루어-내시)</td>
+<td>이해 충돌 방지</td>
+<td>경쟁 회사 정보에 동시 접근 금지</td>
+</tr>
+<tr>
+<td>래티스 모델</td>
+<td>보안 등급의 상·하한</td>
+<td></td>
+</tr>
+</tbody>
+</table></div>
+<p>접근 통제 원칙: <strong>최소 권한</strong>(Need-to-know), <strong>직무 분리</strong>, <strong>알 필요성</strong>.</p>
+<h3 id="s34">최신 보안 동향</h3>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>기술</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>블록체인</strong></td>
+<td>분산 원장. 해시로 블록을 연결해 위변조 방지. 합의 알고리즘(PoW, PoS)</td>
+</tr>
+<tr>
+<td><strong>양자 내성 암호 (PQC)</strong></td>
+<td>양자컴퓨터로도 풀기 어려운 암호. 격자 기반(CRYSTALS-Kyber/ML-KEM, Dilithium/ML-DSA) 등. 양자컴퓨터는 <strong>쇼어 알고리즘</strong>으로 RSA·ECC를 위협</td>
+</tr>
+<tr>
+<td><strong>동형 암호</strong></td>
+<td>암호화된 상태로 연산 가능</td>
+</tr>
+<tr>
+<td>경량 암호</td>
+<td>IoT용 저전력 암호 (LEA, HIGHT, PRESENT)</td>
+</tr>
+<tr>
+<td><strong>딥페이크</strong></td>
+<td>AI로 만든 가짜 영상·음성. 탐지 기술, 워터마크</td>
+</tr>
+<tr>
+<td>화이트박스 암호</td>
+<td>키를 코드 안에 숨겨 노출 방지</td>
+</tr>
+</tbody>
+</table></div>
+<ol class="quiz">
+<li class="q" data-ans="2"><div class="q-text"><p>키 길이가 56비트이며 Feistel 구조를 사용하는 대칭키 암호는?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>AES</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>DES</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>ARIA</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>SEED</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> DES다. AES·ARIA는 SPN 구조.</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>한국에서 개발한 블록 암호 중 SPN 구조를 사용하는 국가 표준 알고리즘은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>SEED</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>ARIA</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>HIGHT</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>IDEA</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> ARIA. SEED는 Feistel 구조.</p></div></li>
+<li class="q" data-ans="1"><div class="q-text"><p>같은 평문 블록이 항상 같은 암호문 블록이 되어 패턴이 노출되는 운용 모드는?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>ECB</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>CBC</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>CTR</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>OFB</span></button></li>
+</ol><div class="ans"><p><b>정답 ①</b> ECB 모드다.</p></div></li>
+<li class="q" data-ans="3"><div class="q-text"><p>큰 수의 소인수분해 문제의 어려움에 기반한 공개키 알고리즘은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>Diffie-Hellman</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>ElGamal</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>RSA</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>ECC</span></button></li>
+</ol><div class="ans"><p><b>정답 ③</b> RSA. DH·ElGamal은 이산대수, ECC는 타원곡선 이산대수.</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>RSA에서 p = 5, q = 11, e = 3일 때 개인키 d는?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>7</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>27</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>13</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>17</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> φ(n) = 4 × 10 = 40. 3 × d ≡ 1 (mod 40) → d = 27 (3 × 27 = 81 = 2 × 40 + 1).</p></div></li>
+<li class="q" data-ans="4"><div class="q-text"><p>전자서명이 제공하지 않는 보안 서비스는?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>인증</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>무결성</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>부인 방지</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>기밀성</span></button></li>
+</ol><div class="ans"><p><b>정답 ④</b> 전자서명만으로는 내용을 숨기지 못한다.</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>인증서의 폐지 여부를 실시간으로 확인하는 프로토콜은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>CRL</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>OCSP</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>LDAP</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>X.509</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> OCSP다. CRL은 주기적으로 받는 목록.</p></div></li>
+<li class="q" data-ans="3"><div class="q-text"><p>커버로스에 대한 설명으로 틀린 것은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>대칭키 암호를 사용한다</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>KDC는 AS와 TGS로 구성된다</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>시간 동기화가 필요 없다</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>KDC가 단일 장애점이 될 수 있다</span></button></li>
+</ol><div class="ans"><p><b>정답 ③</b> 티켓에 타임스탬프를 쓰므로 시간 동기화가 필요하다.</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>무결성을 위해 하위 등급 읽기와 상위 등급 쓰기를 금지하는 모델은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>벨-라파둘라</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>비바</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>클락-윌슨</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>만리장성</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> 비바(Biba) 모델이다.</p></div></li>
+<li class="q" data-ans="3"><div class="q-text"><p>생체 인식에서 FAR과 FRR이 같아지는 지점으로, 낮을수록 정확한 시스템인 지표는?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>FAR</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>FRR</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>CER</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>TPR</span></button></li>
+</ol><div class="ans"><p><b>정답 ③</b> CER(EER)이다.</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>전자투표처럼 서명자가 내용을 모른 채 서명하게 하는 기법은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>이중 서명</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>은닉 서명</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>그룹 서명</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>위임 서명</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> 은닉(블라인드) 서명이다.</p></div></li>
+</ol>
+  </div>
+</section>
+
+<section class="chapter" id="ch6" data-title="관리체계, 위험관리, 법규" data-group="5과목 · 정보보안 관리 및 법규">
+  <header class="ch-head reveal">
+    <p class="ch-group">5과목 · 정보보안 관리 및 법규</p>
+    <h2>관리체계, 위험관리, 법규</h2>
+    <button type="button" class="ch-pdf" data-ch="ch6"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 1.5h5.5L12.5 4.5V14.5h-8.5z M9.5 1.5v3h3 M6 9.5l2 2 2-2 M8 6.5v5"/></svg>이 장만 PDF로</button>
+  </header>
+  <div class="ch-body">
+<h3 id="s35">정보보호 관리와 거버넌스</h3>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>용어</th>
+<th>뜻</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>정보보호 거버넌스</td>
+<td>경영진이 정보보호를 전략과 연계해 책임지고 관리하는 체계</td>
+</tr>
+<tr>
+<td>정보보호 정책</td>
+<td>최상위 문서. 정책 → 표준 → 지침(가이드라인) → 절차 순으로 구체화</td>
+</tr>
+<tr>
+<td>CISO</td>
+<td>정보보호 최고책임자</td>
+</tr>
+<tr>
+<td>CPO</td>
+<td>개인정보 보호책임자</td>
+</tr>
+<tr>
+<td>정보보호 관리체계 (ISMS)</td>
+<td>정책 수립 → 위험 관리 → 대책 구현 → 사후 관리를 반복하는 체계 (PDCA)</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>PDCA</strong>: Plan(계획) → Do(실행) → Check(점검) → Act(개선).</p>
+<p><strong>보안 대책 유형</strong>: 관리적(정책, 교육, 인사), 물리적(출입 통제, CCTV), 기술적(방화벽, 암호화). 기능별: 예방, 탐지, 교정, 억제, 복구.</p>
+<h3 id="s36">위험 관리</h3>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>용어</th>
+<th>뜻</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>자산 (Asset)</td>
+<td>보호해야 할 가치 있는 것 (정보, 시스템, 사람, 평판)</td>
+</tr>
+<tr>
+<td>위협 (Threat)</td>
+<td>자산에 손해를 끼칠 수 있는 원인</td>
+</tr>
+<tr>
+<td>취약점 (Vulnerability)</td>
+<td>위협이 이용할 수 있는 약점</td>
+</tr>
+<tr>
+<td>위험 (Risk)</td>
+<td>위협이 취약점을 이용해 손실을 낼 가능성 = <strong>자산 가치 × 위협 × 취약점</strong></td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>위험 관리 절차</strong>: 자산 식별·가치 평가 → 위협 평가 → 취약점 평가 → 위험 평가(분석) → 대책 선정 → 잔여 위험 평가·수용.</p>
+<h4>위험 분석 접근법</h4>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>접근법</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>기준선(베이스라인) 접근</td>
+<td>표준화된 보호 대책을 체크리스트로 일괄 적용. 빠르고 저렴, 조직 특성 반영 부족</td>
+</tr>
+<tr>
+<td>비정형 접근</td>
+<td>전문가 경험과 지식으로 분석. 빠르지만 전문가에 의존</td>
+</tr>
+<tr>
+<td>상세 위험 분석</td>
+<td>자산·위협·취약점을 정형화된 절차로 상세 분석. 정확하지만 시간·비용 큼</td>
+</tr>
+<tr>
+<td>복합 접근</td>
+<td>중요 시스템은 상세, 나머지는 베이스라인</td>
+</tr>
+</tbody>
+</table></div>
+<h4>정량적 vs 정성적 위험 분석</h4>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>정량적 (숫자)</th>
+<th>정성적 (등급)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>ALE</strong>(연간 예상 손실) = <strong>SLE × ARO</strong></td>
+<td>델파이법(전문가 합의)</td>
+</tr>
+<tr>
+<td><strong>SLE</strong>(단일 예상 손실) = <strong>자산 가치(AV) × 노출 계수(EF)</strong></td>
+<td>시나리오법</td>
+</tr>
+<tr>
+<td>과거 자료 분석법, 수학 공식 접근법, 확률 분포법</td>
+<td>순위 결정법, 퍼지 행렬법</td>
+</tr>
+<tr>
+<td>비용·효과 분석 가능, 계산 복잡</td>
+<td>빠르고 쉬움, 주관적</td>
+</tr>
+</tbody>
+</table></div>
+<aside class="box box-ex">
+<p class="box-t">ALE 계산</p>
+<p>서버 자산 가치 1억 원, 화재 시 40% 손실(EF 0.4), 화재는 10년에 한 번(ARO 0.1).
+SLE = 1억 × 0.4 = 4,000만 원 / ALE = 4,000만 × 0.1 = <strong>400만 원</strong>.
+보안 대책 비용이 연 400만 원보다 크면 경제적이지 않다.</p>
+</aside>
+<h4>위험 처리 전략</h4>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>전략</th>
+<th>설명</th>
+<th>예</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>수용</strong> (Acceptance)</td>
+<td>위험을 받아들임 (비용이 더 클 때)</td>
+<td>경미한 위험</td>
+</tr>
+<tr>
+<td><strong>감소·완화</strong> (Reduction)</td>
+<td>대책을 도입해 위험을 줄임</td>
+<td>방화벽 설치</td>
+</tr>
+<tr>
+<td><strong>회피</strong> (Avoidance)</td>
+<td>위험이 있는 업무를 하지 않음</td>
+<td>서비스 중단</td>
+</tr>
+<tr>
+<td><strong>전가</strong> (Transfer)</td>
+<td>제3자에게 넘김</td>
+<td><strong>보험 가입</strong>, 외주</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="s37">업무 연속성과 재해 복구</h3>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>용어</th>
+<th>뜻</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>BCP</strong></td>
+<td>업무 연속성 계획. 재해에도 핵심 업무를 지속</td>
+</tr>
+<tr>
+<td><strong>DRP</strong></td>
+<td>재해 복구 계획. IT 시스템 복구 중심</td>
+</tr>
+<tr>
+<td><strong>BIA</strong></td>
+<td>업무 영향 분석. 업무 중단 시 영향과 복구 우선순위 결정 (BCP의 첫 단계)</td>
+</tr>
+<tr>
+<td><strong>RTO</strong></td>
+<td>목표 복구 <strong>시간</strong> (얼마나 빨리)</td>
+</tr>
+<tr>
+<td><strong>RPO</strong></td>
+<td>목표 복구 <strong>시점</strong> (어느 시점 데이터까지)</td>
+</tr>
+<tr>
+<td>MTD</td>
+<td>최대 허용 중단 시간</td>
+</tr>
+</tbody>
+</table></div>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>재해 복구 센터</th>
+<th>RTO</th>
+<th>특징</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>미러 사이트</td>
+<td><strong>즉시</strong> (0)</td>
+<td>주 센터와 같은 시스템을 실시간 동기화 (Active-Active)</td>
+</tr>
+<tr>
+<td>핫 사이트</td>
+<td>수 시간 이내</td>
+<td>같은 장비 대기, 데이터 동기화 (Active-Standby)</td>
+</tr>
+<tr>
+<td>웜 사이트</td>
+<td>수일 ~ 수주</td>
+<td>일부 중요 장비만</td>
+</tr>
+<tr>
+<td>콜드 사이트</td>
+<td>수주 ~ 수개월</td>
+<td>공간·전원만 확보</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>백업</strong>: 전체(Full), <strong>증분</strong>(직전 백업 이후 변경분 — 백업 빠름·복구 느림), <strong>차등</strong>(마지막 전체 백업 이후 변경분 — 복구 시 전체 + 마지막 차등).</p>
+<h3 id="s38">침해사고 대응과 디지털 포렌식</h3>
+<p><strong>침해사고 대응 절차 (7단계)</strong>: 사고 전 준비 → 사고 탐지 → 초기 대응 → 대응 전략 체계화 → 사고 조사 → 보고서 작성 → 해결.</p>
+<p><strong>CERT / CSIRT</strong>: 침해사고 대응팀. 국가 차원: KISA 인터넷침해대응센터(KrCERT).</p>
+<h4>디지털 포렌식</h4>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>기본 원칙</th>
+<th>의미</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>정당성</strong></td>
+<td>증거가 적법한 절차로 수집되어야 함 (위법 수집 증거 배제)</td>
+</tr>
+<tr>
+<td><strong>재현성</strong></td>
+<td>같은 조건에서 같은 결과가 나와야 함</td>
+</tr>
+<tr>
+<td><strong>신속성</strong></td>
+<td>휘발성 증거는 빨리 수집</td>
+</tr>
+<tr>
+<td><strong>연계 보관성 (Chain of Custody)</strong></td>
+<td>수집·이송·분석·보관 단계마다 담당자와 이력을 기록</td>
+</tr>
+<tr>
+<td><strong>무결성</strong></td>
+<td>수집한 증거가 바뀌지 않았음을 <strong>해시값</strong>으로 증명</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>휘발성 순서 (먼저 수집)</strong>: 레지스터·캐시 → 메모리(RAM) → 네트워크 상태·실행 중 프로세스 → 임시 파일 → 디스크 → 원격 로그 → 백업 매체.</p>
+<p>절차: 사전 준비 → 증거 수집 → 포장·이송 → 조사·분석 → 정밀 검토 → 보고서. 디스크는 <strong>쓰기 방지 장치</strong>를 붙여 <strong>비트 단위 이미징</strong> 후 사본으로 분석한다.</p>
+<h3 id="s39">인증 제도</h3>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>제도</th>
+<th>내용</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>ISMS-P</strong></td>
+<td>정보보호 및 개인정보보호 관리체계 인증 (과기정통부·개인정보보호위원회, KISA 운영). 인증 기준 <strong>102개</strong>: 관리체계 수립 및 운영 <strong>16</strong>, 보호대책 요구사항 <strong>64</strong>, 개인정보 처리 단계별 요구사항 <strong>22</strong></td>
+</tr>
+<tr>
+<td>ISMS</td>
+<td>정보보호 관리체계만 (80개 = 16 + 64). 일정 기준 이상 사업자는 <strong>의무 인증</strong></td>
+</tr>
+<tr>
+<td>인증 유효 기간</td>
+<td><strong>3년</strong>, 매년 사후 심사</td>
+</tr>
+<tr>
+<td>ISO/IEC 27001</td>
+<td>국제 정보보호 관리체계 표준 (27002는 통제 항목 지침)</td>
+</tr>
+<tr>
+<td><strong>CC (공통평가기준, ISO/IEC 15408)</strong></td>
+<td>정보보호 제품의 보안성 평가. <strong>보호 프로파일(PP)</strong>: 제품군별 보안 요구사항 / <strong>보안 목표 명세서(ST)</strong>: 특정 제품의 보안 기능 명세. 평가 등급 <strong>EAL1 ~ EAL7</strong> (높을수록 엄격)</td>
+</tr>
+<tr>
+<td>보안 기능 확인서</td>
+<td>국가·공공기관 도입 제품의 보안 기능 시험</td>
+</tr>
+<tr>
+<td><strong>CSAP</strong></td>
+<td>클라우드 서비스 보안 인증 (공공기관에 클라우드 제공 시)</td>
+</tr>
+<tr>
+<td>주요정보통신기반시설</td>
+<td>국가 안보·경제에 중요한 시설 지정, 매년 취약점 분석·평가</td>
+</tr>
+<tr>
+<td>PIA (개인정보 영향평가)</td>
+<td>공공기관이 대규모 개인정보 시스템 구축 시 위험 사전 평가</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="s40">정보보호 관련 법규</h3>
+<aside class="box box-warn">
+<p class="box-t">법령은 자주 개정된다</p>
+<p>아래 내용은 2026년 11월 기준 일반적인 내용이다. 시험 직전에는 국가법령정보센터(law.go.kr)에서 최신 조문을 확인하자.</p>
+</aside>
+<h4>개인정보 보호법</h4>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>용어</th>
+<th>정의</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>개인정보</td>
+<td><strong>살아 있는 개인</strong>에 관한 정보로, 성명·주민등록번호·영상 등으로 개인을 알아볼 수 있는 정보. 다른 정보와 <strong>쉽게 결합</strong>해 알아볼 수 있는 정보, <strong>가명정보</strong> 포함</td>
+</tr>
+<tr>
+<td><strong>가명정보</strong></td>
+<td>추가 정보 없이는 특정 개인을 알아볼 수 없게 가명 처리한 정보. <strong>통계 작성, 과학적 연구, 공익적 기록 보존</strong> 목적이면 동의 없이 처리 가능</td>
+</tr>
+<tr>
+<td>익명정보</td>
+<td>더 이상 개인을 알아볼 수 없는 정보 (법 적용 대상 아님)</td>
+</tr>
+<tr>
+<td>정보주체</td>
+<td>정보의 주체가 되는 사람</td>
+</tr>
+<tr>
+<td>개인정보처리자</td>
+<td>업무를 위해 개인정보를 처리하는 공공기관·법인·단체·개인</td>
+</tr>
+<tr>
+<td><strong>민감정보</strong></td>
+<td>사상·신념, 노동조합·정당 가입·탈퇴, 정치적 견해, 건강·성생활, 유전정보, 범죄경력, 개인 식별 목적의 생체인식정보, 인종·민족 정보 → <strong>별도 동의</strong> 필요</td>
+</tr>
+<tr>
+<td><strong>고유식별정보</strong></td>
+<td><strong>주민등록번호, 여권번호, 운전면허번호, 외국인등록번호</strong> → 별도 동의. 주민등록번호는 법령 근거 등 예외가 아니면 <strong>처리 금지</strong></td>
+</tr>
+</tbody>
+</table></div>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>원칙</th>
+<th>내용</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>수집·이용</td>
+<td>동의, 법률 규정, 계약 이행 등 적법 근거 필요. 동의 시 <strong>수집 목적, 항목, 보유·이용 기간, 동의 거부 권리와 불이익</strong>을 알림</td>
+</tr>
+<tr>
+<td>최소 수집</td>
+<td>목적에 필요한 최소한만</td>
+</tr>
+<tr>
+<td>제3자 제공</td>
+<td>별도 동의 필요</td>
+</tr>
+<tr>
+<td>처리 위탁</td>
+<td>위탁 내용과 수탁자 공개, 수탁자 관리·감독</td>
+</tr>
+<tr>
+<td>파기</td>
+<td>보유 기간 경과·목적 달성 시 <strong>지체 없이</strong> 파기 (복구 불가능하게)</td>
+</tr>
+<tr>
+<td>개인정보 처리방침</td>
+<td>수립·공개</td>
+</tr>
+<tr>
+<td>개인정보 보호책임자</td>
+<td>지정</td>
+</tr>
+<tr>
+<td>안전성 확보 조치</td>
+<td>내부 관리 계획, 접근 통제, 접근 권한 관리, 암호화, 접속 기록 보관, 악성 프로그램 방지, 물리적 안전 조치</td>
+</tr>
+<tr>
+<td>유출 통지·신고</td>
+<td>유출을 알게 되면 <strong>72시간 이내</strong> 정보주체에게 통지, 일정 규모 이상이면 개인정보보호위원회·KISA에 신고</td>
+</tr>
+<tr>
+<td>영상정보처리기기 (CCTV)</td>
+<td>공개 장소 설치는 법령 허용·범죄 예방 등으로 제한. <strong>안내판</strong> 설치. 목욕실·화장실·탈의실 등 사생활 침해 장소 설치 금지</td>
+</tr>
+<tr>
+<td>정보주체 권리</td>
+<td>열람, 정정·삭제, 처리 정지, <strong>개인정보 전송 요구권</strong>, 자동화된 결정에 대한 거부·설명 요구</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>개인정보 비식별 조치</strong>: 가명처리, 총계처리, 데이터 삭제, 데이터 범주화, 데이터 마스킹. 적정성 평가: <strong>k-익명성</strong>(같은 값을 가진 레코드가 k개 이상), <strong>l-다양성</strong>(민감 속성이 l개 이상 다양), <strong>t-근접성</strong>(민감 정보 분포가 전체와 비슷).</p>
+<h4>정보통신망법 (정보통신망 이용촉진 및 정보보호 등에 관한 법률)</h4>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>주요 내용</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>정보보호 관리체계 인증</td>
+<td>일정 규모 이상 정보통신서비스 제공자는 ISMS 인증 의무</td>
+</tr>
+<tr>
+<td>정보보호 최고책임자 (CISO)</td>
+<td>지정·신고 의무 (일정 규모 이상)</td>
+</tr>
+<tr>
+<td>침해사고 신고</td>
+<td>정보통신서비스 제공자는 침해사고 발생 시 과기정통부 또는 KISA에 신고</td>
+</tr>
+<tr>
+<td>정보보호 공시</td>
+<td>일정 기업은 정보보호 투자·인력 현황 공시</td>
+</tr>
+<tr>
+<td>불법 정보 유통 금지</td>
+<td>음란물, 명예훼손, 악성 프로그램 유포 금지</td>
+</tr>
+<tr>
+<td>광고성 정보</td>
+<td>수신자 사전 동의 (옵트인). 야간(21시~8시) 전송은 별도 동의</td>
+</tr>
+</tbody>
+</table></div>
+<h4>기타 법률</h4>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>법률</th>
+<th>핵심</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>정보통신기반 보호법</strong></td>
+<td>주요정보통신기반시설 지정·보호. 관리기관은 <strong>취약점 분석·평가</strong>와 보호 대책 수립</td>
+</tr>
+<tr>
+<td>전자서명법</td>
+<td>2020년 개정으로 <strong>공인인증서 독점 지위 폐지</strong>, 다양한 전자서명 활성화</td>
+</tr>
+<tr>
+<td>신용정보법</td>
+<td>개인신용정보 보호, 마이데이터</td>
+</tr>
+<tr>
+<td>위치정보법</td>
+<td>개인위치정보 수집 시 동의</td>
+</tr>
+<tr>
+<td>클라우드컴퓨팅법</td>
+<td>클라우드 이용자 정보 보호</td>
+</tr>
+<tr>
+<td>전자금융거래법</td>
+<td>전자금융 보안, 사고 책임</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="s41">사이버 윤리</h3>
+<ul>
+<li>저작권 보호(불법 복제 금지), 개인정보 존중, 사이버 폭력 금지, 해킹 금지</li>
+<li><strong>화이트 해커</strong>: 허가받아 취약점을 찾는 보안 전문가 / <strong>버그 바운티</strong>: 취약점 신고 포상 제도</li>
+<li>책임 있는 공개(Responsible Disclosure): 취약점을 제조사에 먼저 알리고 패치 후 공개</li>
+</ul>
+<ol class="quiz">
+<li class="q" data-ans="1"><div class="q-text"><p>자산 가치 5,000만 원, 노출 계수 0.2, 연간 발생률 0.5일 때 ALE는?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>500만 원</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>1,000만 원</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>2,500만 원</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>5,000만 원</span></button></li>
+</ol><div class="ans"><p><b>정답 ①</b> SLE = 5,000만 × 0.2 = 1,000만, ALE = 1,000만 × 0.5 = 500만 원.</p></div></li>
+<li class="q" data-ans="4"><div class="q-text"><p>보험에 가입해 위험을 제3자에게 넘기는 위험 처리 전략은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>수용</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>감소</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>회피</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>전가</span></button></li>
+</ol><div class="ans"><p><b>정답 ④</b> 위험 전가(Transfer)다.</p></div></li>
+<li class="q" data-ans="1"><div class="q-text"><p>재해 발생 시 즉시 복구가 가능하도록 주 센터와 같은 시스템을 실시간으로 운영하는 재해 복구 센터는?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>미러 사이트</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>핫 사이트</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>웜 사이트</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>콜드 사이트</span></button></li>
+</ol><div class="ans"><p><b>정답 ①</b> 미러 사이트다.</p></div></li>
+<li class="q" data-ans="3"><div class="q-text"><p>디지털 포렌식 원칙 중 증거의 수집·이송·분석·보관 과정을 모두 기록해 관리하는 것은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>정당성</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>재현성</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>연계 보관성</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>신속성</span></button></li>
+</ol><div class="ans"><p><b>정답 ③</b> Chain of Custody.</p></div></li>
+<li class="q" data-ans="3"><div class="q-text"><p>ISMS-P 인증 기준의 총 개수는?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>80개</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>92개</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>102개</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>114개</span></button></li>
+</ol><div class="ans"><p><b>정답 ③</b> 16 + 64 + 22 = 102개. ISMS만은 80개.</p></div></li>
+<li class="q" data-ans="4"><div class="q-text"><p>개인정보 보호법상 고유식별정보가 아닌 것은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>주민등록번호</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>여권번호</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>운전면허번호</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>휴대전화번호</span></button></li>
+</ol><div class="ans"><p><b>정답 ④</b> 고유식별정보는 주민등록번호, 여권번호, 운전면허번호, 외국인등록번호.</p></div></li>
+<li class="q" data-ans="4"><div class="q-text"><p>가명정보를 정보주체의 동의 없이 처리할 수 있는 목적이 아닌 것은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>통계 작성</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>과학적 연구</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>공익적 기록 보존</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>마케팅 광고</span></button></li>
+</ol><div class="ans"><p><b>정답 ④</b> 마케팅은 해당하지 않는다.</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>정보보호 제품의 보안성을 평가하는 국제 공통평가기준(CC)의 평가 보증 등급 범위는?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>EAL0 ~ EAL5</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>EAL1 ~ EAL7</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>Level 1 ~ Level 5</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>A ~ D 등급</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> EAL1부터 EAL7까지.</p></div></li>
+<li class="q" data-ans="3"><div class="q-text"><p>기준선(베이스라인) 접근법의 특징으로 옳은 것은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>조직 특성을 정밀하게 반영한다</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>시간과 비용이 가장 많이 든다</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>표준화된 보호 대책을 체크리스트로 적용한다</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>전문가의 경험에만 의존한다</span></button></li>
+</ol><div class="ans"><p><b>정답 ③</b> 빠르고 저렴하지만 조직 특성 반영이 부족하다.</p></div></li>
+<li class="q" data-ans="1"><div class="q-text"><p>동일한 준식별자 값을 가진 레코드가 최소 k개 이상 존재하도록 하는 비식별 적정성 평가 모델은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>k-익명성</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>l-다양성</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>t-근접성</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>차분 프라이버시</span></button></li>
+</ol><div class="ans"><p><b>정답 ①</b> k-익명성이다.</p></div></li>
+</ol>
+  </div>
+</section>
+
+<section class="chapter" id="ch7" data-title="실기 필답형 공략" data-group="실기 · 정보보안 실무">
+  <header class="ch-head reveal">
+    <p class="ch-group">실기 · 정보보안 실무</p>
+    <h2>실기 필답형 공략</h2>
+    <button type="button" class="ch-pdf" data-ch="ch7"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 1.5h5.5L12.5 4.5V14.5h-8.5z M9.5 1.5v3h3 M6 9.5l2 2 2-2 M8 6.5v5"/></svg>이 장만 PDF로</button>
+  </header>
+  <div class="ch-body">
+<h3 id="s42">실기는 "쓰는" 시험이다</h3>
+<p>실기 출제 범위는 필기와 같다. 다른 점은 <strong>보기 없이 직접 쓴다</strong>는 것이다. 주요 항목은 시스템 및 네트워크 보안 특성 파악, 취약점 점검 및 보완, 보안관제 및 대응, 위험분석 및 정보보호 대책 수립 (2027년부터 최신 보안 동향 추가).</p>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>유형</th>
+<th>요구</th>
+<th>준비 방법</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>단답형</td>
+<td>용어·명령어·설정값·포트 번호</td>
+<td>키워드 카드로 반복 암기. 영문 약어와 풀네임 모두</td>
+</tr>
+<tr>
+<td>서술형</td>
+<td>원리·절차·대응 방안을 문장으로</td>
+<td>아래 <strong>답안 골격 4가지</strong>로 연습</td>
+</tr>
+<tr>
+<td>실무형</td>
+<td>로그·패킷·설정 파일·소스 코드를 보고 분석·조치</td>
+<td>실제 로그 형식을 눈에 익히기</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="s43">서술형 답안 골격 4가지</h3>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>골격</th>
+<th>쓰는 순서</th>
+<th>예시 문제</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>원리형</strong></td>
+<td>① 정의 → ② 동작 원리(단계) → ③ 결과·피해</td>
+<td>"SYN 플러딩의 원리를 설명하시오"</td>
+</tr>
+<tr>
+<td><strong>대응형</strong></td>
+<td>① 원인 → ② 대응 방안 3가지 이상(기술적·관리적) → ③ 설정 예</td>
+<td>"SQL 삽입 대응 방안을 쓰시오"</td>
+</tr>
+<tr>
+<td><strong>비교형</strong></td>
+<td>표 형식으로 기준별 비교 (정의·장점·단점·사용처)</td>
+<td>"IDS와 IPS를 비교하시오"</td>
+</tr>
+<tr>
+<td><strong>절차형</strong></td>
+<td>번호를 붙여 단계별 서술</td>
+<td>"침해사고 대응 절차를 쓰시오"</td>
+</tr>
+</tbody>
+</table></div>
+<aside class="box box-ex">
+<p class="box-t">서술형 예시 답안 — SQL 삽입 대응</p>
+<p><strong>원인</strong>: 사용자 입력값을 검증 없이 SQL 문자열에 이어 붙여 쿼리를 만들기 때문.
+<strong>대응</strong>
+1. <strong>Prepared Statement(바인드 변수)</strong>를 사용해 입력값이 SQL 구문으로 해석되지 않게 한다.
+2. 입력값의 길이·형식·허용 문자를 서버 측에서 검증하고, <code>'</code>, <code>--</code>, <code>;</code> 등 특수문자를 필터링한다.
+3. DB 계정은 <strong>최소 권한</strong>으로 운영하고, 상세 DB 오류 메시지를 사용자에게 노출하지 않는다.
+4. 웹 방화벽(WAF)으로 공격 패턴을 차단한다.</p>
+</aside>
+<h3 id="s44">실무형 연습: 로그와 설정 읽기</h3>
+<aside class="box box-ex">
+<p class="box-t">리눅스 인증 로그 분석</p>
+<pre><code class="language-text">Nov  7 03:12:01 web sshd[2211]: Failed password for root from 203.0.113.7 port 51022 ssh2
+Nov  7 03:12:03 web sshd[2213]: Failed password for root from 203.0.113.7 port 51024 ssh2
+Nov  7 03:12:05 web sshd[2215]: Failed password for invalid user admin from 203.0.113.7 port 51026 ssh2
+...(같은 IP에서 수백 건)
+Nov  7 03:20:44 web sshd[2901]: Accepted password for root from 203.0.113.7 port 52210 ssh2
+</code></pre>
+<p><strong>분석</strong>: 같은 IP에서 짧은 간격으로 로그인 실패가 반복된 뒤 root 로그인이 성공했다 → <strong>무차별 대입(Brute Force) 공격 성공</strong>.
+<strong>조치</strong>: ① 해당 IP 차단 (<code>iptables -A INPUT -s 203.0.113.7 -j DROP</code>) ② root 비밀번호 즉시 변경 ③ <code>/etc/ssh/sshd_config</code>에 <code>PermitRootLogin no</code> ④ 비밀번호 대신 키 인증, 로그인 실패 잠금(pam_faillock), fail2ban ⑤ 침입 이후 행위(<code>last</code>, <code>.bash_history</code>, 새 계정·cron·SetUID 파일) 점검.</p>
+</aside>
+<aside class="box box-ex">
+<p class="box-t">웹 접근 로그 분석</p>
+<pre><code class="language-text">198.51.100.9 - - [07/Nov/2026:10:01:12] &quot;GET /board/view.php?id=1%27%20or%20%271%27=%271 HTTP/1.1&quot; 200 5123
+198.51.100.9 - - [07/Nov/2026:10:01:40] &quot;GET /board/view.php?id=1 union select id,pw from member-- HTTP/1.1&quot; 200 8812
+198.51.100.9 - - [07/Nov/2026:10:05:02] &quot;POST /upload.php HTTP/1.1&quot; 200 120
+198.51.100.9 - - [07/Nov/2026:10:05:10] &quot;GET /upload/shell.php?cmd=cat%20/etc/passwd HTTP/1.1&quot; 200 1820
+</code></pre>
+<p><strong>분석</strong>: ① <code>' or '1'='1</code> → SQL 삽입 시도 ② <code>union select</code> → 회원 테이블 탈취 시도 (응답 크기 증가로 성공 추정) ③ 파일 업로드 후 <code>shell.php?cmd=</code> → <strong>웹셸</strong> 업로드·명령 실행.
+<strong>조치</strong>: Prepared Statement 적용, 업로드 확장자 허용 목록·실행 권한 제거·웹 루트 밖 저장, 웹셸 삭제, 회원 비밀번호 초기화, WAF 정책 추가.</p>
+</aside>
+<aside class="box box-ex">
+<p class="box-t">방화벽 정책 순서</p>
+<pre><code class="language-text">1  allow  any            → 10.0.0.10  tcp/80
+2  deny   203.0.113.0/24 → any        any
+3  allow  10.0.1.0/24    → 10.0.0.20  tcp/22
+4  deny   any            → any        any
+</code></pre>
+<p><strong>문제점</strong>: 1번 규칙이 먼저 일치하므로 203.0.113.0/24도 웹 서버 80번에 접근할 수 있다. 차단 규칙(2번)을 <strong>1번보다 위로</strong> 올려야 한다. 규칙은 위에서부터 처음 일치한 것이 적용된다.</p>
+</aside>
+<h3 id="s45">단답형 키워드 점검</h3>
+<ol class="quiz">
+<li class="q" data-ans="2"><div class="q-text"><p>리눅스에서 사용자가 실행한 모든 명령을 기록하며 lastcomm으로 확인하는 로그 파일은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>wtmp</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>pacct</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>secure</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>lastlog</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> pacct(프로세스 계정 로그).</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>다음 tcpdump 출력이 나타내는 상태로 가장 적절한 것은? (같은 출발지 포트가 계속 바뀌며 반복)</p>
+<pre><code class="language-text">IP 198.51.100.x.40001 &gt; 10.0.0.5.80: Flags [S]
+IP 198.51.100.y.40002 &gt; 10.0.0.5.80: Flags [S]
+IP 198.51.100.z.40003 &gt; 10.0.0.5.80: Flags [S]
+(ACK 없이 SYN만 수천 건)
+</code></pre></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>ARP 스푸핑</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>SYN 플러딩</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>DNS 증폭</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>세션 하이재킹</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> SYN만 대량으로 오고 3-way handshake가 완료되지 않는다.</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>Snort 규칙에서 대소문자를 구분하지 않고 문자열을 검사하게 하는 옵션은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>content</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>nocase</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>offset</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>depth</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> nocase.</p></div></li>
+<li class="q" data-ans="1"><div class="q-text"><p>Apache에서 응답 헤더의 서버 버전 정보를 최소화하는 설정은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>ServerTokens Prod</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>Options -Indexes</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>ServerSignature On</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>KeepAlive Off</span></button></li>
+</ol><div class="ans"><p><b>정답 ①</b> ServerTokens Prod. ServerSignature Off도 함께 설정한다.</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>웹 로그에서 <code>/upload/a.jsp?cmd=whoami</code> 같은 요청이 보일 때 가장 의심되는 공격은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>XSS</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>웹셸</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>CSRF</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>디렉터리 리스팅</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> 업로드된 스크립트로 시스템 명령을 실행하는 웹셸이다.</p></div></li>
+<li class="q" data-ans="1"><div class="q-text"><p>SSH 설정에서 root 계정의 원격 로그인을 막는 항목은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>PermitRootLogin no</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>PasswordAuthentication yes</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>Port 2222</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>AllowUsers root</span></button></li>
+</ol><div class="ans"><p><b>정답 ①</b> <code>/etc/ssh/sshd_config</code>의 PermitRootLogin no.</p></div></li>
+</ol>
+  </div>
+</section>
+
+<section class="chapter" id="ch8" data-title="실전 모의 문제" data-group="마무리">
+  <header class="ch-head reveal">
+    <p class="ch-group">마무리</p>
+    <h2>실전 모의 문제</h2>
+    <button type="button" class="ch-pdf" data-ch="ch8"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 1.5h5.5L12.5 4.5V14.5h-8.5z M9.5 1.5v3h3 M6 9.5l2 2 2-2 M8 6.5v5"/></svg>이 장만 PDF로</button>
+  </header>
+  <div class="ch-body">
+<h3 id="s46">과목 섞어 풀기</h3>
+<ol class="quiz">
+<li class="q" data-ans="1"><div class="q-text"><p>리눅스에서 현재 로그인한 사용자 정보를 담고 있으며 who 명령으로 확인하는 로그는?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>utmp</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>wtmp</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>btmp</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>pacct</span></button></li>
+</ol><div class="ans"><p><b>정답 ①</b> (시스템 보안)</p></div></li>
+<li class="q" data-ans="1"><div class="q-text"><p>다음 중 root 소유의 SetUID 파일을 찾는 명령으로 옳은 것은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>find / -user root -perm -4000</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>find / -user root -perm -2000</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>find / -perm -1000 -user root</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>find / -name setuid</span></button></li>
+</ol><div class="ans"><p><b>정답 ①</b> 4000이 SetUID. (시스템 보안)</p></div></li>
+<li class="q" data-ans="1"><div class="q-text"><p>포맷 스트링 공격의 대응으로 옳은 것은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>printf(buf) 대신 printf("%s", buf) 사용</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>strcpy 사용</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>스택 크기 확대</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>로그 비활성화</span></button></li>
+</ol><div class="ans"><p><b>정답 ①</b> 서식 문자열을 고정한다. (시스템 보안)</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>파일 시스템 해시값을 저장해 두고 변조 여부를 점검하는 도구는?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>Nmap</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>Tripwire</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>Snort</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>tcpdump</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> (시스템 보안)</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>IP 헤더에서 라우터를 거칠 때마다 1씩 줄어 0이 되면 폐기되는 필드는?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>Fragment Offset</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>TTL</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>Protocol</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>Checksum</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> (네트워크)</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>TCP 플래그 중 연결을 강제로 즉시 끊는 것은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>FIN</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>RST</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>PSH</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>URG</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> (네트워크)</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>스위치의 MAC 주소 테이블을 가짜 MAC으로 가득 채워 허브처럼 동작하게 만드는 공격은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>ARP 리다이렉트</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>스위치 재밍 (MAC 플러딩)</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>ICMP 리다이렉트</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>DNS 스푸핑</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> 포트 보안으로 막는다. (네트워크 보안)</p></div></li>
+<li class="q" data-ans="1"><div class="q-text"><p>공격자가 IP 단편의 오프셋을 겹치게 조작해 재조립 과정에서 오류를 일으키는 공격은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>티어드롭</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>랜드</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>스머프</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>Ping of Death</span></button></li>
+</ol><div class="ans"><p><b>정답 ①</b> (네트워크 보안)</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>정상 트래픽에서 벗어난 행위를 탐지하여 새로운 공격도 탐지할 수 있지만 오탐률이 높은 방식은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>오용 탐지</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>이상 탐지</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>시그니처 탐지</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>패턴 매칭</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> (네트워크 보안)</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>IPSec 터널 모드에 대한 설명으로 옳은 것은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>원래 IP 헤더는 보호하지 않는다</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>원래 IP 패킷 전체를 새 IP 헤더로 감싼다</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>종단 호스트 간에만 사용한다</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>암호화를 지원하지 않는다</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> 게이트웨이 간 VPN에 주로 쓴다. (네트워크 보안)</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>"아무것도 신뢰하지 않고 모든 접근을 지속적으로 검증한다"는 보안 모델은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>심층 방어</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>제로 트러스트</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>경계 보안</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>허니넷</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> (최신 보안 동향)</p></div></li>
+<li class="q" data-ans="1"><div class="q-text"><p>XSS 대응으로 가장 적절한 것은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>출력 시 HTML 특수문자를 엔티티로 변환</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>Prepared Statement 사용</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>SYN 쿠키</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>DNSSEC</span></button></li>
+</ol><div class="ans"><p><b>정답 ①</b> (어플리케이션 보안)</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>서버가 공격자가 지정한 내부 주소로 요청을 보내도록 만드는 OWASP Top 10 항목은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>CSRF</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>SSRF</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>XXE</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>IDOR</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> (어플리케이션 보안)</p></div></li>
+<li class="q" data-ans="1"><div class="q-text"><p>메일 발신 도메인에서 허용된 메일 서버 IP 목록을 DNS TXT 레코드에 등록하는 기술은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>SPF</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>DKIM</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>DMARC</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>S/MIME</span></button></li>
+</ol><div class="ans"><p><b>정답 ①</b> (어플리케이션 보안)</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>쿠키에 설정해 자바스크립트로 쿠키에 접근하지 못하게 하는 속성은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>Secure</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>HttpOnly</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>SameSite</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>Domain</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> XSS로 세션 쿠키가 탈취되는 것을 막는다. (어플리케이션 보안)</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>AES의 블록 크기는?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>64비트</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>128비트</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>192비트</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>256비트</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> 키는 128/192/256, 블록은 항상 128비트. (정보보안 일반)</p></div></li>
+<li class="q" data-ans="3"><div class="q-text"><p>메시지 인증 코드(MAC)가 제공하지 않는 것은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>무결성</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>메시지 출처 인증</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>부인 방지</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>변조 탐지</span></button></li>
+</ol><div class="ans"><p><b>정답 ③</b> 송신·수신이 같은 키를 가져 누가 만들었는지 제3자에게 증명할 수 없다. (정보보안 일반)</p></div></li>
+<li class="q" data-ans="1"><div class="q-text"><p>Diffie-Hellman 키 교환이 취약한 공격은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>중간자 공격</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>생일 공격</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>사전 공격</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>재전송 공격만</span></button></li>
+</ol><div class="ans"><p><b>정답 ①</b> 인증이 없으면 중간자가 양쪽과 각각 키를 교환할 수 있다. (정보보안 일반)</p></div></li>
+<li class="q" data-ans="3"><div class="q-text"><p>역할에 권한을 부여하고 사용자에게 역할을 할당하는 접근통제는?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>DAC</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>MAC</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>RBAC</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>BLP</span></button></li>
+</ol><div class="ans"><p><b>정답 ③</b> (정보보안 일반)</p></div></li>
+<li class="q" data-ans="3"><div class="q-text"><p>양자컴퓨터의 쇼어 알고리즘으로 가장 크게 위협받는 암호는?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>AES-256</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>SHA-256</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>RSA</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>일회용 패드</span></button></li>
+</ol><div class="ans"><p><b>정답 ③</b> 소인수분해·이산대수 기반 공개키 암호가 위협받는다. (최신 보안 동향)</p></div></li>
+</ol>
+
+<h3 id="s47">관리·법규 추가 문제</h3>
+<ol class="quiz">
+<li class="q" data-ans="1"><div class="q-text"><p>업무 연속성 계획(BCP)에서 업무 중단 시 영향과 복구 우선순위를 정하는 단계는?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>BIA</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>RTO</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>DRP</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>RPO</span></button></li>
+</ol><div class="ans"><p><b>정답 ①</b> 업무 영향 분석(BIA)이다.</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>정량적 위험 분석에서 ALE를 구하는 식은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>AV × EF</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>SLE × ARO</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>SLE ÷ ARO</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>AV × ARO</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> SLE = AV × EF, ALE = SLE × ARO.</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>개인정보 유출을 알게 된 개인정보처리자가 정보주체에게 통지해야 하는 기한은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>24시간 이내</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>72시간 이내</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>7일 이내</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>30일 이내</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> 72시간 이내 통지가 원칙이다 (2026년 기준).</p></div></li>
+</ol>
+
+<aside class="box box-tip">
+<p class="box-t">시험 직전 체크리스트</p>
+<ul>
+<li>리눅스 로그(utmp·wtmp·btmp·lastlog·pacct), SetUID 점검 명령, syslog 우선순위</li>
+<li>윈도우 SAM·LSA·SRM, SID 500, 이벤트 4624/4625</li>
+<li>버퍼 오버플로 대응(스택 가드·ASLR·DEP), 포맷 스트링, 레이스 컨디션</li>
+<li>DoS 유형별 원리·대응(SYN 쿠키, directed-broadcast 차단), 스캔별 응답, 스푸핑 대응</li>
+<li>방화벽 구축 형태, IDS 오용·이상 탐지, Snort 규칙, IPSec AH·ESP·모드</li>
+<li>OWASP Top 10, SQL 삽입·XSS·CSRF 대응, SPF·DKIM·DMARC, DNSSEC</li>
+<li>DES·AES·SEED·ARIA 구조, 운용 모드, RSA·DH 계산, 해시·MAC·전자서명·PKI</li>
+<li>커버로스, BLP·Biba, DAC·MAC·RBAC</li>
+<li>ALE, 위험 처리 4전략, 재해 복구 센터, 포렌식 원칙, ISMS-P 102개, CC EAL</li>
+<li>개인정보 보호법 민감·고유식별정보, 가명정보, 유출 통지</li>
+</ul>
+</aside>
+  </div>
+</section>
+    <footer class="end">
+      <p><b>정보보안기사 교본</b> · 2026년 11월 기준. 시험 일정·응시료·출제 기준은 바뀔 수 있으니 접수 전 공식 사이트 공지를 확인하세요.</p>
+    </footer>
+  </main>
+</div>
+
+<div class="modal" id="pdfModal" role="dialog" aria-modal="true" aria-labelledby="pdfTitle" hidden>
+  <div class="modal-back" data-close></div>
+  <div class="modal-box">
+    <div class="modal-head">
+      <h2 id="pdfTitle">PDF로 저장할 단원</h2>
+      <button type="button" class="x" data-close aria-label="닫기"><svg viewBox="0 0 16 16"><path d="M3 3l10 10M13 3L3 13"/></svg></button>
+    </div>
+    <div class="pick-tools">
+      <button type="button" class="link" data-all="1">전체 선택</button>
+      <button type="button" class="link" data-all="0">전체 해제</button>
+      <label class="switch"><input type="checkbox" id="optAns" checked> 정답·해설 함께 인쇄</label>
+    </div>
+    <div class="pick-list"><label class="pick"><input type="checkbox" value="ch0" checked><span class="pick-g">시작하기</span><span class="pick-t">시험 구성과 공부 순서</span></label>
+<label class="pick"><input type="checkbox" value="ch1" checked><span class="pick-g">1과목 · 시스템 보안</span><span class="pick-t">시스템 보안</span></label>
+<label class="pick"><input type="checkbox" value="ch2" checked><span class="pick-g">2과목 · 네트워크 보안</span><span class="pick-t">네트워크 기초</span></label>
+<label class="pick"><input type="checkbox" value="ch3" checked><span class="pick-g">2과목 · 네트워크 보안</span><span class="pick-t">네트워크 공격과 보안 기술</span></label>
+<label class="pick"><input type="checkbox" value="ch4" checked><span class="pick-g">3과목 · 어플리케이션 보안</span><span class="pick-t">어플리케이션 보안</span></label>
+<label class="pick"><input type="checkbox" value="ch5" checked><span class="pick-g">4과목 · 정보보안 일반</span><span class="pick-t">암호, 인증, 접근통제</span></label>
+<label class="pick"><input type="checkbox" value="ch6" checked><span class="pick-g">5과목 · 정보보안 관리 및 법규</span><span class="pick-t">관리체계, 위험관리, 법규</span></label>
+<label class="pick"><input type="checkbox" value="ch7" checked><span class="pick-g">실기 · 정보보안 실무</span><span class="pick-t">실기 필답형 공략</span></label>
+<label class="pick"><input type="checkbox" value="ch8" checked><span class="pick-g">마무리</span><span class="pick-t">실전 모의 문제</span></label></div>
+    <div class="modal-foot">
+      <p class="hint">인쇄 창에서 <b>대상: PDF로 저장</b>, 용지 <b>A4</b>를 고르세요. 단원마다 새 페이지에서 시작하고, 표·코드·문제는 페이지 경계에서 잘리지 않게 넘어갑니다.</p>
+      <button type="button" class="btn btn-solid" id="doPrint">선택한 단원 PDF로 저장</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  var $ = function(s, r){ return (r||document).querySelector(s); };
+  var $$ = function(s, r){ return Array.prototype.slice.call((r||document).querySelectorAll(s)); };
+  var body = document.body;
+
+  /* ---- reveal on scroll ---- */
+  var revs = $$('.reveal');
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function(es){
+      es.forEach(function(e){ if (e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, {rootMargin:'0px 0px -8% 0px'});
+    revs.forEach(function(el){ io.observe(el); });
+  } else revs.forEach(function(el){ el.classList.add('in'); });
+
+  /* ---- progress bar + toc spy ---- */
+  var bar = $('.progress i');
+  var chs = $$('.chapter');
+  var subs = $$('.ch-body h3[id]');
+  var tocCh = {}; $$('.toc-ch').forEach(function(a){ tocCh[a.dataset.ch] = a; });
+  var tocSub = {}; $$('.toc ol a').forEach(function(a){ tocSub[a.getAttribute('href').slice(1)] = a; });
+  var curCh = null, curSub = null, ticking = false;
+  function spy(){
+    ticking = false;
+    var h = document.documentElement, max = h.scrollHeight - innerHeight;
+    if (bar) bar.style.transform = 'scaleX(' + (max > 0 ? Math.min(1, scrollY / max) : 0) + ')';
+    var line = 140, c = null, s = null;
+    for (var i = 0; i < chs.length; i++) { if (chs[i].getBoundingClientRect().top - line < 0) c = chs[i]; else break; }
+    for (var j = 0; j < subs.length; j++) { if (subs[j].getBoundingClientRect().top - line < 0) s = subs[j]; else break; }
+    if (c !== curCh) {
+      if (curCh && tocCh[curCh.id]) { tocCh[curCh.id].classList.remove('on'); tocCh[curCh.id].parentNode.classList.remove('open'); }
+      curCh = c;
+      if (c && tocCh[c.id]) { tocCh[c.id].classList.add('on'); tocCh[c.id].parentNode.classList.add('open'); }
+    }
+    if (s !== curSub) {
+      if (curSub && tocSub[curSub.id]) tocSub[curSub.id].classList.remove('on');
+      curSub = s;
+      if (s && tocSub[s.id] && c && c.contains(s)) tocSub[s.id].classList.add('on');
+    }
+  }
+  addEventListener('scroll', function(){ if (!ticking){ ticking = true; requestAnimationFrame(spy); } }, {passive:true});
+  spy();
+
+  /* ---- mobile toc ---- */
+  var tg = $('.toc-toggle');
+  if (tg) tg.addEventListener('click', function(){
+    var open = body.classList.toggle('toc-open'); tg.setAttribute('aria-expanded', open);
+  });
+  $$('.toc a').forEach(function(a){ a.addEventListener('click', function(){ body.classList.remove('toc-open'); if (tg) tg.setAttribute('aria-expanded', false); }); });
+
+  /* ---- quiz ---- */
+  document.addEventListener('click', function(e){
+    var b = e.target.closest && e.target.closest('.opt');
+    if (!b) return;
+    var q = b.closest('.q'); if (q.classList.contains('done')) return;
+    var ans = +q.dataset.ans, pick = +b.dataset.i;
+    q.classList.add('done');
+    $$('.opt', q).forEach(function(o){ if (+o.dataset.i === ans) o.classList.add('right'); });
+    if (pick !== ans) b.classList.add('wrong');
+  });
+  $$('.q').forEach(function(q){
+    var t = document.createElement('button'); t.type = 'button'; t.className = 'ans-toggle'; t.textContent = '정답만 보기';
+    t.addEventListener('click', function(){
+      q.classList.add('done'); $$('.opt', q).forEach(function(o){ if (+o.dataset.i === +q.dataset.ans) o.classList.add('right'); });
+      t.remove();
+    });
+    q.appendChild(t);
+  });
+
+  /* ---- PDF (print) ---- */
+  var modal = $('#pdfModal'), lastFocus = null;
+  function openModal(){ lastFocus = document.activeElement; modal.hidden = false; $('#doPrint').focus(); }
+  function closeModal(){ modal.hidden = true; if (lastFocus) lastFocus.focus(); }
+  $$('.open-pdf').forEach(function(b){ b.addEventListener('click', openModal); });
+  $$('[data-close]', modal).forEach(function(b){ b.addEventListener('click', closeModal); });
+  addEventListener('keydown', function(e){ if (e.key === 'Escape' && !modal.hidden) closeModal(); });
+  $$('[data-all]', modal).forEach(function(b){ b.addEventListener('click', function(){
+    var v = b.dataset.all === '1'; $$('.pick input', modal).forEach(function(i){ i.checked = v; });
+  }); });
+
+  var cover = $('.pc-list');
+  function fillCover(ids){
+    cover.innerHTML = '';
+    chs.forEach(function(c){
+      if (ids && ids.indexOf(c.id) < 0) return;
+      var li = document.createElement('li'), g = c.dataset.group;
+      li.innerHTML = (g ? '<span>' + g + '</span>' : '') + c.dataset.title;
+      cover.appendChild(li);
+    });
+  }
+  function printChapters(ids, withAns){
+    if (!ids.length) { alert('저장할 단원을 하나 이상 고르세요.'); return; }
+    var all = ids.length === chs.length;
+    chs.forEach(function(c){ c.classList.toggle('pr', ids.indexOf(c.id) > -1); });
+    body.classList.toggle('pick-mode', !all);
+    body.classList.toggle('no-ans', !withAns);
+    fillCover(ids);
+    revs.forEach(function(el){ el.classList.add('in'); });
+    var t = document.title;
+    if (!all && ids.length === 1) document.title = t.replace(' 교본', '') + ' - ' + $('#' + ids[0]).dataset.title;
+    modal.hidden = true;
+    setTimeout(function(){
+      window.print();
+      setTimeout(function(){ document.title = t; }, 500);
+    }, 60);
+  }
+  $('#doPrint').addEventListener('click', function(){
+    var ids = $$('.pick input:checked', modal).map(function(i){ return i.value; });
+    printChapters(ids, $('#optAns').checked);
+  });
+  $$('.ch-pdf').forEach(function(b){ b.addEventListener('click', function(){ printChapters([b.dataset.ch], true); }); });
+  addEventListener('afterprint', function(){
+    body.classList.remove('pick-mode', 'no-ans'); chs.forEach(function(c){ c.classList.remove('pr'); });
+    fillCover(null);
+  });
+  addEventListener('beforeprint', function(){ revs.forEach(function(el){ el.classList.add('in'); }); });
+  /* 브라우저 메뉴(Ctrl+P)로 바로 인쇄해도 표지 목록이 채워지도록 */
+  fillCover(null);
+
+  /* figures: run once when visible */
+  window.__onSeen = function(el, fn){
+    if (!el) return;
+    if (!('IntersectionObserver' in window)) { fn(); return; }
+    var o = new IntersectionObserver(function(es){ es.forEach(function(e){ if (e.isIntersecting){ o.disconnect(); fn(); } }); }, {threshold:.35});
+    o.observe(el);
+  };
+})();
+
+
+(function(){
+  var d = document.getElementById('fig-dikw'); __onSeen(d, function(){ d.classList.add('play'); });
+  var c = document.getElementById('fig-crisp');
+  if (c) {
+    var ph = c.querySelectorAll('.ph'), orb = c.querySelector('.orbit'), desc = c.querySelector('.crisp-desc');
+    var tx = ['비즈니스 목표 → 분석 목표','데이터 수집·품질 확인','정제·통합·변환 (가장 오래 걸림)','기법 선택·모델 작성','목표 달성 여부 판단','배포·모니터링·보고서'];
+    var n = -1, timer = null;
+    function step(){ n++; var i = n % 6; ph.forEach(function(p){ p.classList.toggle('on', +p.dataset.i === i); });
+      orb.style.transform = 'rotate(' + (n*60) + 'deg)'; desc.textContent = tx[i]; }
+    __onSeen(c, function(){ step(); timer = setInterval(step, 1800); });
+  }
+  var m = document.getElementById('fig-cm');
+  if (m) {
+    var ins = m.querySelectorAll('input'), out = {};
+    m.querySelectorAll('[data-o]').forEach(function(e){ out[e.dataset.o] = e; });
+    function f(x){ return isFinite(x) ? (x*100).toFixed(1) + '%' : '—'; }
+    function calc(){ var v = {}; ins.forEach(function(i){ v[i.dataset.k] = Math.max(0, +i.value || 0); });
+      var all = v.tp+v.fn+v.fp+v.tn, P = v.tp/(v.tp+v.fp), R = v.tp/(v.tp+v.fn);
+      out.acc.textContent = f((v.tp+v.tn)/all); out.pre.textContent = f(P); out.rec.textContent = f(R);
+      out.spe.textContent = f(v.tn/(v.tn+v.fp)); out.f1.textContent = isFinite(2*P*R/(P+R)) ? (2*P*R/(P+R)).toFixed(3) : '—';
+      out.fpr.textContent = f(v.fp/(v.fp+v.tn)); }
+    ins.forEach(function(i){ i.addEventListener('input', calc); }); calc();
+  }
+})();
+
+
+(function(){
+  /* hero: 조인 행 연결 애니메이션 */
+  var h = document.getElementById('hero-sqld');
+  if (h) {
+    var er = h.querySelectorAll('.er'), dr = h.querySelectorAll('.dr'), jl = h.querySelector('.jl');
+    var map = [1, 2, 1, 0], k = 0; // EMP행 -> DEPT행 인덱스 (20,30,20,10)
+    function yE(r){ return 60 + 34 + r*36 + 18; } function yD(r){ return 78 + 34 + r*36 + 18; }
+    function tick(){
+      er.forEach(function(g){ g.classList.remove('on'); }); dr.forEach(function(g){ g.classList.remove('on'); });
+      var r = k % 4, d = map[r]; er[r].classList.add('on'); dr[d].classList.add('on');
+      jl.setAttribute('d', 'M240 ' + yE(r) + ' C290 ' + yE(r) + ' 290 ' + yD(d) + ' 340 ' + yD(d)); k++;
+    }
+    if (!matchMedia('(prefers-reduced-motion: reduce)').matches) { tick(); setInterval(tick, 1500); } else tick();
+  }
+  /* 실행 순서 */
+  var o = document.getElementById('fig-order');
+  if (o) {
+    var w = o.querySelectorAll('li'), s = 0;
+    function st(){ s = s % 6 + 1; w.forEach(function(li){ var n = +li.dataset.s; li.classList.toggle('on', n === s); li.classList.toggle('done', n < s); }); }
+    __onSeen(o, function(){ st(); setInterval(st, 1400); });
+  }
+  /* 조인 시각화 */
+  var j = document.getElementById('fig-join');
+  if (j) {
+    var A = [['SMITH',20],['ALLEN',30],['KING',10],['SCOTT',null]];
+    var B = [[10,'ACCOUNTING'],[20,'RESEARCH'],[40,'OPERATIONS']];
+    var SQL = {
+      inner:'SELECT E.ENAME, E.DEPTNO, D.DEPTNO, D.DNAME\n  FROM EMP E INNER JOIN DEPT D\n    ON E.DEPTNO = D.DEPTNO;',
+      left:'SELECT E.ENAME, E.DEPTNO, D.DEPTNO, D.DNAME\n  FROM EMP E LEFT OUTER JOIN DEPT D\n    ON E.DEPTNO = D.DEPTNO;',
+      right:'SELECT E.ENAME, E.DEPTNO, D.DEPTNO, D.DNAME\n  FROM EMP E RIGHT OUTER JOIN DEPT D\n    ON E.DEPTNO = D.DEPTNO;',
+      full:'SELECT E.ENAME, E.DEPTNO, D.DEPTNO, D.DNAME\n  FROM EMP E FULL OUTER JOIN DEPT D\n    ON E.DEPTNO = D.DEPTNO;',
+      cross:'SELECT E.ENAME, E.DEPTNO, D.DEPTNO, D.DNAME\n  FROM EMP E CROSS JOIN DEPT D;'
+    };
+    function cell(v){ return v === null ? '<td class="nul">NULL</td>' : '<td>' + v + '</td>'; }
+    function run(t){
+      var res = [], ma = {}, mb = {};
+      if (t === 'cross') { A.forEach(function(a){ B.forEach(function(b){ res.push([a[0],a[1],b[0],b[1]]); }); }); }
+      else {
+        A.forEach(function(a, i){ B.forEach(function(b, k){ if (a[1] !== null && a[1] === b[0]) { res.push([a[0],a[1],b[0],b[1]]); ma[i]=1; mb[k]=1; } }); });
+        if (t === 'left' || t === 'full') A.forEach(function(a, i){ if (!ma[i]) res.push([a[0],a[1],null,null]); });
+        if (t === 'right' || t === 'full') B.forEach(function(b, k){ if (!mb[k]) res.push([null,null,b[0],b[1]]); });
+      }
+      j.querySelector('.j-a tbody').innerHTML = A.map(function(a,i){ return '<tr' + (ma[i]||t==='cross' ? ' class="m"' : '') + '>' + cell(a[0]) + cell(a[1]) + '</tr>'; }).join('');
+      j.querySelector('.j-b tbody').innerHTML = B.map(function(b,k){ return '<tr' + (mb[k]||t==='cross' ? ' class="m"' : '') + '>' + cell(b[0]) + cell(b[1]) + '</tr>'; }).join('');
+      j.querySelector('.j-r tbody').innerHTML = res.map(function(r,i){ return '<tr style="animation-delay:' + (i*35) + 'ms">' + r.map(cell).join('') + '</tr>'; }).join('');
+      j.querySelector('.j-n').textContent = res.length + '행';
+      j.querySelector('.j-sql code').textContent = SQL[t];
+    }
+    j.querySelectorAll('.chip').forEach(function(b){ b.addEventListener('click', function(){
+      j.querySelectorAll('.chip').forEach(function(x){ x.setAttribute('aria-pressed', x === b); }); run(b.dataset.j); }); });
+    run('inner');
+  }
+})();
+
+
+(function(){
+  /* hero terminal typing */
+  var t = document.getElementById('heroTerm');
+  if (t) {
+    var S = [
+      ['$ ', 'whoami', 'student'],
+      ['$ ', 'pwd', '/home/student'],
+      ['$ ', 'ls -l report.txt', '-rw-r--r--. 1 student student 2048 Nov  7 16:00 report.txt'],
+      ['$ ', 'chmod 640 report.txt', ''],
+      ['$ ', 'ls -l report.txt', '-rw-r-----. 1 student student 2048 Nov  7 16:00 report.txt'],
+      ['$ ', 'ps -ef | grep sshd | head -1', 'root      1024     1  0 09:12 ?   00:00:00 /usr/sbin/sshd -D']
+    ];
+    var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var html = '<span class="d">[student@rocky ~]</span>';
+    function esc(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;'); }
+    if (reduce) { S.forEach(function(s){ html += '\n<span class="p">' + s[0] + '</span>' + esc(s[1]) + (s[2] ? '\n' + esc(s[2]) : ''); }); t.innerHTML = html; }
+    else {
+      var ln = 0, ci = 0;
+      function frame(){
+        if (ln >= S.length) { t.innerHTML = html + '\n<span class="p">$ </span><span class="cur"></span>'; return; }
+        var s = S[ln];
+        if (ci <= s[1].length) {
+          t.innerHTML = html + '\n<span class="p">' + s[0] + '</span>' + esc(s[1].slice(0, ci)) + '<span class="cur"></span>';
+          ci++; setTimeout(frame, 38 + Math.random()*50);
+        } else {
+          html += '\n<span class="p">' + s[0] + '</span>' + esc(s[1]) + (s[2] ? '\n' + esc(s[2]) : '');
+          ln++; ci = 0; t.innerHTML = html; setTimeout(frame, 520);
+        }
+      }
+      setTimeout(frame, 500);
+    }
+  }
+  /* boot */
+  var b = document.getElementById('fig-boot');
+  if (b) {
+    var steps = b.querySelectorAll('li'), bar = b.querySelector('.boot-bar i'), dsc = b.querySelector('.boot-desc');
+    var D = ['전원이 들어오면 메인보드 펌웨어(BIOS 또는 UEFI)가 POST(하드웨어 자가 진단)를 하고, 부팅 장치에서 부트로더를 찾는다.',
+             '부트로더 GRUB2가 메뉴를 보여주고, 선택한 커널 이미지와 initramfs를 메모리에 올린다. 설정은 /boot/grub2/grub.cfg.',
+             '커널이 하드웨어를 초기화하고 루트 파일 시스템을 마운트한다. initramfs는 그 전에 필요한 임시 드라이버 묶음이다.',
+             '커널이 첫 프로세스 systemd를 실행한다. PID는 1번이고, 이후 모든 프로세스의 조상이 된다.',
+             'systemd가 기본 target(예전의 런레벨)에 필요한 서비스들을 띄운다. 기본값 확인은 systemctl get-default.',
+             '텍스트 로그인(getty) 또는 그래픽 로그인(GDM) 화면이 뜬다. 로그인하면 셸이 시작된다.'];
+    var i = -1;
+    function go(){ i = (i + 1) % 6; steps.forEach(function(e){ var n = +e.dataset.i; e.classList.toggle('on', n === i); e.classList.toggle('done', n < i); });
+      bar.style.transform = 'scaleX(' + ((i + 1) / 6) + ')'; dsc.textContent = (i + 1) + '단계 · ' + D[i]; }
+    __onSeen(b, function(){ go(); setInterval(go, 2600); });
+  }
+  /* chmod */
+  var p = document.getElementById('fig-chmod');
+  if (p) {
+    var bt = p.querySelectorAll('.perm-grid button'), num = p.querySelector('.perm-num'), term = p.querySelector('.perm-term');
+    function val(){ var v = 0; bt.forEach(function(x){ if (x.getAttribute('aria-pressed') === 'true') v += +x.dataset.b; }); return v; }
+    function sym(v){ var s = 'rwxrwxrwx', o = '-'; for (var k = 0; k < 9; k++) o += (v & (256 >> k)) ? s[k] : '-'; return o; }
+    function show(v, fromNum){
+      var oc = v.toString(8); while (oc.length < 3) oc = '0' + oc;
+      if (!fromNum) num.value = oc;
+      bt.forEach(function(x){ x.setAttribute('aria-pressed', (v & +x.dataset.b) ? 'true' : 'false'); });
+      var u = 'ugo', parts = [];
+      for (var k = 0; k < 3; k++) { var seg = sym(v).slice(1 + k*3, 4 + k*3).replace(/-/g, ''); parts.push(u[k] + '=' + seg); }
+      term.innerHTML = '<span class="p">$ </span>chmod ' + oc + ' report.txt\n<span class="d"># 같은 뜻</span>\n<span class="p">$ </span>chmod ' + parts.join(',') + ' report.txt\n<span class="p">$ </span>ls -l report.txt\n' + sym(v) + '. 1 student student 2048 report.txt';
+    }
+    bt.forEach(function(x){ x.addEventListener('click', function(){ x.setAttribute('aria-pressed', x.getAttribute('aria-pressed') !== 'true'); show(val()); }); });
+    num.addEventListener('input', function(){ var s = num.value.replace(/[^0-7]/g, ''); num.value = s; if (s.length === 3) show(parseInt(s, 8), true); });
+    show(val());
+  }
+})();
+
+
+(function(){
+  /* 범용 터미널 히어로 */
+  document.querySelectorAll('.gen-term').forEach(function(t){
+    var S; try { S = JSON.parse(t.dataset.lines); } catch(e) { return; }
+    var P = t.dataset.prompt || '';
+    function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;'); }
+    var html = '<span class="d">' + esc(P) + '</span>';
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      S.forEach(function(s){ html += '\n<span class="p">' + esc(s[0]) + '</span>' + esc(s[1]) + (s[2] ? '\n' + esc(s[2]) : ''); }); t.innerHTML = html; return;
+    }
+    var ln = 0, ci = 0;
+    function frame(){
+      if (ln >= S.length) { t.innerHTML = html + '\n<span class="cur"></span>'; return; }
+      var s = S[ln];
+      if (ci <= s[1].length) { t.innerHTML = html + '\n<span class="p">' + esc(s[0]) + '</span>' + esc(s[1].slice(0, ci)) + '<span class="cur"></span>'; ci++; setTimeout(frame, 30 + Math.random()*40); }
+      else { html += '\n<span class="p">' + esc(s[0]) + '</span>' + esc(s[1]) + (s[2] ? '\n' + esc(s[2]) : ''); ln++; ci = 0; t.innerHTML = html; setTimeout(frame, 450); }
+    }
+    setTimeout(frame, 500);
+  });
+  /* 서브넷 계산기 */
+  var sn = document.getElementById('fig-subnet');
+  if (sn) {
+    var ip = sn.querySelector('.sn-ip'), px = sn.querySelector('.sn-px'), bits = sn.querySelector('.sn-bits'), o = {};
+    sn.querySelectorAll('[data-o]').forEach(function(e){ o[e.dataset.o] = e; });
+    for (var i = 0; i < 32; i++) { var b = document.createElement('i'); if (i % 8 === 7 && i < 31) b.className = 'g'; bits.appendChild(b); }
+    var cells = bits.querySelectorAll('i');
+    function toS(n){ return [n>>>24, (n>>>16)&255, (n>>>8)&255, n&255].join('.'); }
+    function calc(){
+      var p = ip.value.trim().split('.').map(Number), k = Math.max(0, Math.min(32, parseInt(px.value, 10) || 0));
+      if (p.length !== 4 || p.some(function(x){ return isNaN(x) || x < 0 || x > 255; })) { o.mask.textContent = '올바른 IP를 입력'; return; }
+      var n = ((p[0]<<24)>>>0) + (p[1]<<16) + (p[2]<<8) + p[3];
+      var m = k === 0 ? 0 : (0xFFFFFFFF << (32 - k)) >>> 0;
+      var net = (n & m) >>> 0, bc = (net | (~m >>> 0)) >>> 0;
+      cells.forEach(function(c, i){ c.textContent = (n >>> (31 - i)) & 1; c.classList.toggle('n', i < k); });
+      o.mask.textContent = toS(m); o.net.textContent = toS(net); o.bc.textContent = toS(bc);
+      var h = k >= 31 ? (k === 32 ? 1 : 2) : Math.pow(2, 32 - k) - 2;
+      o.range.textContent = k >= 31 ? toS(net) + ' ~ ' + toS(bc) : toS(net + 1) + ' ~ ' + toS(bc - 1);
+      o.hosts.textContent = h.toLocaleString() + '개';
+      var c = p[0] < 128 ? 'A' : p[0] < 192 ? 'B' : p[0] < 224 ? 'C' : p[0] < 240 ? 'D' : 'E';
+      var priv = p[0] === 10 || (p[0] === 172 && p[1] >= 16 && p[1] <= 31) || (p[0] === 192 && p[1] === 168);
+      o.cls.textContent = c + '클래스 · ' + (p[0] === 127 ? '루프백' : priv ? '사설' : '공인');
+    }
+    ip.addEventListener('input', calc); px.addEventListener('input', calc); calc();
+  }
+  /* TCP 3-way */
+  var tc = document.getElementById('fig-tcp3'); if (tc) __onSeen(tc, function(){ tc.classList.add('play'); });
+  /* 페이지 교체 */
+  var pg = document.getElementById('fig-paging');
+  if (pg) {
+    var alg = 'FIFO', ref = pg.querySelector('.pg-ref'), fr = pg.querySelector('.pg-fr'), tb = pg.querySelector('tbody'), sum = pg.querySelector('.pg-sum');
+    function run(){
+      var R = ref.value.trim().split(/[\s,]+/).filter(Boolean), F = Math.max(1, Math.min(6, +fr.value || 3));
+      var mem = [], cols = [], faults = 0, last = {}, order = [];
+      R.forEach(function(r, t){
+        var hit = mem.indexOf(r) > -1;
+        if (!hit) {
+          faults++;
+          if (mem.length < F) { mem.push(r); order.push(r); }
+          else {
+            var victim;
+            if (alg === 'FIFO') victim = order.shift();
+            else if (alg === 'LRU') { victim = mem.slice().sort(function(a, b){ return last[a] - last[b]; })[0]; }
+            else { var far = -1; mem.forEach(function(m){ var nx = R.indexOf(m, t + 1); if (nx === -1) nx = 1e9; if (nx > far) { far = nx; victim = m; } }); }
+            mem[mem.indexOf(victim)] = r;
+            if (alg === 'FIFO') order.push(r);
+          }
+        }
+        last[r] = t; cols.push({r: r, m: mem.slice(), f: !hit});
+      });
+      var h = '<tr><th>참조</th>' + cols.map(function(c){ return '<th>' + c.r + '</th>'; }).join('') + '</tr>';
+      for (var i = 0; i < F; i++) h += '<tr><th>프레임' + (i + 1) + '</th>' + cols.map(function(c){ var v = c.m[i]; return '<td class="' + (c.f && v === c.r ? 'f' : 'h') + '">' + (v === undefined ? '' : v) + '</td>'; }).join('') + '</tr>';
+      tb.innerHTML = h; sum.textContent = alg + ' · 페이지 부재 ' + faults + '회 / 참조 ' + R.length + '회';
+    }
+    pg.querySelectorAll('.chip').forEach(function(b){ b.addEventListener('click', function(){ pg.querySelectorAll('.chip').forEach(function(x){ x.setAttribute('aria-pressed', x === b); }); alg = b.dataset.a; run(); }); });
+    ref.addEventListener('input', run); fr.addEventListener('input', run); run();
+  }
+})();
+
+</script>
+</body>
+</html>

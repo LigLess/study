@@ -1,0 +1,1708 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AICE Associate 교본</title>
+<meta name="description" content="90분 14문항 파이썬 실기를 문항 유형별 코드로 준비하는 교본.">
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pretendard@1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+:root{--accent:#a3134f;--accent-2:#f7e4ec;--accent-ink:#ffffff;}
+:root{
+  --bg:#ffffff; --surface:#f3f5f7; --surface-2:#e8ecf0; --line:#d6dce2;
+  --text:#121a22; --text-2:#4f5d6b; --code-bg:#11161b; --code-text:#e4eaf0; --code-dim:#8b97a3;
+  --ok:#0d7a4f; --ok-bg:#e2f3ea; --bad:#b42318; --bad-bg:#fcebe9;
+  --ease-out:cubic-bezier(.23,1,.32,1); --ease-io:cubic-bezier(.77,0,.175,1);
+  --font:"Pretendard Variable",Pretendard,-apple-system,"Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
+  --mono:ui-monospace,"SF Mono","D2Coding",Consolas,"Liberation Mono",monospace;
+  --top:60px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:calc(var(--top) + 20px);-webkit-text-size-adjust:100%;font-family:var(--font);overflow-x:clip}
+button,input,select,textarea{font-family:inherit}
+body{margin:0;overflow-x:clip;background:var(--bg);color:var(--text);font-family:var(--font);font-size:17px;line-height:1.75;
+  word-break:keep-all;overflow-wrap:anywhere;-webkit-font-smoothing:antialiased}
+::selection{background:var(--accent);color:var(--accent-ink)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:2px}
+a{color:var(--accent);text-underline-offset:3px;text-decoration-thickness:1px}
+h1,h2,h3,h4{text-wrap:balance;line-height:1.25;margin:0}
+img,svg{max-width:100%}
+html{scrollbar-color:var(--line) transparent}
+
+/* progress */
+.progress{position:fixed;inset:0 0 auto 0;height:3px;z-index:60;pointer-events:none}
+.progress i{display:block;height:100%;background:var(--accent);transform-origin:0 50%;transform:scaleX(0)}
+
+/* top bar */
+.topbar{position:sticky;top:0;z-index:50;background:var(--bg);border-bottom:1px solid var(--line)}
+.topbar-in{max-width:1320px;margin:0 auto;height:var(--top);display:flex;align-items:center;gap:28px;padding:0 28px}
+.brand{color:var(--text);text-decoration:none;font-size:16px;white-space:nowrap}
+.brand b{font-weight:700;margin-left:4px}
+.guides{display:flex;gap:22px;margin-left:auto}
+.guides a{color:var(--text-2);text-decoration:none;font-size:15px;padding:6px 0;border-bottom:2px solid transparent}
+.guides a[aria-current]{color:var(--text);border-bottom-color:var(--accent);font-weight:600}
+.toc-toggle{display:none}
+.btn{font:inherit;font-size:15px;font-weight:600;border-radius:999px;padding:10px 20px;cursor:pointer;border:1px solid transparent;
+  text-decoration:none;display:inline-flex;align-items:center;gap:8px;line-height:1.2;
+  transition:transform 160ms var(--ease-out),background-color 160ms var(--ease-out)}
+.btn:active{transform:scale(.97)}
+.btn-solid{background:var(--accent);color:var(--accent-ink)}
+.btn-light{background:#fff;color:var(--accent)}
+.btn-line-light{background:transparent;color:#fff;border-color:rgba(255,255,255,.55)}
+@media (hover:hover) and (pointer:fine){
+  .btn-solid:hover{background:color-mix(in srgb,var(--accent) 86%,#000)}
+  .btn-line-light:hover{background:rgba(255,255,255,.12)}
+  .guides a:hover{color:var(--text)}
+}
+
+/* hero: solid accent plane */
+.hero{background:var(--accent);color:#fff}
+.hero-in{max-width:1320px;margin:0 auto;padding:96px 28px 104px;display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:56px;align-items:center}
+.hero h1{font-size:clamp(40px,5.4vw,76px);letter-spacing:-.035em;line-height:1.08;font-weight:800}
+.hero-tag{font-size:clamp(18px,1.6vw,22px);margin:24px 0 0;max-width:30em;color:rgba(255,255,255,.9);line-height:1.6}
+.hero-stats{display:flex;gap:44px;margin:48px 0 0;padding:0}
+.hero-stats div{margin:0}
+.hero-stats dt{font-size:14px;color:rgba(255,255,255,.75)}
+.hero-stats dd{margin:2px 0 0;font-size:40px;font-weight:700;letter-spacing:-.02em;font-variant-numeric:tabular-nums;line-height:1.1}
+.hero-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:44px}
+.hero-fig svg{display:block;width:100%;height:auto}
+
+/* layout */
+.layout{max-width:1320px;margin:0 auto;display:grid;grid-template-columns:290px minmax(0,1fr);gap:64px;padding:0 28px}
+.sidebar{position:relative}
+.sidebar-in{position:sticky;top:calc(var(--top) + 0px);max-height:calc(100vh - var(--top));overflow:auto;padding:48px 8px 48px 0;scrollbar-width:thin}
+.toc-title{font-size:14px;color:var(--text-2);margin:0 0 12px}
+.toc,.toc ol{list-style:none;margin:0;padding:0}
+.toc>li{margin:0 0 4px}
+.toc-ch{display:block;color:var(--text);text-decoration:none;font-size:15px;font-weight:600;padding:8px 10px;border-radius:4px;line-height:1.4}
+.toc-g{display:block;font-size:13px;font-weight:500;color:var(--text-2)}
+.toc ol{display:none;padding:2px 0 8px 10px}
+.toc li.open>ol{display:block}
+.toc ol a{display:block;color:var(--text-2);text-decoration:none;font-size:14px;padding:4px 10px;line-height:1.45;border-radius:4px}
+.toc a.on{background:var(--accent-2);color:var(--text)}
+@media (hover:hover) and (pointer:fine){ .toc a:hover{background:var(--surface)} }
+
+.content{min-width:0;max-width:800px;padding:0 0 120px}
+
+/* chapter */
+.chapter{padding-top:120px}
+.ch-head{padding-bottom:36px;margin-bottom:44px;border-bottom:1px solid var(--line);position:relative}
+.ch-group{margin:0 0 12px;font-size:16px;color:var(--accent);font-weight:600}
+.ch-head h2{font-size:clamp(32px,4vw,50px);letter-spacing:-.03em;font-weight:800}
+.ch-pdf{margin-top:22px;font:inherit;font-size:14px;color:var(--text-2);background:var(--surface);border:0;border-radius:999px;padding:7px 14px 7px 11px;
+  display:inline-flex;align-items:center;gap:7px;cursor:pointer;transition:transform 160ms var(--ease-out),background-color 160ms var(--ease-out)}
+.ch-pdf svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.3;stroke-linejoin:round;stroke-linecap:round}
+.ch-pdf:active{transform:scale(.97)}
+@media (hover:hover) and (pointer:fine){ .ch-pdf:hover{background:var(--surface-2);color:var(--text)} }
+
+.ch-body h3{font-size:28px;letter-spacing:-.02em;font-weight:750;margin:80px 0 20px}
+.ch-body h3:first-child{margin-top:0}
+.ch-body h4{font-size:20px;font-weight:700;margin:44px 0 12px;letter-spacing:-.01em}
+.ch-body p{margin:0 0 16px}
+.ch-body ul,.ch-body ol{margin:0 0 18px;padding-left:1.4em}
+.ch-body li{margin:4px 0}
+.ch-body li>ul,.ch-body li>ol{margin:4px 0}
+.ch-body strong{font-weight:700}
+.ch-body hr{border:0;border-top:1px solid var(--line);margin:48px 0}
+
+/* inline code & blocks */
+code{font-family:var(--mono);font-size:.88em;background:var(--surface);padding:.12em .4em;border-radius:3px}
+pre{background:var(--code-bg);color:var(--code-text);border-radius:6px;padding:18px 20px;overflow:auto;margin:0 0 20px;line-height:1.6;font-size:14.5px}
+pre code{background:none;padding:0;font-size:inherit;color:inherit;white-space:pre}
+
+/* tables */
+.tw{overflow-x:auto;margin:0 0 22px}
+table{border-collapse:collapse;width:100%;font-size:15.5px;line-height:1.55;font-variant-numeric:tabular-nums}
+th,td{text-align:left;vertical-align:top;padding:10px 12px;border-bottom:1px solid var(--line)}
+thead th{background:var(--surface);font-weight:650;border-bottom:1px solid var(--text-2)}
+td code{white-space:nowrap}
+
+/* boxes */
+.box{margin:28px 0;padding:22px 24px 8px;background:var(--surface);border-radius:6px}
+.box-t{font-weight:700;margin:0 0 8px !important;font-size:16px}
+.box-exam{background:var(--accent-2)}
+.box-exam .box-t{color:var(--accent)}
+.box-warn{background:#fdf3e4}
+.box-warn .box-t{color:#8a4b00}
+.box-ex{background:transparent;border:1px solid var(--line)}
+.box table{background:#fff}
+
+/* quiz */
+.quiz{list-style:none;padding:0 !important;margin:32px 0 !important;counter-reset:q}
+.q{counter-increment:q;margin:0 0 18px !important;padding:22px 24px;background:var(--surface);border-radius:6px}
+.q-text{font-weight:600}
+.q-text p:first-child::before{content:"문제 " counter(q) ". ";color:var(--accent);font-weight:700}
+.q-text p{margin:0 0 10px}
+.q-text pre{font-weight:400;font-size:14px}
+.opts{list-style:none;padding:0 !important;margin:6px 0 0 !important;display:grid;gap:6px}
+.opts li{margin:0}
+.opt{all:unset;box-sizing:border-box;width:100%;display:flex;gap:10px;align-items:flex-start;padding:10px 14px;background:#fff;border:1px solid var(--line);
+  border-radius:4px;cursor:pointer;font-size:16px;line-height:1.55;transition:transform 140ms var(--ease-out),border-color 140ms var(--ease-out),background-color 140ms var(--ease-out)}
+.opt .n{flex:none;color:var(--text-2)}
+.opt:active{transform:scale(.99)}
+.opt:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+@media (hover:hover) and (pointer:fine){ .q:not(.done) .opt:hover{border-color:var(--text-2)} }
+.q.done .opt{cursor:default}
+.opt.right{border-color:var(--ok);background:var(--ok-bg)}
+.opt.wrong{border-color:var(--bad);background:var(--bad-bg)}
+.ans{display:none;margin-top:12px;padding-top:12px;border-top:1px solid var(--line);font-size:15.5px}
+.ans p{margin:0}
+.ans b{color:var(--ok);margin-right:6px}
+.q.done .ans{display:block}
+.no-js .ans{display:block}
+.ans-toggle{all:unset;cursor:pointer;font-size:14px;color:var(--text-2);margin-top:10px;display:inline-block;text-decoration:underline;text-underline-offset:3px}
+
+/* figures */
+.fig{margin:36px 0;padding:28px;background:var(--surface);border-radius:6px}
+.fig svg{display:block;width:100%;height:auto}
+.fig figcaption{font-size:15px;color:var(--text-2);margin-top:14px;line-height:1.6}
+.fig-ctrl{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px}
+.chip{font:inherit;font-size:14px;padding:6px 14px;border-radius:999px;border:1px solid var(--line);background:#fff;color:var(--text);cursor:pointer;
+  transition:transform 140ms var(--ease-out),background-color 140ms var(--ease-out),color 140ms var(--ease-out)}
+.chip:active{transform:scale(.97)}
+.chip[aria-pressed="true"]{background:var(--text);color:#fff;border-color:var(--text)}
+.term{background:var(--code-bg);color:var(--code-text);font-family:var(--mono);font-size:14px;border-radius:6px;padding:16px 18px;line-height:1.65;min-height:3em;white-space:pre-wrap}
+.term .p{color:#7ee2a8}
+.term .d{color:var(--code-dim)}
+
+/* reveal */
+.js .reveal{opacity:0;transform:translateY(22px);transition:opacity 520ms var(--ease-out),transform 520ms var(--ease-out)}
+.js .reveal.in{opacity:1;transform:none}
+
+.end{margin-top:140px;padding-top:28px;border-top:1px solid var(--line);color:var(--text-2);font-size:15px}
+
+/* modal */
+.modal[hidden]{display:none}
+.modal{position:fixed;inset:0;z-index:100;display:grid;place-items:center;padding:20px}
+.modal-back{position:absolute;inset:0;background:rgba(10,14,18,.5);animation:fade 180ms var(--ease-out)}
+.modal-box{position:relative;background:#fff;border-radius:10px;width:min(620px,100%);max-height:min(86vh,820px);display:flex;flex-direction:column;
+  box-shadow:0 24px 60px rgba(0,0,0,.25);animation:pop 220ms var(--ease-out)}
+@keyframes fade{from{opacity:0}}
+@keyframes pop{from{opacity:0;transform:scale(.96) translateY(8px)}}
+.modal-head{display:flex;align-items:center;justify-content:space-between;padding:22px 24px 10px}
+.modal-head h2{font-size:22px;letter-spacing:-.02em}
+.x{all:unset;cursor:pointer;width:36px;height:36px;display:grid;place-items:center;border-radius:999px}
+.x svg{width:16px;height:16px;stroke:var(--text);stroke-width:1.6}
+.x:hover{background:var(--surface)}
+.pick-tools{display:flex;gap:16px;align-items:center;padding:0 24px 12px;border-bottom:1px solid var(--line);font-size:14px;flex-wrap:wrap}
+.link{all:unset;cursor:pointer;color:var(--accent);font-weight:600}
+.switch{margin-left:auto;display:flex;gap:6px;align-items:center;color:var(--text-2);cursor:pointer}
+.pick-list{overflow:auto;padding:8px 14px}
+.pick{display:grid;grid-template-columns:22px 1fr;column-gap:10px;padding:9px 10px;border-radius:4px;cursor:pointer;line-height:1.4}
+.pick:hover{background:var(--surface)}
+.pick input{grid-row:span 2;margin-top:3px;accent-color:var(--accent);width:16px;height:16px}
+.pick-g{font-size:13px;color:var(--text-2)}
+.pick-t{font-size:16px;font-weight:600}
+.modal-foot{padding:16px 24px 22px;border-top:1px solid var(--line)}
+.hint{font-size:14px;color:var(--text-2);margin:0 0 14px;line-height:1.6}
+#doPrint{width:100%;justify-content:center;padding:13px}
+
+.print-cover{display:none}
+
+/* responsive */
+@media (max-width:1080px){
+  .layout{grid-template-columns:1fr;gap:0}
+  .sidebar{position:fixed;inset:var(--top) 0 0 auto;width:min(360px,88vw);background:#fff;z-index:45;border-left:1px solid var(--line);
+    transform:translateX(100%);visibility:hidden;transition:transform 260ms var(--ease-io),visibility 0s linear 260ms}
+  body.toc-open .sidebar{transform:none;visibility:visible;transition:transform 260ms var(--ease-io),visibility 0s;box-shadow:-20px 0 40px rgba(0,0,0,.12)}
+  .sidebar-in{position:static;max-height:100%;height:100%;padding:24px 20px}
+  .toc-toggle{display:inline-flex;font:inherit;font-size:15px;background:none;border:1px solid var(--line);border-radius:999px;padding:8px 16px;cursor:pointer;color:var(--text)}
+  .guides{display:none}
+  .topbar-in{gap:10px}
+  .toc-toggle{margin-left:auto}
+  .content{max-width:760px;width:100%;margin:0 auto}
+  .hero-in{grid-template-columns:1fr;padding:72px 28px 80px}
+  .hero-fig{max-width:560px}
+}
+@media (max-width:600px){
+  body{font-size:16px}
+  .topbar-in{padding:0 16px}
+  .layout{padding:0 18px}
+  .hero-in{padding:56px 20px 64px;gap:40px}
+  .hero-stats{gap:28px}
+  .hero-stats dd{font-size:32px}
+  .topbar .btn-solid{padding:8px 14px;font-size:14px}
+  .chapter{padding-top:88px}
+  .ch-body h3{font-size:24px;margin-top:64px}
+  .box,.q,.fig{padding-left:16px;padding-right:16px;margin-left:-4px;margin-right:-4px}
+  pre{font-size:13px;padding:14px;margin-left:-4px;margin-right:-4px}
+  table{font-size:14.5px}
+  th,td{padding:8px 9px}
+  .switch{margin-left:0}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .js .reveal{transform:none;transition:opacity 300ms linear}
+  *,*::before,*::after{animation-duration:1ms !important;animation-iteration-count:1 !important}
+  .sidebar{transition:none}
+}
+
+/* ============ PRINT ============ */
+@page{size:A4;margin:16mm 15mm 17mm}
+@media print{
+  :root{--surface:#f2f4f6}
+  *{-webkit-print-color-adjust:exact !important;print-color-adjust:exact !important;animation:none !important;transition:none !important}
+  html,body{background:#fff;font-size:10pt;line-height:1.62;scroll-behavior:auto}
+  .topbar,.progress,.sidebar,.hero,.ch-pdf,.modal,.fig-ctrl,.ans-toggle,.no-print,.end{display:none !important}
+  .layout{display:block;padding:0;max-width:none}
+  .content{max-width:none;padding:0}
+  .js .reveal{opacity:1 !important;transform:none !important}
+  body.pick-mode .chapter:not(.pr){display:none !important}
+
+  .print-cover{display:flex;flex-direction:column;justify-content:flex-start;min-height:250mm;break-after:page;padding-top:40mm}
+  .pc-kind{font-size:12pt;color:var(--accent);font-weight:700;margin:0 0 6mm}
+  .print-cover h1{font-size:34pt;letter-spacing:-.03em;line-height:1.15}
+  .pc-tag{font-size:13pt;color:var(--text-2);margin:6mm 0 18mm}
+  .pc-list{margin:0;padding:8mm 0 0 1.2em;border-top:1.5pt solid var(--accent);font-size:11pt;line-height:1.9}
+  .pc-list span{color:var(--text-2);margin-right:3mm}
+  .pc-date{margin-top:auto;font-size:9pt;color:var(--text-2)}
+
+  .chapter{padding-top:0;break-before:page}
+  .ch-head{padding-bottom:5mm;margin-bottom:7mm;break-after:avoid;break-inside:avoid}
+  .ch-group{font-size:10pt;margin-bottom:2mm}
+  .ch-head h2{font-size:22pt}
+  .ch-body h3{font-size:15pt;margin:9mm 0 3mm;break-after:avoid;break-inside:avoid}
+  .ch-body h4{font-size:12pt;margin:6mm 0 2mm;break-after:avoid;break-inside:avoid}
+  .keep{break-inside:avoid}
+  p{orphans:3;widows:3}
+  .ch-body p{margin-bottom:2.5mm}
+  pre{font-size:8.6pt;padding:3.5mm 4mm;line-height:1.5;white-space:pre-wrap;break-inside:avoid;overflow:visible;
+      background:#f4f6f8 !important;color:#14202b !important;border:.6pt solid #d6dce2}
+  pre code{white-space:pre-wrap}
+  .term{background:#f4f6f8 !important;color:#14202b !important;border:.6pt solid #d6dce2}
+  .term .p{color:#0d7a4f}
+  .tw{overflow:visible}
+  table{font-size:9pt;break-inside:auto}
+  thead{display:table-header-group}
+  tr,th,td{break-inside:avoid}
+  th,td{padding:1.6mm 2.2mm}
+  .tw.small-table, table.small{break-inside:avoid}
+  .box{break-inside:avoid;padding:4mm 5mm 1.5mm;margin:5mm 0}
+  .fig{break-inside:avoid;padding:4mm;margin:5mm 0}
+  .fig svg{max-height:120mm}
+  .quiz{margin:5mm 0 !important;display:block}
+  .opts{display:block !important}
+  .opts li{margin:0}
+  .opt{display:flex;border:0 !important;padding:.5mm 0 !important;background:transparent !important}
+  .q{break-inside:avoid;padding:3.2mm 4.5mm;margin-bottom:2.5mm !important}
+  .q-text p{margin-bottom:1.5mm}
+  .opt{padding:1.4mm 3mm;font-size:9.5pt;border-color:#d6dce2;background:#fff !important}
+  .opt.right,.opt.wrong{background:#fff !important;border-color:#d6dce2}
+  .ans{display:block !important;font-size:9.3pt;margin-top:2.5mm;padding-top:2.5mm}
+  body.no-ans .ans{display:none !important}
+  a{color:inherit;text-decoration:none}
+}
+
+/* hero svg animations */
+.hero-svg .pt{opacity:0;transform-box:fill-box;transform-origin:center;animation:ptIn 420ms var(--ease-out) forwards}
+@keyframes ptIn{from{opacity:0;transform:scale(.6)}to{opacity:.95;transform:none}}
+.hero-svg .reg{stroke-dasharray:500;stroke-dashoffset:500;animation:draw 1100ms var(--ease-io) 1400ms forwards}
+.hero-svg .rs{opacity:0;animation:fadeIn 300ms var(--ease-out) forwards}
+.hero-svg .eq{opacity:0;animation:fadeIn 500ms var(--ease-out) 2300ms forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+@keyframes fadeIn{to{opacity:1}}
+#hero-sqld .er rect,#hero-sqld .dr rect{transition:fill 260ms var(--ease-out)}
+#hero-sqld .on rect{fill:rgba(255,255,255,.2)}
+#hero-sqld .jl{transition:opacity 200ms var(--ease-out)}
+.hero-term{min-height:300px;font-size:15px;background:#0b0f12}
+.hero-term .cur{display:inline-block;width:.6em;height:1.1em;background:#7ee2a8;vertical-align:-.15em;animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+
+/* DIKW */
+.js #fig-dikw:not(.play) .lay{opacity:0}
+#fig-dikw.play .lay{animation:rise 620ms var(--ease-out) both;animation-delay:var(--d)}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+
+/* CRISP */
+#fig-crisp .ph rect{fill:#fff;stroke:var(--line);stroke-width:1.5;transition:fill 300ms var(--ease-out),stroke 300ms var(--ease-out)}
+#fig-crisp .ph text{fill:var(--text);transition:fill 300ms var(--ease-out)}
+#fig-crisp .ph.on rect{fill:var(--accent);stroke:var(--accent)}
+#fig-crisp .ph.on text{fill:#fff}
+#fig-crisp .orbit{transition:transform 900ms var(--ease-io)}
+
+/* CM */
+.cm{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:28px;align-items:start}
+.cm-grid{display:grid;grid-template-columns:auto 1fr 1fr;gap:6px;font-size:14px}
+.cm-h{font-weight:600;color:var(--text-2);text-align:center;align-self:end;padding-bottom:2px}
+.cm-v{writing-mode:horizontal-tb;text-align:right;align-self:center;padding-right:6px}
+.cm-c{display:flex;flex-direction:column;gap:4px;padding:12px;border-radius:4px;font-weight:700;font-size:14px;background:#fff;border:1px solid var(--line)}
+.cm-c.tp,.cm-c.tn{background:var(--accent-2);border-color:transparent}
+.cm-c input{font:inherit;font-size:24px;font-weight:700;width:100%;border:0;background:transparent;padding:0;color:var(--text);font-variant-numeric:tabular-nums}
+.cm-c input:focus{outline:none}
+.cm-c:focus-within{outline:2px solid var(--accent);outline-offset:1px}
+.cm-out{display:grid;grid-template-columns:1fr 1fr;gap:14px 18px;margin:0}
+.cm-out div{margin:0}
+.cm-out dt{font-size:13.5px;color:var(--text-2)}
+.cm-out dd{margin:0;font-size:26px;font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:-.01em;line-height:1.25}
+.cm-out p{margin:0 !important;font-size:14px;color:var(--text-2)}
+
+/* ORDER */
+.ord{display:grid;grid-template-columns:1fr 1.4fr;gap:28px}
+.ord-h{font-size:14px;color:var(--text-2);margin:0 0 8px !important;font-weight:600}
+.ord ol{list-style:none;padding:0 !important;margin:0 !important;display:grid;gap:6px}
+.ord li{margin:0;padding:10px 14px;background:#fff;border:1px solid var(--line);border-radius:4px;font-family:var(--mono);font-size:15px;
+  transition:background-color 260ms var(--ease-out),color 260ms var(--ease-out),border-color 260ms var(--ease-out),transform 260ms var(--ease-out)}
+.ord-x li{display:flex;justify-content:space-between;gap:12px}
+.ord-x li span{font-family:var(--font);color:var(--text-2);font-size:14px}
+.ord-x li::before{content:attr(data-s);font-family:var(--font);font-weight:700;color:var(--accent);margin-right:-4px;min-width:1.2em}
+.ord-x li b{flex:1}
+.ord li.on{background:var(--accent);border-color:var(--accent);color:#fff;transform:translateX(4px)}
+.ord li.on span,.ord-x li.on::before{color:#fff}
+.ord li.done{border-color:var(--accent)}
+
+/* JOIN */
+.j-sql{margin-bottom:16px}
+.j-wrap{display:grid;grid-template-columns:.8fr .8fr 1.4fr;gap:16px;align-items:start}
+.j-t{font-size:14px;font-weight:700;margin:0 0 6px !important}
+.j-n{color:var(--accent);font-weight:600;margin-left:6px}
+.j-wrap table{font-size:13.5px;background:#fff}
+.j-wrap th,.j-wrap td{padding:6px 8px;font-family:var(--mono);white-space:nowrap}
+.j-wrap tr.m td{background:var(--accent-2)}
+.j-wrap td.nul{color:var(--text-2);font-style:italic}
+.j-r tbody tr{animation:rowIn 260ms var(--ease-out) both}
+@keyframes rowIn{from{opacity:0;transform:translateY(6px)}}
+
+/* BOOT */
+.boot{list-style:none;padding:0 !important;margin:0 0 14px !important;display:grid;grid-template-columns:repeat(6,1fr);gap:6px}
+.boot li{margin:0;padding:12px 10px;background:#fff;border:1px solid var(--line);border-radius:4px;display:flex;flex-direction:column;
+  transition:background-color 300ms var(--ease-out),color 300ms var(--ease-out),border-color 300ms var(--ease-out)}
+.boot b{font-size:15px}
+.boot span{font-size:12.5px;color:var(--text-2);line-height:1.4;margin-top:2px}
+.boot li.on{background:var(--accent);border-color:var(--accent);color:#fff}
+.boot li.on span{color:rgba(255,255,255,.85)}
+.boot li.done{border-color:var(--accent)}
+.boot-bar{height:4px;background:var(--surface-2);border-radius:2px;overflow:hidden}
+.boot-bar i{display:block;height:100%;background:var(--accent);transform-origin:0 50%;transform:scaleX(0);transition:transform 900ms var(--ease-io)}
+.boot-desc{min-height:3.4em;margin:14px 0 0 !important;font-size:15.5px}
+
+/* CHMOD */
+.perm{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:24px;align-items:start}
+.perm-grid{display:grid;grid-template-columns:auto repeat(3,1fr);gap:6px;font-size:13.5px;align-items:center}
+.perm-grid>b{color:var(--text-2);font-weight:600;text-align:center}
+.perm-grid>b.perm-who{text-align:right;padding-right:6px;color:var(--text)}
+.perm-grid button{font:inherit;font-family:var(--mono);font-size:20px;font-weight:700;height:52px;border-radius:4px;border:1px solid var(--line);background:#fff;color:var(--text-2);cursor:pointer;
+  transition:background-color 160ms var(--ease-out),color 160ms var(--ease-out),transform 140ms var(--ease-out)}
+.perm-grid button:active{transform:scale(.96)}
+.perm-grid button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+.perm-grid button[aria-pressed="false"]{text-decoration:line-through;text-decoration-thickness:1px}
+.perm-out label{display:flex;flex-direction:column;font-size:13.5px;color:var(--text-2);gap:4px;margin-bottom:10px}
+.perm-num{font:inherit;font-family:var(--mono);font-size:30px;font-weight:700;width:5em;padding:4px 10px;border:1px solid var(--line);border-radius:4px;color:var(--text);letter-spacing:.08em}
+.perm-term{font-size:13.5px;min-height:7.5em}
+
+@media (max-width:720px){
+  .cm,.perm,.ord{grid-template-columns:1fr}
+  .j-wrap{grid-template-columns:1fr 1fr}
+  .j-res{grid-column:1/-1;overflow-x:auto}
+  .boot{grid-template-columns:repeat(3,1fr)}
+}
+@media print{
+  .hero-term{display:none}
+  #fig-dikw .lay{opacity:1 !important}
+  #fig-crisp .orbit{display:none}
+  #fig-crisp .ph rect{fill:#fff !important;stroke:var(--accent) !important}
+  #fig-crisp .ph text{fill:var(--text) !important}
+  .ord li.on,.boot li.on{background:#fff !important;color:var(--text) !important;border-color:var(--accent) !important;transform:none}
+  .ord li.on span,.boot li.on span{color:var(--text-2) !important}
+  .ord-x li.on::before{color:var(--accent) !important}
+  .boot-bar,.boot-desc{display:none}
+  .boot{grid-template-columns:repeat(6,1fr)}
+  .perm-grid button{height:9mm;font-size:12pt}
+  .cm-c input{font-size:14pt}
+  .j-wrap{grid-template-columns:.8fr .8fr 1.4fr}
+}
+
+/* SUBNET */
+.sn-in{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:14px}
+.sn-in label,.pg-in{display:flex;flex-direction:column;font-size:13.5px;color:var(--text-2);gap:4px}
+.sn-in input,.pg-in input{font:inherit;font-family:var(--mono);font-size:18px;padding:6px 10px;border:1px solid var(--line);border-radius:4px;color:var(--text);background:#fff}
+.sn-ip{width:11em}.sn-px{width:5em}
+.sn-bits{display:grid;grid-template-columns:repeat(32,1fr);gap:2px;margin-bottom:16px}
+.sn-bits i{height:26px;border-radius:2px;background:var(--surface-2);font-style:normal;font-family:var(--mono);font-size:11px;display:grid;place-items:center;color:var(--text-2);
+  transition:background-color 200ms var(--ease-out),color 200ms var(--ease-out)}
+.sn-bits i.n{background:var(--accent);color:#fff}
+.sn-bits i.g{margin-right:5px}
+.sn-out{display:grid;grid-template-columns:repeat(3,1fr);gap:12px 18px;margin:0}
+.sn-out div{margin:0}.sn-out dt{font-size:13.5px;color:var(--text-2)}
+.sn-out dd{margin:0;font-family:var(--mono);font-size:17px;font-weight:700;font-variant-numeric:tabular-nums}
+/* TCP3 */
+.js #fig-tcp3:not(.play) .tm{opacity:0}
+#fig-tcp3.play .tm{animation:rise 520ms var(--ease-out) both;animation-delay:var(--d)}
+/* PAGING */
+.pg-in{flex-direction:row;align-items:center;margin-left:8px}
+.pg-in input{font-size:14px;padding:4px 8px}
+.pg-ref{width:14em}.pg-fr{width:4em}
+.pg-wrap{overflow-x:auto}
+.pg td,.pg th{text-align:center;font-family:var(--mono);padding:6px 8px;min-width:34px;border:1px solid var(--line)}
+.pg th{background:#fff}
+.pg td.f{background:var(--accent);color:#fff;font-weight:700}
+.pg td.h{background:#fff}
+.pg-sum{margin:12px 0 0 !important;font-weight:600}
+@media (max-width:720px){ .sn-out{grid-template-columns:1fr 1fr} .sn-bits i{font-size:0;height:18px} }
+@media print{ .js #fig-tcp3 .tm{opacity:1 !important} .sn-in input,.pg-in input{border-color:#d6dce2} }
+
+</style>
+<script>document.documentElement.classList.add('js')</script>
+</head>
+<body data-guide="aice">
+<div class="progress" aria-hidden="true"><i></i></div>
+<header class="topbar">
+  <div class="topbar-in">
+    <a class="brand" href="index.html">교본 <b>AICE Associate</b></a>
+    <nav class="guides" aria-label="다른 교본"><a href="index.html">전체 교본 목록</a></nav>
+    <button type="button" class="toc-toggle" aria-expanded="false" aria-controls="toc">목차</button>
+    <button type="button" class="btn btn-solid open-pdf">PDF로 저장</button>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="hero-in">
+    <div class="hero-text">
+      <h1>AICE Associate</h1>
+      <p class="hero-tag">90분 14문항 파이썬 실기를 문항 유형별 코드로 준비하는 교본.</p>
+      <dl class="hero-stats">
+        <div><dt>단원</dt><dd>7</dd></div>
+        <div><dt>주제</dt><dd>23</dd></div>
+        <div><dt>확인 문제</dt><dd>24</dd></div>
+      </dl>
+      <div class="hero-actions">
+        <a class="btn btn-light" href="#ch0">처음부터 읽기</a>
+        <button type="button" class="btn btn-line-light open-pdf">원하는 단원만 PDF로</button>
+      </div>
+    </div>
+    <div class="hero-fig"><div class="term hero-term gen-term" data-prompt="In [1]:" data-lines='[["In [1]: ", "df = pd.read_csv(&#39;data.csv&#39;)", ""], ["In [2]: ", "df.isnull().sum().sum()", "Out[2]: 37"], ["In [3]: ", "model.evaluate(X_test, y_test)", "loss: 0.3121 - accuracy: 0.8790"]]' aria-label="실행 예시"><span class="d">In [1]:</span></div></div>
+  </div>
+</section>
+
+<div class="print-cover" aria-hidden="true">
+  <p class="pc-kind">교본</p>
+  <h1>AICE Associate</h1>
+  <p class="pc-tag">90분 14문항 파이썬 실기를 문항 유형별 코드로 준비하는 교본.</p>
+  <ol class="pc-list"></ol>
+  <p class="pc-date">2026년 11월 기준으로 정리 · 시험 일정과 세부 규정은 접수 전 공식 사이트에서 다시 확인하세요.</p>
+</div>
+
+<div class="layout">
+  <aside class="sidebar" id="toc" aria-label="목차">
+    <div class="sidebar-in">
+      <p class="toc-title">목차</p>
+      <ol class="toc"><li><a href="#ch0" class="toc-ch" data-ch="ch0"><span class="toc-g">시작하기</span>시험 구성과 공부 순서</a>
+<ol><li><a href="#s1">AICE Associate는 어떤 시험인가</a></li><li><a href="#s2">공부 순서</a></li></ol>
+</li>
+<li><a href="#ch1" class="toc-ch" data-ch="ch1"><span class="toc-g">데이터 다루기</span>Python과 pandas 기본</a>
+<ol><li><a href="#s3">라이브러리 불러오기</a></li><li><a href="#s4">데이터 불러오기와 확인</a></li><li><a href="#s5">선택과 필터링</a></li><li><a href="#s6">정렬, 그룹, 병합</a></li></ol>
+</li>
+<li><a href="#ch2" class="toc-ch" data-ch="ch2"><span class="toc-g">데이터 다루기</span>시각화로 데이터 이해하기</a>
+<ol><li><a href="#s7">자주 나오는 그래프</a></li></ol>
+</li>
+<li><a href="#ch3" class="toc-ch" data-ch="ch3"><span class="toc-g">데이터 다루기</span>전처리</a>
+<ol><li><a href="#s8">결측치</a></li><li><a href="#s9">자료형 변환과 값 바꾸기</a></li><li><a href="#s10">이상치</a></li><li><a href="#s11">범주형 인코딩</a></li><li><a href="#s12">데이터 분할과 스케일링</a></li></ol>
+</li>
+<li><a href="#ch4" class="toc-ch" data-ch="ch4"><span class="toc-g">모델링</span>머신러닝 모델</a>
+<ol><li><a href="#s13">scikit-learn 공통 흐름</a></li><li><a href="#s14">부스팅 모델</a></li><li><a href="#s15">주요 하이퍼파라미터</a></li><li><a href="#s16">평가</a></li><li><a href="#s17">하이퍼파라미터 탐색과 변수 중요도</a></li></ol>
+</li>
+<li><a href="#ch5" class="toc-ch" data-ch="ch5"><span class="toc-g">모델링</span>딥러닝 모델 (Keras)</a>
+<ol><li><a href="#s18">기본 구조</a></li><li><a href="#s19">문제 유형별 마지막 층과 손실 함수</a></li><li><a href="#s20">컴파일과 학습</a></li><li><a href="#s21">학습 곡선과 평가</a></li></ol>
+</li>
+<li><a href="#ch6" class="toc-ch" data-ch="ch6"><span class="toc-g">마무리</span>실전 모의 문제 (14문항)</a>
+<ol><li><a href="#s22">상황</a></li><li><a href="#s23">회귀형 변형</a></li></ol>
+</li></ol>
+    </div>
+  </aside>
+  <main class="content">
+
+<section class="chapter" id="ch0" data-title="시험 구성과 공부 순서" data-group="시작하기">
+  <header class="ch-head reveal">
+    <p class="ch-group">시작하기</p>
+    <h2>시험 구성과 공부 순서</h2>
+    <button type="button" class="ch-pdf" data-ch="ch0"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 1.5h5.5L12.5 4.5V14.5h-8.5z M9.5 1.5v3h3 M6 9.5l2 2 2-2 M8 6.5v5"/></svg>이 장만 PDF로</button>
+  </header>
+  <div class="ch-body">
+<h3 id="s1">AICE Associate는 어떤 시험인가</h3>
+<p>AICE(AI Certificate for Everyone)는 <strong>KT가 개발하고 한국경제신문과 함께 주관</strong>하는 AI 활용 능력 시험이다. Associate는 그중 실무 입문 등급으로, <strong>Python으로 데이터를 다루고 머신러닝·딥러닝 모델을 직접 만드는 실습형 시험</strong>이다. 객관식 이론 시험이 아니다.</p>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>구분</th>
+<th>내용</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>주관</td>
+<td>KT · 한국경제신문 (aice.study)</td>
+</tr>
+<tr>
+<td>등급 체계</td>
+<td>Future(초·중) · Basic · <strong>Associate</strong> · Professional</td>
+</tr>
+<tr>
+<td>방식</td>
+<td>온라인 실습형. 웹 브라우저의 <strong>Jupyter 환경</strong>에서 코드 작성</td>
+</tr>
+<tr>
+<td>문항</td>
+<td><strong>14문항 / 90분</strong></td>
+</tr>
+<tr>
+<td>합격</td>
+<td>100점 만점 <strong>80점 이상</strong></td>
+</tr>
+<tr>
+<td>응시료</td>
+<td>80,000원</td>
+</tr>
+<tr>
+<td>자격 유효</td>
+<td>3년</td>
+</tr>
+<tr>
+<td>사용 언어</td>
+<td>Python (pandas, numpy, matplotlib, seaborn, scikit-learn, TensorFlow/Keras)</td>
+</tr>
+<tr>
+<td>오픈북</td>
+<td>인터넷 검색 불가. 시험 환경 내 도움말 사용 가능</td>
+</tr>
+</tbody>
+</table></div>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>문항 흐름 (예)</th>
+<th>내용</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1~3</td>
+<td>라이브러리 임포트, 데이터 불러오기, 시각화로 데이터 확인</td>
+</tr>
+<tr>
+<td>4~8</td>
+<td>결측치·이상치 처리, 불필요한 열 삭제, 원-핫 인코딩, 데이터 분할, 스케일링</td>
+</tr>
+<tr>
+<td>9~11</td>
+<td>머신러닝 모델(의사결정나무, 랜덤 포레스트, XGBoost 등) 학습</td>
+</tr>
+<tr>
+<td>12~13</td>
+<td>딥러닝 모델(Keras Sequential) 설계·학습</td>
+</tr>
+<tr>
+<td>14</td>
+<td>모델 성능 평가 (MAE, 정확도 등)</td>
+</tr>
+</tbody>
+</table></div>
+<aside class="box box-warn">
+<p class="box-t">접수 전에 꼭 다시 확인할 것</p>
+<p>2026년 11월 기준이다. 응시료와 문항 구성은 AICE 공식 사이트(aice.study) 공고를 확인하자. 공식 사이트에 <strong>샘플 문항과 체험 환경</strong>이 있으니 반드시 한 번 풀어 보고 들어가자. 문제는 "변수명 <code>df</code>로 저장하세요", "<code>X_train</code>, <code>X_test</code> …으로 분할하세요"처럼 <strong>지정한 변수명</strong>을 쓰라고 한다. 변수명이 다르면 채점이 안 된다.</p>
+</aside>
+<h3 id="s2">공부 순서</h3>
+<ol>
+<li><strong>1주</strong> — Python 기초 문법과 pandas 데이터 다루기</li>
+<li><strong>2주</strong> — 시각화(matplotlib, seaborn)와 전처리</li>
+<li><strong>3주</strong> — scikit-learn 머신러닝 흐름</li>
+<li><strong>4주</strong> — Keras 딥러닝</li>
+<li><strong>5주</strong> — 마지막 장의 모의 문제를 <strong>처음부터 끝까지 손으로 쳐서</strong> 90분 안에 끝내기</li>
+</ol>
+  </div>
+</section>
+
+<section class="chapter" id="ch1" data-title="Python과 pandas 기본" data-group="데이터 다루기">
+  <header class="ch-head reveal">
+    <p class="ch-group">데이터 다루기</p>
+    <h2>Python과 pandas 기본</h2>
+    <button type="button" class="ch-pdf" data-ch="ch1"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 1.5h5.5L12.5 4.5V14.5h-8.5z M9.5 1.5v3h3 M6 9.5l2 2 2-2 M8 6.5v5"/></svg>이 장만 PDF로</button>
+  </header>
+  <div class="ch-body">
+<h3 id="s3">라이브러리 불러오기</h3>
+<p>시험 첫 문항은 대부분 라이브러리 임포트다. 관례적인 별칭을 그대로 쓴다.</p>
+<pre><code class="language-python">import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+</code></pre>
+<h3 id="s4">데이터 불러오기와 확인</h3>
+<pre><code class="language-python">df = pd.read_csv(&quot;data.csv&quot;)             # CSV
+df = pd.read_json(&quot;data.json&quot;)           # JSON
+df = pd.read_excel(&quot;data.xlsx&quot;)          # 엑셀
+
+df.head()          # 앞 5행
+df.tail(3)         # 뒤 3행
+df.info()          # 열, 자료형, 결측 아닌 개수
+df.describe()      # 수치형 기초 통계
+df.shape           # (행 수, 열 수)
+df.columns         # 열 이름
+df.dtypes          # 열별 자료형
+df[&quot;col&quot;].value_counts()    # 범주별 개수
+df[&quot;col&quot;].unique()          # 고유값
+df[&quot;col&quot;].nunique()         # 고유값 개수
+</code></pre>
+<h3 id="s5">선택과 필터링</h3>
+<pre><code class="language-python">df[&quot;age&quot;]                     # 열 하나 → Series
+df[[&quot;age&quot;, &quot;sex&quot;]]            # 여러 열 → DataFrame
+df.loc[0:4, [&quot;age&quot;, &quot;sex&quot;]]   # 라벨 기준 (끝 포함)
+df.iloc[0:5, 0:2]             # 위치 기준 (끝 제외)
+df[df[&quot;age&quot;] &gt;= 30]
+df[(df[&quot;age&quot;] &gt;= 30) &amp; (df[&quot;sex&quot;] == &quot;M&quot;)]
+df[df[&quot;city&quot;].isin([&quot;서울&quot;, &quot;부산&quot;])]
+df.query(&quot;age &gt;= 30 and sex == 'M'&quot;)
+</code></pre>
+<h3 id="s6">정렬, 그룹, 병합</h3>
+<pre><code class="language-python">df.sort_values(&quot;price&quot;, ascending=False)
+df.groupby(&quot;city&quot;)[&quot;price&quot;].mean()
+df.groupby([&quot;city&quot;, &quot;type&quot;]).agg({&quot;price&quot;: &quot;mean&quot;, &quot;id&quot;: &quot;count&quot;})
+pd.merge(df1, df2, on=&quot;id&quot;, how=&quot;left&quot;)      # inner, left, right, outer
+pd.concat([df1, df2], axis=0)                # 위아래로 붙이기
+df.pivot_table(index=&quot;city&quot;, columns=&quot;type&quot;, values=&quot;price&quot;, aggfunc=&quot;mean&quot;)
+</code></pre>
+<ol class="quiz">
+<li class="q" data-ans="2"><div class="q-text"><p>DataFrame의 열 이름, 자료형, 결측이 아닌 값의 개수를 한 번에 확인하는 메서드는?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>df.describe()</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>df.info()</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>df.head()</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>df.shape</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> info()다.</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>df.iloc[0:3]이 반환하는 행의 개수는?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>2</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>3</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>4</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>0</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> iloc은 끝 위치를 포함하지 않으므로 0, 1, 2 세 행이다.</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>'city' 열의 범주별 개수를 세는 코드는?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>df["city"].count()</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>df["city"].value_counts()</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>df["city"].unique()</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>df.groupby("city")</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> value_counts()다.</p></div></li>
+</ol>
+  </div>
+</section>
+
+<section class="chapter" id="ch2" data-title="시각화로 데이터 이해하기" data-group="데이터 다루기">
+  <header class="ch-head reveal">
+    <p class="ch-group">데이터 다루기</p>
+    <h2>시각화로 데이터 이해하기</h2>
+    <button type="button" class="ch-pdf" data-ch="ch2"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 1.5h5.5L12.5 4.5V14.5h-8.5z M9.5 1.5v3h3 M6 9.5l2 2 2-2 M8 6.5v5"/></svg>이 장만 PDF로</button>
+  </header>
+  <div class="ch-body">
+<h3 id="s7">자주 나오는 그래프</h3>
+<pre><code class="language-python"># 범주별 개수
+sns.countplot(data=df, x=&quot;churn&quot;)
+plt.show()
+
+# 분포
+sns.histplot(data=df, x=&quot;age&quot;, bins=30, kde=True)
+sns.kdeplot(data=df, x=&quot;age&quot;, hue=&quot;churn&quot;)
+
+# 이상치 확인
+sns.boxplot(data=df, x=&quot;type&quot;, y=&quot;price&quot;)
+
+# 두 수치형 변수 관계
+sns.scatterplot(data=df, x=&quot;area&quot;, y=&quot;price&quot;, hue=&quot;type&quot;)
+sns.jointplot(data=df, x=&quot;area&quot;, y=&quot;price&quot;)
+
+# 범주별 평균
+sns.barplot(data=df, x=&quot;city&quot;, y=&quot;price&quot;)
+
+# 상관관계 히트맵 (수치형만)
+corr = df.select_dtypes(&quot;number&quot;).corr()
+sns.heatmap(corr, annot=True, fmt=&quot;.2f&quot;, cmap=&quot;coolwarm&quot;)
+plt.show()
+
+# 여러 변수 한 번에
+sns.pairplot(df[[&quot;age&quot;, &quot;price&quot;, &quot;area&quot;]])
+</code></pre>
+<aside class="box box-exam">
+<p class="box-t">시각화 문항이 묻는 것</p>
+<p>그래프를 그린 다음 "<strong>가장 상관관계가 높은 변수</strong>를 답안 변수에 저장하라", "<strong>이상치가 있는 열</strong>은?" 같은 해석 질문이 함께 나온다. 히트맵에서는 대각선(자기 자신과 상관 1)을 빼고 타깃과의 상관계수 절댓값이 가장 큰 열을 찾는다.</p>
+<pre><code class="language-python">corr[&quot;price&quot;].drop(&quot;price&quot;).abs().idxmax()
+</code></pre>
+</aside>
+<ol class="quiz">
+<li class="q" data-ans="2"><div class="q-text"><p>수치형 변수 간 상관계수를 색으로 표현하는 그래프 함수는?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>sns.countplot</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>sns.heatmap</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>sns.histplot</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>sns.boxplot</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> df.corr() 결과를 heatmap으로 그린다.</p></div></li>
+<li class="q" data-ans="1"><div class="q-text"><p>범주형 타깃 변수의 클래스별 데이터 개수를 막대로 보는 함수는?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>sns.countplot</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>sns.scatterplot</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>sns.kdeplot</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>sns.jointplot</span></button></li>
+</ol><div class="ans"><p><b>정답 ①</b> countplot이다.</p></div></li>
+</ol>
+  </div>
+</section>
+
+<section class="chapter" id="ch3" data-title="전처리" data-group="데이터 다루기">
+  <header class="ch-head reveal">
+    <p class="ch-group">데이터 다루기</p>
+    <h2>전처리</h2>
+    <button type="button" class="ch-pdf" data-ch="ch3"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 1.5h5.5L12.5 4.5V14.5h-8.5z M9.5 1.5v3h3 M6 9.5l2 2 2-2 M8 6.5v5"/></svg>이 장만 PDF로</button>
+  </header>
+  <div class="ch-body">
+<h3 id="s8">결측치</h3>
+<pre><code class="language-python">df.isnull().sum()                        # 열별 결측 개수
+df.isna().sum().sum()                    # 전체 결측 개수
+
+df = df.dropna()                         # 결측이 있는 행 모두 삭제
+df = df.dropna(subset=[&quot;income&quot;])        # 특정 열 기준
+df = df.drop(columns=[&quot;memo&quot;])           # 결측이 너무 많은 열 삭제
+
+df[&quot;age&quot;] = df[&quot;age&quot;].fillna(df[&quot;age&quot;].mean())
+df[&quot;city&quot;] = df[&quot;city&quot;].fillna(df[&quot;city&quot;].mode()[0])   # 최빈값
+df[&quot;price&quot;] = df[&quot;price&quot;].fillna(method=&quot;ffill&quot;)        # 앞 값으로
+</code></pre>
+<h3 id="s9">자료형 변환과 값 바꾸기</h3>
+<pre><code class="language-python">df[&quot;TotalCharge&quot;] = pd.to_numeric(df[&quot;TotalCharge&quot;], errors=&quot;coerce&quot;)  # 숫자 아닌 값 → NaN
+df[&quot;date&quot;] = pd.to_datetime(df[&quot;date&quot;])
+df[&quot;sex&quot;] = df[&quot;sex&quot;].replace({&quot;M&quot;: 0, &quot;F&quot;: 1})
+df[&quot;churn&quot;] = df[&quot;churn&quot;].map({&quot;Yes&quot;: 1, &quot;No&quot;: 0})
+df = df[df[&quot;price&quot;] &gt; 0]                                 # 이상한 값 제거
+df[&quot;age&quot;] = df[&quot;age&quot;].astype(int)
+</code></pre>
+<h3 id="s10">이상치</h3>
+<pre><code class="language-python">q1 = df[&quot;price&quot;].quantile(0.25)
+q3 = df[&quot;price&quot;].quantile(0.75)
+iqr = q3 - q1
+df = df[(df[&quot;price&quot;] &gt;= q1 - 1.5 * iqr) &amp; (df[&quot;price&quot;] &lt;= q3 + 1.5 * iqr)]
+</code></pre>
+<h3 id="s11">범주형 인코딩</h3>
+<pre><code class="language-python"># 원-핫 인코딩 (시험에서 가장 자주 나옴)
+cat_cols = df.select_dtypes(&quot;object&quot;).columns
+df = pd.get_dummies(df, columns=cat_cols, drop_first=True)
+
+# 레이블 인코딩
+from sklearn.preprocessing import LabelEncoder
+le = LabelEncoder()
+df[&quot;grade&quot;] = le.fit_transform(df[&quot;grade&quot;])
+</code></pre>
+<aside class="box box-tip">
+<p class="box-t">drop_first=True</p>
+<p>범주가 k개면 k−1개 더미만 있어도 정보가 다 담긴다. 선형 모델에서 다중공선성을 줄이려고 쓴다. 문제에서 지정하면 그대로 따른다.</p>
+</aside>
+<h3 id="s12">데이터 분할과 스케일링</h3>
+<pre><code class="language-python">from sklearn.model_selection import train_test_split
+
+X = df.drop(&quot;churn&quot;, axis=1)
+y = df[&quot;churn&quot;]
+X_train, X_valid, y_train, y_valid = train_test_split(
+    X, y, test_size=0.2, random_state=42, stratify=y)
+
+from sklearn.preprocessing import StandardScaler, MinMaxScaler
+scaler = MinMaxScaler()
+X_train = scaler.fit_transform(X_train)    # 학습 데이터로 fit
+X_valid = scaler.transform(X_valid)        # 검증 데이터는 transform만
+</code></pre>
+<aside class="box box-warn">
+<p class="box-t">스케일러는 학습 데이터로만 fit</p>
+<p>검증·테스트 데이터까지 fit하면 <strong>데이터 누수</strong>가 생긴다. 시험에서도 "train에는 fit_transform, valid에는 transform"을 확인한다. 분할은 스케일링보다 <strong>먼저</strong> 한다.</p>
+</aside>
+<ol class="quiz">
+<li class="q" data-ans="2"><div class="q-text"><p>문자열이 섞인 열을 숫자로 바꾸면서 변환할 수 없는 값을 NaN으로 만드는 코드는?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>df["a"].astype(float)</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>pd.to_numeric(df["a"], errors="coerce")</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>df["a"].replace("", 0)</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>df["a"].fillna(0)</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> errors="coerce"를 쓴다.</p></div></li>
+<li class="q" data-ans="1"><div class="q-text"><p>범주형 열을 0/1 더미 열로 바꾸는 pandas 함수는?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>pd.get_dummies</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>pd.factorize</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>pd.cut</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>pd.melt</span></button></li>
+</ol><div class="ans"><p><b>정답 ①</b> get_dummies다.</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>데이터를 학습 80%, 검증 20%로 나누는 train_test_split 인자는?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>train_size=0.2</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>test_size=0.2</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>random_state=0.2</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>stratify=0.2</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> test_size=0.2다.</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>스케일링 순서로 옳은 것은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>전체 데이터에 fit_transform 후 분할</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>분할 후 train에 fit_transform, valid에 transform</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>분할 후 valid에 fit_transform, train에 transform</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>분할 후 둘 다 fit_transform</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> 데이터 누수를 막는다.</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>분류 문제에서 학습·검증 데이터의 클래스 비율을 같게 유지하려면 train_test_split에 어떤 인자를 주는가?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>shuffle=False</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>stratify=y</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>random_state=42</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>test_size=0.3</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> stratify다.</p></div></li>
+</ol>
+  </div>
+</section>
+
+<section class="chapter" id="ch4" data-title="머신러닝 모델" data-group="모델링">
+  <header class="ch-head reveal">
+    <p class="ch-group">모델링</p>
+    <h2>머신러닝 모델</h2>
+    <button type="button" class="ch-pdf" data-ch="ch4"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 1.5h5.5L12.5 4.5V14.5h-8.5z M9.5 1.5v3h3 M6 9.5l2 2 2-2 M8 6.5v5"/></svg>이 장만 PDF로</button>
+  </header>
+  <div class="ch-body">
+<h3 id="s13">scikit-learn 공통 흐름</h3>
+<p>모든 모델이 <strong>생성 → fit → predict → 평가</strong> 같은 모양이다.</p>
+<pre><code class="language-python">from sklearn.linear_model import LinearRegression, LogisticRegression
+from sklearn.tree import DecisionTreeClassifier, DecisionTreeRegressor
+from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor
+from sklearn.neighbors import KNeighborsClassifier
+
+# 분류
+dt = DecisionTreeClassifier(max_depth=5, random_state=42)
+dt.fit(X_train, y_train)
+pred = dt.predict(X_valid)
+
+rf = RandomForestClassifier(n_estimators=100, max_depth=10, random_state=42)
+rf.fit(X_train, y_train)
+
+lr = LogisticRegression(max_iter=1000)
+lr.fit(X_train, y_train)
+proba = lr.predict_proba(X_valid)[:, 1]   # 양성 클래스 확률
+
+# 회귀
+reg = RandomForestRegressor(n_estimators=100, random_state=42)
+reg.fit(X_train, y_train)
+</code></pre>
+<h3 id="s14">부스팅 모델</h3>
+<pre><code class="language-python">from xgboost import XGBClassifier, XGBRegressor
+from lightgbm import LGBMClassifier, LGBMRegressor
+
+xgb = XGBClassifier(n_estimators=100, max_depth=5, learning_rate=0.1, random_state=42)
+xgb.fit(X_train, y_train)
+
+lgbm = LGBMRegressor(n_estimators=100, random_state=42)
+lgbm.fit(X_train, y_train)
+</code></pre>
+<h3 id="s15">주요 하이퍼파라미터</h3>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>모델</th>
+<th>인자</th>
+<th>의미</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>의사결정나무</td>
+<td><code>max_depth</code></td>
+<td>최대 깊이. 크면 과대적합</td>
+</tr>
+<tr>
+<td></td>
+<td><code>min_samples_split</code>, <code>min_samples_leaf</code></td>
+<td>분할·리프 최소 샘플 수</td>
+</tr>
+<tr>
+<td>랜덤 포레스트</td>
+<td><code>n_estimators</code></td>
+<td>트리 개수</td>
+</tr>
+<tr>
+<td></td>
+<td><code>max_features</code></td>
+<td>분할마다 고려할 변수 수</td>
+</tr>
+<tr>
+<td>XGBoost / LightGBM</td>
+<td><code>learning_rate</code></td>
+<td>학습률. 작으면 트리를 더 많이</td>
+</tr>
+<tr>
+<td>KNN</td>
+<td><code>n_neighbors</code></td>
+<td>이웃 수 K</td>
+</tr>
+<tr>
+<td>공통</td>
+<td><code>random_state</code></td>
+<td>결과 재현용 난수 고정</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="s16">평가</h3>
+<pre><code class="language-python">from sklearn.metrics import (accuracy_score, precision_score, recall_score, f1_score,
+                             confusion_matrix, classification_report, roc_auc_score,
+                             mean_absolute_error, mean_squared_error, r2_score)
+
+# 분류
+accuracy_score(y_valid, pred)
+confusion_matrix(y_valid, pred)
+print(classification_report(y_valid, pred))
+roc_auc_score(y_valid, proba)
+
+# 회귀
+mae = mean_absolute_error(y_valid, pred)
+mse = mean_squared_error(y_valid, pred)
+rmse = np.sqrt(mse)
+r2 = r2_score(y_valid, pred)
+</code></pre>
+<figure class="fig" id="fig-cm">
+<div class="cm">
+ <div class="cm-grid">
+  <span></span><b class="cm-h">예측 Positive</b><b class="cm-h">예측 Negative</b>
+  <b class="cm-h cm-v">실제 Positive</b>
+  <label class="cm-c tp">TP<input type="number" min="0" value="40" data-k="tp"></label>
+  <label class="cm-c fn">FN<input type="number" min="0" value="10" data-k="fn"></label>
+  <b class="cm-h cm-v">실제 Negative</b>
+  <label class="cm-c fp">FP<input type="number" min="0" value="5" data-k="fp"></label>
+  <label class="cm-c tn">TN<input type="number" min="0" value="45" data-k="tn"></label>
+ </div>
+ <dl class="cm-out">
+  <div><dt>정확도 Accuracy</dt><dd data-o="acc"></dd><p>(TP+TN) / 전체</p></div>
+  <div><dt>정밀도 Precision</dt><dd data-o="pre"></dd><p>TP / (TP+FP)</p></div>
+  <div><dt>재현율·민감도 Recall</dt><dd data-o="rec"></dd><p>TP / (TP+FN)</p></div>
+  <div><dt>특이도 Specificity</dt><dd data-o="spe"></dd><p>TN / (TN+FP)</p></div>
+  <div><dt>F1 점수</dt><dd data-o="f1"></dd><p>2·P·R / (P+R)</p></div>
+  <div><dt>FPR (1 − 특이도)</dt><dd data-o="fpr"></dd><p>FP / (FP+TN) · ROC의 x축</p></div>
+ </dl>
+</div>
+<figcaption>네 칸의 숫자를 바꿔 보면 지표가 바로 다시 계산된다. 시험에서는 표를 주고 정밀도·재현율·특이도를 계산하게 한다. 분모가 무엇인지(예측 기준인지, 실제 기준인지)가 핵심이다.</figcaption>
+</figure>
+
+<h3 id="s17">하이퍼파라미터 탐색과 변수 중요도</h3>
+<pre><code class="language-python">from sklearn.model_selection import GridSearchCV, cross_val_score
+
+params = {&quot;max_depth&quot;: [3, 5, 7], &quot;n_estimators&quot;: [100, 200]}
+gs = GridSearchCV(RandomForestClassifier(random_state=42), params, cv=5, scoring=&quot;accuracy&quot;)
+gs.fit(X_train, y_train)
+print(gs.best_params_, gs.best_score_)
+
+scores = cross_val_score(rf, X_train, y_train, cv=5)
+print(scores.mean())
+
+imp = pd.Series(rf.feature_importances_, index=X.columns).sort_values(ascending=False)
+print(imp.head())
+</code></pre>
+<ol class="quiz">
+<li class="q" data-ans="2"><div class="q-text"><p>scikit-learn 모델을 학습시키는 메서드는?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>train()</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>fit()</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>compile()</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>learn()</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> fit()이다. compile()은 Keras.</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>분류 모델에서 클래스별 확률을 반환하는 메서드는?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>predict()</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>predict_proba()</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>score()</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>transform()</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> predict_proba()다.</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>랜덤 포레스트에서 트리 개수를 정하는 인자는?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>max_depth</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>n_estimators</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>learning_rate</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>n_neighbors</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> n_estimators다.</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>회귀 모델의 평균 절대 오차를 계산하는 함수는?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>mean_squared_error</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>mean_absolute_error</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>r2_score</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>accuracy_score</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> MAE다.</p></div></li>
+<li class="q" data-ans="3"><div class="q-text"><p>실제 양성 중 모델이 양성으로 맞힌 비율은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>정확도</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>정밀도</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>재현율</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>특이도</span></button></li>
+</ol><div class="ans"><p><b>정답 ③</b> TP / (TP + FN).</p></div></li>
+</ol>
+  </div>
+</section>
+
+<section class="chapter" id="ch5" data-title="딥러닝 모델 (Keras)" data-group="모델링">
+  <header class="ch-head reveal">
+    <p class="ch-group">모델링</p>
+    <h2>딥러닝 모델 (Keras)</h2>
+    <button type="button" class="ch-pdf" data-ch="ch5"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 1.5h5.5L12.5 4.5V14.5h-8.5z M9.5 1.5v3h3 M6 9.5l2 2 2-2 M8 6.5v5"/></svg>이 장만 PDF로</button>
+  </header>
+  <div class="ch-body">
+<h3 id="s18">기본 구조</h3>
+<pre><code class="language-python">import tensorflow as tf
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense, Dropout
+from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
+
+model = Sequential([
+    Dense(64, activation=&quot;relu&quot;, input_shape=(X_train.shape[1],)),
+    Dropout(0.3),
+    Dense(32, activation=&quot;relu&quot;),
+    Dropout(0.3),
+    Dense(1, activation=&quot;sigmoid&quot;)        # 이진 분류
+])
+model.summary()
+</code></pre>
+<h3 id="s19">문제 유형별 마지막 층과 손실 함수</h3>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>문제</th>
+<th>마지막 층</th>
+<th>loss</th>
+<th>metrics</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>이진 분류</strong></td>
+<td><code>Dense(1, activation="sigmoid")</code></td>
+<td><code>binary_crossentropy</code></td>
+<td><code>accuracy</code></td>
+</tr>
+<tr>
+<td><strong>다중 분류 (정수 레이블)</strong></td>
+<td><code>Dense(클래스 수, activation="softmax")</code></td>
+<td><code>sparse_categorical_crossentropy</code></td>
+<td><code>accuracy</code></td>
+</tr>
+<tr>
+<td><strong>다중 분류 (원-핫 레이블)</strong></td>
+<td><code>Dense(클래스 수, activation="softmax")</code></td>
+<td><code>categorical_crossentropy</code></td>
+<td><code>accuracy</code></td>
+</tr>
+<tr>
+<td><strong>회귀</strong></td>
+<td><code>Dense(1)</code> (활성화 없음)</td>
+<td><code>mse</code></td>
+<td><code>mae</code></td>
+</tr>
+</tbody>
+</table></div>
+<aside class="box box-exam">
+<p class="box-t">가장 자주 틀리는 조합</p>
+<p>레이블이 0, 1, 2처럼 <strong>정수</strong>인데 <code>categorical_crossentropy</code>를 쓰면 오류가 난다. 정수면 <code>sparse_</code>가 붙은 것. 원-핫으로 바꾸려면 <code>tf.keras.utils.to_categorical(y)</code>.</p>
+</aside>
+<h3 id="s20">컴파일과 학습</h3>
+<pre><code class="language-python">model.compile(optimizer=&quot;adam&quot;, loss=&quot;binary_crossentropy&quot;, metrics=[&quot;accuracy&quot;])
+
+es = EarlyStopping(monitor=&quot;val_loss&quot;, patience=5, restore_best_weights=True)
+mc = ModelCheckpoint(&quot;best_model.h5&quot;, monitor=&quot;val_loss&quot;, save_best_only=True)
+
+history = model.fit(X_train, y_train,
+                    validation_data=(X_valid, y_valid),
+                    epochs=50, batch_size=32,
+                    callbacks=[es, mc], verbose=1)
+</code></pre>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>용어</th>
+<th>의미</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>epoch</td>
+<td>전체 학습 데이터를 한 번 다 보는 것</td>
+</tr>
+<tr>
+<td>batch_size</td>
+<td>가중치를 한 번 갱신할 때 쓰는 샘플 수</td>
+</tr>
+<tr>
+<td>EarlyStopping</td>
+<td>검증 손실이 <code>patience</code>번 연속 나아지지 않으면 중단</td>
+</tr>
+<tr>
+<td>ModelCheckpoint</td>
+<td>가장 좋은 모델을 파일로 저장</td>
+</tr>
+<tr>
+<td>Dropout(0.3)</td>
+<td>학습 때 뉴런 30%를 무작위로 끔 (과대적합 방지)</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="s21">학습 곡선과 평가</h3>
+<pre><code class="language-python">plt.plot(history.history[&quot;loss&quot;], label=&quot;loss&quot;)
+plt.plot(history.history[&quot;val_loss&quot;], label=&quot;val_loss&quot;)
+plt.xlabel(&quot;epoch&quot;); plt.legend(); plt.show()
+
+loss, acc = model.evaluate(X_valid, y_valid)
+pred = (model.predict(X_valid) &gt; 0.5).astype(int)     # 이진 분류 확률 → 클래스
+pred_multi = np.argmax(model.predict(X_valid), axis=1) # 다중 분류
+</code></pre>
+<aside class="box box-tip">
+<p class="box-t">학습 곡선 읽기</p>
+<p>train loss는 계속 줄어드는데 <strong>val loss가 다시 올라가기 시작하면 과대적합</strong>이다. 그 지점에서 멈추게 하는 것이 EarlyStopping이다.</p>
+</aside>
+<ol class="quiz">
+<li class="q" data-ans="2"><div class="q-text"><p>3개 클래스 다중 분류 모델의 출력층으로 알맞은 것은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>Dense(1, activation="sigmoid")</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>Dense(3, activation="softmax")</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>Dense(3, activation="relu")</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>Dense(1)</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> 클래스 수만큼, softmax.</p></div></li>
+<li class="q" data-ans="3"><div class="q-text"><p>레이블이 0, 1, 2 정수일 때 쓰는 손실 함수는?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>binary_crossentropy</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>categorical_crossentropy</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>sparse_categorical_crossentropy</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>mse</span></button></li>
+</ol><div class="ans"><p><b>정답 ③</b> 정수 레이블이면 sparse를 쓴다.</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>집값을 예측하는 회귀 모델의 출력층과 손실 함수 조합은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>Dense(1, activation="sigmoid") / binary_crossentropy</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>Dense(1) / mse</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>Dense(10, activation="softmax") / mse</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>Dense(1, activation="relu") / accuracy</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> 회귀는 활성화 없는 Dense(1)과 mse.</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>검증 손실이 개선되지 않을 때 학습을 멈추게 하는 콜백은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>ModelCheckpoint</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>EarlyStopping</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>Dropout</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>TensorBoard</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> EarlyStopping이다.</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>학습 데이터 1,000개, batch_size 100이면 1 epoch 동안 가중치는 몇 번 갱신되는가?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>1</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>10</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>100</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>1,000</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> 1000 / 100 = 10번.</p></div></li>
+</ol>
+  </div>
+</section>
+
+<section class="chapter" id="ch6" data-title="실전 모의 문제 (14문항)" data-group="마무리">
+  <header class="ch-head reveal">
+    <p class="ch-group">마무리</p>
+    <h2>실전 모의 문제 (14문항)</h2>
+    <button type="button" class="ch-pdf" data-ch="ch6"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 1.5h5.5L12.5 4.5V14.5h-8.5z M9.5 1.5v3h3 M6 9.5l2 2 2-2 M8 6.5v5"/></svg>이 장만 PDF로</button>
+  </header>
+  <div class="ch-body">
+<h3 id="s22">상황</h3>
+<p>통신사 고객 데이터 <code>churn.csv</code>로 <strong>고객 이탈 여부(<code>Churn</code>: Yes/No)</strong>를 예측한다. 실제 시험처럼 각 문항의 지시대로 코드를 작성해 보자. 아래 해설 코드는 한 흐름으로 이어진다.</p>
+<aside class="box box-ex">
+<p class="box-t">문항과 답안 코드</p>
+<p><strong>1.</strong> pandas를 <code>pd</code>, numpy를 <code>np</code>, seaborn을 <code>sns</code>로 임포트하세요.</p>
+<pre><code class="language-python">import pandas as pd, numpy as np, seaborn as sns, matplotlib.pyplot as plt
+</code></pre>
+<p><strong>2.</strong> <code>churn.csv</code>를 읽어 <code>df</code>에 저장하세요.</p>
+<pre><code class="language-python">df = pd.read_csv(&quot;churn.csv&quot;)
+</code></pre>
+<p><strong>3.</strong> <code>Churn</code> 열의 클래스별 개수를 countplot으로 그리세요.</p>
+<pre><code class="language-python">sns.countplot(data=df, x=&quot;Churn&quot;); plt.show()
+</code></pre>
+<p><strong>4.</strong> 불필요한 <code>customerID</code> 열을 삭제하세요.</p>
+<pre><code class="language-python">df = df.drop(&quot;customerID&quot;, axis=1)
+</code></pre>
+<p><strong>5.</strong> <code>TotalCharges</code> 열을 숫자형으로 바꾸고, 결측치가 있는 행을 삭제하세요.</p>
+<pre><code class="language-python">df[&quot;TotalCharges&quot;] = pd.to_numeric(df[&quot;TotalCharges&quot;], errors=&quot;coerce&quot;)
+df = df.dropna()
+</code></pre>
+<p><strong>6.</strong> <code>Churn</code>의 Yes를 1, No를 0으로 바꾸세요.</p>
+<pre><code class="language-python">df[&quot;Churn&quot;] = df[&quot;Churn&quot;].map({&quot;Yes&quot;: 1, &quot;No&quot;: 0})
+</code></pre>
+<p><strong>7.</strong> 수치형 열의 상관관계 히트맵을 그리고, <code>Churn</code>과 상관계수 절댓값이 가장 큰 열 이름을 <code>answer7</code>에 저장하세요.</p>
+<pre><code class="language-python">corr = df.select_dtypes(&quot;number&quot;).corr()
+sns.heatmap(corr, annot=True); plt.show()
+answer7 = corr[&quot;Churn&quot;].drop(&quot;Churn&quot;).abs().idxmax()
+</code></pre>
+<p><strong>8.</strong> object 타입 열을 모두 원-핫 인코딩해 <code>df</code>에 저장하세요 (<code>drop_first=True</code>).</p>
+<pre><code class="language-python">df = pd.get_dummies(df, columns=df.select_dtypes(&quot;object&quot;).columns, drop_first=True)
+</code></pre>
+<p><strong>9.</strong> <code>Churn</code>을 y, 나머지를 X로 하여 8:2로 나누고 <code>X_train, X_valid, y_train, y_valid</code>에 저장하세요 (<code>random_state=42</code>, <code>stratify=y</code>).</p>
+<pre><code class="language-python">from sklearn.model_selection import train_test_split
+X = df.drop(&quot;Churn&quot;, axis=1); y = df[&quot;Churn&quot;]
+X_train, X_valid, y_train, y_valid = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)
+</code></pre>
+<p><strong>10.</strong> MinMaxScaler로 X_train은 fit_transform, X_valid는 transform하세요.</p>
+<pre><code class="language-python">from sklearn.preprocessing import MinMaxScaler
+scaler = MinMaxScaler()
+X_train = scaler.fit_transform(X_train); X_valid = scaler.transform(X_valid)
+</code></pre>
+<p><strong>11.</strong> <code>max_depth=5</code>인 의사결정나무를 <code>dt</code>로 학습시키세요.</p>
+<pre><code class="language-python">from sklearn.tree import DecisionTreeClassifier
+dt = DecisionTreeClassifier(max_depth=5, random_state=42).fit(X_train, y_train)
+</code></pre>
+<p><strong>12.</strong> <code>n_estimators=100</code>인 랜덤 포레스트를 <code>rf</code>로 학습시키세요.</p>
+<pre><code class="language-python">from sklearn.ensemble import RandomForestClassifier
+rf = RandomForestClassifier(n_estimators=100, random_state=42).fit(X_train, y_train)
+</code></pre>
+<p><strong>13.</strong> 은닉층 2개(64, 32, relu)와 Dropout(0.2)을 가진 이진 분류 딥러닝 모델을 만들어 30 epoch, batch_size 32로 학습하고 기록을 <code>history</code>에 저장하세요.</p>
+<pre><code class="language-python">from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense, Dropout
+model = Sequential([Dense(64, activation=&quot;relu&quot;, input_shape=(X_train.shape[1],)), Dropout(0.2),
+                    Dense(32, activation=&quot;relu&quot;), Dropout(0.2), Dense(1, activation=&quot;sigmoid&quot;)])
+model.compile(optimizer=&quot;adam&quot;, loss=&quot;binary_crossentropy&quot;, metrics=[&quot;accuracy&quot;])
+history = model.fit(X_train, y_train, validation_data=(X_valid, y_valid), epochs=30, batch_size=32)
+</code></pre>
+<p><strong>14.</strong> 랜덤 포레스트로 X_valid를 예측해 정확도를 <code>acc</code>에 저장하세요.</p>
+<pre><code class="language-python">from sklearn.metrics import accuracy_score
+acc = accuracy_score(y_valid, rf.predict(X_valid))
+print(acc)
+</code></pre>
+</aside>
+<h3 id="s23">회귀형 변형</h3>
+<p>같은 흐름에서 타깃이 연속형(예: 배달 시간, 집값)이면 바뀌는 것만 정리한다.</p>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>단계</th>
+<th>분류</th>
+<th>회귀</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>분할</td>
+<td><code>stratify=y</code></td>
+<td>stratify 없음</td>
+</tr>
+<tr>
+<td>모델</td>
+<td><code>...Classifier</code></td>
+<td><code>...Regressor</code></td>
+</tr>
+<tr>
+<td>딥러닝 출력</td>
+<td><code>Dense(1, activation="sigmoid")</code></td>
+<td><code>Dense(1)</code></td>
+</tr>
+<tr>
+<td>손실</td>
+<td><code>binary_crossentropy</code></td>
+<td><code>mse</code></td>
+</tr>
+<tr>
+<td>평가</td>
+<td><code>accuracy_score</code></td>
+<td><code>mean_absolute_error</code>, <code>mean_squared_error</code></td>
+</tr>
+</tbody>
+</table></div>
+<ol class="quiz">
+<li class="q" data-ans="2"><div class="q-text"><p>다음 중 데이터 누수가 발생하는 코드는?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>scaler.fit(X_train)</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>scaler.fit(pd.concat([X_train, X_valid]))</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>scaler.transform(X_valid)</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>train_test_split 후 스케일링</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> 검증 데이터 정보가 학습에 들어간다.</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>df.drop("customerID", axis=1)에서 axis=1의 의미는?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>행 삭제</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>열 삭제</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>첫 번째 행 삭제</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>결측 삭제</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> axis=1은 열 방향이다.</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>Keras 이진 분류 모델의 predict 결과를 0/1 클래스로 바꾸는 코드는?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>np.argmax(pred)</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>(pred &gt; 0.5).astype(int)</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>pred.round(2)</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>pred.sum()</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> 시그모이드 확률을 0.5 기준으로 나눈다.</p></div></li>
+<li class="q" data-ans="1"><div class="q-text"><p>회귀 문제에서 train_test_split에 stratify를 쓰지 않는 이유는?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>타깃이 연속형이라 클래스 비율이 없기 때문</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>속도가 느려서</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>random_state와 충돌해서</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>회귀는 분할하지 않아서</span></button></li>
+</ol><div class="ans"><p><b>정답 ①</b> stratify는 범주 비율을 맞추는 기능이다.</p></div></li>
+</ol>
+
+<aside class="box box-tip">
+<p class="box-t">시험 직전 체크리스트</p>
+<ul>
+<li>문제에서 지정한 <strong>변수명</strong> 그대로 쓰기 (df, X_train, answer7 …)</li>
+<li><code>read_csv</code>, <code>info</code>, <code>isnull().sum()</code>, <code>value_counts</code>, <code>drop(axis=1)</code></li>
+<li><code>to_numeric(errors="coerce")</code>, <code>fillna</code>, <code>dropna</code>, <code>map</code>, <code>get_dummies(drop_first=True)</code></li>
+<li><code>train_test_split(test_size, random_state, stratify)</code>, 스케일러 fit은 train만</li>
+<li>모델 생성 → <code>fit</code> → <code>predict</code> / <code>predict_proba</code>, 주요 하이퍼파라미터</li>
+<li>Keras: 출력층·손실 함수 조합 표, <code>compile(optimizer="adam")</code>, <code>EarlyStopping</code>, <code>validation_data</code></li>
+<li>평가: <code>accuracy_score</code>, <code>mean_absolute_error</code>, <code>np.sqrt(mse)</code></li>
+</ul>
+</aside>
+  </div>
+</section>
+    <footer class="end">
+      <p><b>AICE Associate 교본</b> · 2026년 11월 기준. 시험 일정·응시료·출제 기준은 바뀔 수 있으니 접수 전 공식 사이트 공지를 확인하세요.</p>
+    </footer>
+  </main>
+</div>
+
+<div class="modal" id="pdfModal" role="dialog" aria-modal="true" aria-labelledby="pdfTitle" hidden>
+  <div class="modal-back" data-close></div>
+  <div class="modal-box">
+    <div class="modal-head">
+      <h2 id="pdfTitle">PDF로 저장할 단원</h2>
+      <button type="button" class="x" data-close aria-label="닫기"><svg viewBox="0 0 16 16"><path d="M3 3l10 10M13 3L3 13"/></svg></button>
+    </div>
+    <div class="pick-tools">
+      <button type="button" class="link" data-all="1">전체 선택</button>
+      <button type="button" class="link" data-all="0">전체 해제</button>
+      <label class="switch"><input type="checkbox" id="optAns" checked> 정답·해설 함께 인쇄</label>
+    </div>
+    <div class="pick-list"><label class="pick"><input type="checkbox" value="ch0" checked><span class="pick-g">시작하기</span><span class="pick-t">시험 구성과 공부 순서</span></label>
+<label class="pick"><input type="checkbox" value="ch1" checked><span class="pick-g">데이터 다루기</span><span class="pick-t">Python과 pandas 기본</span></label>
+<label class="pick"><input type="checkbox" value="ch2" checked><span class="pick-g">데이터 다루기</span><span class="pick-t">시각화로 데이터 이해하기</span></label>
+<label class="pick"><input type="checkbox" value="ch3" checked><span class="pick-g">데이터 다루기</span><span class="pick-t">전처리</span></label>
+<label class="pick"><input type="checkbox" value="ch4" checked><span class="pick-g">모델링</span><span class="pick-t">머신러닝 모델</span></label>
+<label class="pick"><input type="checkbox" value="ch5" checked><span class="pick-g">모델링</span><span class="pick-t">딥러닝 모델 (Keras)</span></label>
+<label class="pick"><input type="checkbox" value="ch6" checked><span class="pick-g">마무리</span><span class="pick-t">실전 모의 문제 (14문항)</span></label></div>
+    <div class="modal-foot">
+      <p class="hint">인쇄 창에서 <b>대상: PDF로 저장</b>, 용지 <b>A4</b>를 고르세요. 단원마다 새 페이지에서 시작하고, 표·코드·문제는 페이지 경계에서 잘리지 않게 넘어갑니다.</p>
+      <button type="button" class="btn btn-solid" id="doPrint">선택한 단원 PDF로 저장</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  var $ = function(s, r){ return (r||document).querySelector(s); };
+  var $$ = function(s, r){ return Array.prototype.slice.call((r||document).querySelectorAll(s)); };
+  var body = document.body;
+
+  /* ---- reveal on scroll ---- */
+  var revs = $$('.reveal');
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function(es){
+      es.forEach(function(e){ if (e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, {rootMargin:'0px 0px -8% 0px'});
+    revs.forEach(function(el){ io.observe(el); });
+  } else revs.forEach(function(el){ el.classList.add('in'); });
+
+  /* ---- progress bar + toc spy ---- */
+  var bar = $('.progress i');
+  var chs = $$('.chapter');
+  var subs = $$('.ch-body h3[id]');
+  var tocCh = {}; $$('.toc-ch').forEach(function(a){ tocCh[a.dataset.ch] = a; });
+  var tocSub = {}; $$('.toc ol a').forEach(function(a){ tocSub[a.getAttribute('href').slice(1)] = a; });
+  var curCh = null, curSub = null, ticking = false;
+  function spy(){
+    ticking = false;
+    var h = document.documentElement, max = h.scrollHeight - innerHeight;
+    if (bar) bar.style.transform = 'scaleX(' + (max > 0 ? Math.min(1, scrollY / max) : 0) + ')';
+    var line = 140, c = null, s = null;
+    for (var i = 0; i < chs.length; i++) { if (chs[i].getBoundingClientRect().top - line < 0) c = chs[i]; else break; }
+    for (var j = 0; j < subs.length; j++) { if (subs[j].getBoundingClientRect().top - line < 0) s = subs[j]; else break; }
+    if (c !== curCh) {
+      if (curCh && tocCh[curCh.id]) { tocCh[curCh.id].classList.remove('on'); tocCh[curCh.id].parentNode.classList.remove('open'); }
+      curCh = c;
+      if (c && tocCh[c.id]) { tocCh[c.id].classList.add('on'); tocCh[c.id].parentNode.classList.add('open'); }
+    }
+    if (s !== curSub) {
+      if (curSub && tocSub[curSub.id]) tocSub[curSub.id].classList.remove('on');
+      curSub = s;
+      if (s && tocSub[s.id] && c && c.contains(s)) tocSub[s.id].classList.add('on');
+    }
+  }
+  addEventListener('scroll', function(){ if (!ticking){ ticking = true; requestAnimationFrame(spy); } }, {passive:true});
+  spy();
+
+  /* ---- mobile toc ---- */
+  var tg = $('.toc-toggle');
+  if (tg) tg.addEventListener('click', function(){
+    var open = body.classList.toggle('toc-open'); tg.setAttribute('aria-expanded', open);
+  });
+  $$('.toc a').forEach(function(a){ a.addEventListener('click', function(){ body.classList.remove('toc-open'); if (tg) tg.setAttribute('aria-expanded', false); }); });
+
+  /* ---- quiz ---- */
+  document.addEventListener('click', function(e){
+    var b = e.target.closest && e.target.closest('.opt');
+    if (!b) return;
+    var q = b.closest('.q'); if (q.classList.contains('done')) return;
+    var ans = +q.dataset.ans, pick = +b.dataset.i;
+    q.classList.add('done');
+    $$('.opt', q).forEach(function(o){ if (+o.dataset.i === ans) o.classList.add('right'); });
+    if (pick !== ans) b.classList.add('wrong');
+  });
+  $$('.q').forEach(function(q){
+    var t = document.createElement('button'); t.type = 'button'; t.className = 'ans-toggle'; t.textContent = '정답만 보기';
+    t.addEventListener('click', function(){
+      q.classList.add('done'); $$('.opt', q).forEach(function(o){ if (+o.dataset.i === +q.dataset.ans) o.classList.add('right'); });
+      t.remove();
+    });
+    q.appendChild(t);
+  });
+
+  /* ---- PDF (print) ---- */
+  var modal = $('#pdfModal'), lastFocus = null;
+  function openModal(){ lastFocus = document.activeElement; modal.hidden = false; $('#doPrint').focus(); }
+  function closeModal(){ modal.hidden = true; if (lastFocus) lastFocus.focus(); }
+  $$('.open-pdf').forEach(function(b){ b.addEventListener('click', openModal); });
+  $$('[data-close]', modal).forEach(function(b){ b.addEventListener('click', closeModal); });
+  addEventListener('keydown', function(e){ if (e.key === 'Escape' && !modal.hidden) closeModal(); });
+  $$('[data-all]', modal).forEach(function(b){ b.addEventListener('click', function(){
+    var v = b.dataset.all === '1'; $$('.pick input', modal).forEach(function(i){ i.checked = v; });
+  }); });
+
+  var cover = $('.pc-list');
+  function fillCover(ids){
+    cover.innerHTML = '';
+    chs.forEach(function(c){
+      if (ids && ids.indexOf(c.id) < 0) return;
+      var li = document.createElement('li'), g = c.dataset.group;
+      li.innerHTML = (g ? '<span>' + g + '</span>' : '') + c.dataset.title;
+      cover.appendChild(li);
+    });
+  }
+  function printChapters(ids, withAns){
+    if (!ids.length) { alert('저장할 단원을 하나 이상 고르세요.'); return; }
+    var all = ids.length === chs.length;
+    chs.forEach(function(c){ c.classList.toggle('pr', ids.indexOf(c.id) > -1); });
+    body.classList.toggle('pick-mode', !all);
+    body.classList.toggle('no-ans', !withAns);
+    fillCover(ids);
+    revs.forEach(function(el){ el.classList.add('in'); });
+    var t = document.title;
+    if (!all && ids.length === 1) document.title = t.replace(' 교본', '') + ' - ' + $('#' + ids[0]).dataset.title;
+    modal.hidden = true;
+    setTimeout(function(){
+      window.print();
+      setTimeout(function(){ document.title = t; }, 500);
+    }, 60);
+  }
+  $('#doPrint').addEventListener('click', function(){
+    var ids = $$('.pick input:checked', modal).map(function(i){ return i.value; });
+    printChapters(ids, $('#optAns').checked);
+  });
+  $$('.ch-pdf').forEach(function(b){ b.addEventListener('click', function(){ printChapters([b.dataset.ch], true); }); });
+  addEventListener('afterprint', function(){
+    body.classList.remove('pick-mode', 'no-ans'); chs.forEach(function(c){ c.classList.remove('pr'); });
+    fillCover(null);
+  });
+  addEventListener('beforeprint', function(){ revs.forEach(function(el){ el.classList.add('in'); }); });
+  /* 브라우저 메뉴(Ctrl+P)로 바로 인쇄해도 표지 목록이 채워지도록 */
+  fillCover(null);
+
+  /* figures: run once when visible */
+  window.__onSeen = function(el, fn){
+    if (!el) return;
+    if (!('IntersectionObserver' in window)) { fn(); return; }
+    var o = new IntersectionObserver(function(es){ es.forEach(function(e){ if (e.isIntersecting){ o.disconnect(); fn(); } }); }, {threshold:.35});
+    o.observe(el);
+  };
+})();
+
+
+(function(){
+  var d = document.getElementById('fig-dikw'); __onSeen(d, function(){ d.classList.add('play'); });
+  var c = document.getElementById('fig-crisp');
+  if (c) {
+    var ph = c.querySelectorAll('.ph'), orb = c.querySelector('.orbit'), desc = c.querySelector('.crisp-desc');
+    var tx = ['비즈니스 목표 → 분석 목표','데이터 수집·품질 확인','정제·통합·변환 (가장 오래 걸림)','기법 선택·모델 작성','목표 달성 여부 판단','배포·모니터링·보고서'];
+    var n = -1, timer = null;
+    function step(){ n++; var i = n % 6; ph.forEach(function(p){ p.classList.toggle('on', +p.dataset.i === i); });
+      orb.style.transform = 'rotate(' + (n*60) + 'deg)'; desc.textContent = tx[i]; }
+    __onSeen(c, function(){ step(); timer = setInterval(step, 1800); });
+  }
+  var m = document.getElementById('fig-cm');
+  if (m) {
+    var ins = m.querySelectorAll('input'), out = {};
+    m.querySelectorAll('[data-o]').forEach(function(e){ out[e.dataset.o] = e; });
+    function f(x){ return isFinite(x) ? (x*100).toFixed(1) + '%' : '—'; }
+    function calc(){ var v = {}; ins.forEach(function(i){ v[i.dataset.k] = Math.max(0, +i.value || 0); });
+      var all = v.tp+v.fn+v.fp+v.tn, P = v.tp/(v.tp+v.fp), R = v.tp/(v.tp+v.fn);
+      out.acc.textContent = f((v.tp+v.tn)/all); out.pre.textContent = f(P); out.rec.textContent = f(R);
+      out.spe.textContent = f(v.tn/(v.tn+v.fp)); out.f1.textContent = isFinite(2*P*R/(P+R)) ? (2*P*R/(P+R)).toFixed(3) : '—';
+      out.fpr.textContent = f(v.fp/(v.fp+v.tn)); }
+    ins.forEach(function(i){ i.addEventListener('input', calc); }); calc();
+  }
+})();
+
+
+(function(){
+  /* hero: 조인 행 연결 애니메이션 */
+  var h = document.getElementById('hero-sqld');
+  if (h) {
+    var er = h.querySelectorAll('.er'), dr = h.querySelectorAll('.dr'), jl = h.querySelector('.jl');
+    var map = [1, 2, 1, 0], k = 0; // EMP행 -> DEPT행 인덱스 (20,30,20,10)
+    function yE(r){ return 60 + 34 + r*36 + 18; } function yD(r){ return 78 + 34 + r*36 + 18; }
+    function tick(){
+      er.forEach(function(g){ g.classList.remove('on'); }); dr.forEach(function(g){ g.classList.remove('on'); });
+      var r = k % 4, d = map[r]; er[r].classList.add('on'); dr[d].classList.add('on');
+      jl.setAttribute('d', 'M240 ' + yE(r) + ' C290 ' + yE(r) + ' 290 ' + yD(d) + ' 340 ' + yD(d)); k++;
+    }
+    if (!matchMedia('(prefers-reduced-motion: reduce)').matches) { tick(); setInterval(tick, 1500); } else tick();
+  }
+  /* 실행 순서 */
+  var o = document.getElementById('fig-order');
+  if (o) {
+    var w = o.querySelectorAll('li'), s = 0;
+    function st(){ s = s % 6 + 1; w.forEach(function(li){ var n = +li.dataset.s; li.classList.toggle('on', n === s); li.classList.toggle('done', n < s); }); }
+    __onSeen(o, function(){ st(); setInterval(st, 1400); });
+  }
+  /* 조인 시각화 */
+  var j = document.getElementById('fig-join');
+  if (j) {
+    var A = [['SMITH',20],['ALLEN',30],['KING',10],['SCOTT',null]];
+    var B = [[10,'ACCOUNTING'],[20,'RESEARCH'],[40,'OPERATIONS']];
+    var SQL = {
+      inner:'SELECT E.ENAME, E.DEPTNO, D.DEPTNO, D.DNAME\n  FROM EMP E INNER JOIN DEPT D\n    ON E.DEPTNO = D.DEPTNO;',
+      left:'SELECT E.ENAME, E.DEPTNO, D.DEPTNO, D.DNAME\n  FROM EMP E LEFT OUTER JOIN DEPT D\n    ON E.DEPTNO = D.DEPTNO;',
+      right:'SELECT E.ENAME, E.DEPTNO, D.DEPTNO, D.DNAME\n  FROM EMP E RIGHT OUTER JOIN DEPT D\n    ON E.DEPTNO = D.DEPTNO;',
+      full:'SELECT E.ENAME, E.DEPTNO, D.DEPTNO, D.DNAME\n  FROM EMP E FULL OUTER JOIN DEPT D\n    ON E.DEPTNO = D.DEPTNO;',
+      cross:'SELECT E.ENAME, E.DEPTNO, D.DEPTNO, D.DNAME\n  FROM EMP E CROSS JOIN DEPT D;'
+    };
+    function cell(v){ return v === null ? '<td class="nul">NULL</td>' : '<td>' + v + '</td>'; }
+    function run(t){
+      var res = [], ma = {}, mb = {};
+      if (t === 'cross') { A.forEach(function(a){ B.forEach(function(b){ res.push([a[0],a[1],b[0],b[1]]); }); }); }
+      else {
+        A.forEach(function(a, i){ B.forEach(function(b, k){ if (a[1] !== null && a[1] === b[0]) { res.push([a[0],a[1],b[0],b[1]]); ma[i]=1; mb[k]=1; } }); });
+        if (t === 'left' || t === 'full') A.forEach(function(a, i){ if (!ma[i]) res.push([a[0],a[1],null,null]); });
+        if (t === 'right' || t === 'full') B.forEach(function(b, k){ if (!mb[k]) res.push([null,null,b[0],b[1]]); });
+      }
+      j.querySelector('.j-a tbody').innerHTML = A.map(function(a,i){ return '<tr' + (ma[i]||t==='cross' ? ' class="m"' : '') + '>' + cell(a[0]) + cell(a[1]) + '</tr>'; }).join('');
+      j.querySelector('.j-b tbody').innerHTML = B.map(function(b,k){ return '<tr' + (mb[k]||t==='cross' ? ' class="m"' : '') + '>' + cell(b[0]) + cell(b[1]) + '</tr>'; }).join('');
+      j.querySelector('.j-r tbody').innerHTML = res.map(function(r,i){ return '<tr style="animation-delay:' + (i*35) + 'ms">' + r.map(cell).join('') + '</tr>'; }).join('');
+      j.querySelector('.j-n').textContent = res.length + '행';
+      j.querySelector('.j-sql code').textContent = SQL[t];
+    }
+    j.querySelectorAll('.chip').forEach(function(b){ b.addEventListener('click', function(){
+      j.querySelectorAll('.chip').forEach(function(x){ x.setAttribute('aria-pressed', x === b); }); run(b.dataset.j); }); });
+    run('inner');
+  }
+})();
+
+
+(function(){
+  /* hero terminal typing */
+  var t = document.getElementById('heroTerm');
+  if (t) {
+    var S = [
+      ['$ ', 'whoami', 'student'],
+      ['$ ', 'pwd', '/home/student'],
+      ['$ ', 'ls -l report.txt', '-rw-r--r--. 1 student student 2048 Nov  7 16:00 report.txt'],
+      ['$ ', 'chmod 640 report.txt', ''],
+      ['$ ', 'ls -l report.txt', '-rw-r-----. 1 student student 2048 Nov  7 16:00 report.txt'],
+      ['$ ', 'ps -ef | grep sshd | head -1', 'root      1024     1  0 09:12 ?   00:00:00 /usr/sbin/sshd -D']
+    ];
+    var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var html = '<span class="d">[student@rocky ~]</span>';
+    function esc(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;'); }
+    if (reduce) { S.forEach(function(s){ html += '\n<span class="p">' + s[0] + '</span>' + esc(s[1]) + (s[2] ? '\n' + esc(s[2]) : ''); }); t.innerHTML = html; }
+    else {
+      var ln = 0, ci = 0;
+      function frame(){
+        if (ln >= S.length) { t.innerHTML = html + '\n<span class="p">$ </span><span class="cur"></span>'; return; }
+        var s = S[ln];
+        if (ci <= s[1].length) {
+          t.innerHTML = html + '\n<span class="p">' + s[0] + '</span>' + esc(s[1].slice(0, ci)) + '<span class="cur"></span>';
+          ci++; setTimeout(frame, 38 + Math.random()*50);
+        } else {
+          html += '\n<span class="p">' + s[0] + '</span>' + esc(s[1]) + (s[2] ? '\n' + esc(s[2]) : '');
+          ln++; ci = 0; t.innerHTML = html; setTimeout(frame, 520);
+        }
+      }
+      setTimeout(frame, 500);
+    }
+  }
+  /* boot */
+  var b = document.getElementById('fig-boot');
+  if (b) {
+    var steps = b.querySelectorAll('li'), bar = b.querySelector('.boot-bar i'), dsc = b.querySelector('.boot-desc');
+    var D = ['전원이 들어오면 메인보드 펌웨어(BIOS 또는 UEFI)가 POST(하드웨어 자가 진단)를 하고, 부팅 장치에서 부트로더를 찾는다.',
+             '부트로더 GRUB2가 메뉴를 보여주고, 선택한 커널 이미지와 initramfs를 메모리에 올린다. 설정은 /boot/grub2/grub.cfg.',
+             '커널이 하드웨어를 초기화하고 루트 파일 시스템을 마운트한다. initramfs는 그 전에 필요한 임시 드라이버 묶음이다.',
+             '커널이 첫 프로세스 systemd를 실행한다. PID는 1번이고, 이후 모든 프로세스의 조상이 된다.',
+             'systemd가 기본 target(예전의 런레벨)에 필요한 서비스들을 띄운다. 기본값 확인은 systemctl get-default.',
+             '텍스트 로그인(getty) 또는 그래픽 로그인(GDM) 화면이 뜬다. 로그인하면 셸이 시작된다.'];
+    var i = -1;
+    function go(){ i = (i + 1) % 6; steps.forEach(function(e){ var n = +e.dataset.i; e.classList.toggle('on', n === i); e.classList.toggle('done', n < i); });
+      bar.style.transform = 'scaleX(' + ((i + 1) / 6) + ')'; dsc.textContent = (i + 1) + '단계 · ' + D[i]; }
+    __onSeen(b, function(){ go(); setInterval(go, 2600); });
+  }
+  /* chmod */
+  var p = document.getElementById('fig-chmod');
+  if (p) {
+    var bt = p.querySelectorAll('.perm-grid button'), num = p.querySelector('.perm-num'), term = p.querySelector('.perm-term');
+    function val(){ var v = 0; bt.forEach(function(x){ if (x.getAttribute('aria-pressed') === 'true') v += +x.dataset.b; }); return v; }
+    function sym(v){ var s = 'rwxrwxrwx', o = '-'; for (var k = 0; k < 9; k++) o += (v & (256 >> k)) ? s[k] : '-'; return o; }
+    function show(v, fromNum){
+      var oc = v.toString(8); while (oc.length < 3) oc = '0' + oc;
+      if (!fromNum) num.value = oc;
+      bt.forEach(function(x){ x.setAttribute('aria-pressed', (v & +x.dataset.b) ? 'true' : 'false'); });
+      var u = 'ugo', parts = [];
+      for (var k = 0; k < 3; k++) { var seg = sym(v).slice(1 + k*3, 4 + k*3).replace(/-/g, ''); parts.push(u[k] + '=' + seg); }
+      term.innerHTML = '<span class="p">$ </span>chmod ' + oc + ' report.txt\n<span class="d"># 같은 뜻</span>\n<span class="p">$ </span>chmod ' + parts.join(',') + ' report.txt\n<span class="p">$ </span>ls -l report.txt\n' + sym(v) + '. 1 student student 2048 report.txt';
+    }
+    bt.forEach(function(x){ x.addEventListener('click', function(){ x.setAttribute('aria-pressed', x.getAttribute('aria-pressed') !== 'true'); show(val()); }); });
+    num.addEventListener('input', function(){ var s = num.value.replace(/[^0-7]/g, ''); num.value = s; if (s.length === 3) show(parseInt(s, 8), true); });
+    show(val());
+  }
+})();
+
+
+(function(){
+  /* 범용 터미널 히어로 */
+  document.querySelectorAll('.gen-term').forEach(function(t){
+    var S; try { S = JSON.parse(t.dataset.lines); } catch(e) { return; }
+    var P = t.dataset.prompt || '';
+    function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;'); }
+    var html = '<span class="d">' + esc(P) + '</span>';
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      S.forEach(function(s){ html += '\n<span class="p">' + esc(s[0]) + '</span>' + esc(s[1]) + (s[2] ? '\n' + esc(s[2]) : ''); }); t.innerHTML = html; return;
+    }
+    var ln = 0, ci = 0;
+    function frame(){
+      if (ln >= S.length) { t.innerHTML = html + '\n<span class="cur"></span>'; return; }
+      var s = S[ln];
+      if (ci <= s[1].length) { t.innerHTML = html + '\n<span class="p">' + esc(s[0]) + '</span>' + esc(s[1].slice(0, ci)) + '<span class="cur"></span>'; ci++; setTimeout(frame, 30 + Math.random()*40); }
+      else { html += '\n<span class="p">' + esc(s[0]) + '</span>' + esc(s[1]) + (s[2] ? '\n' + esc(s[2]) : ''); ln++; ci = 0; t.innerHTML = html; setTimeout(frame, 450); }
+    }
+    setTimeout(frame, 500);
+  });
+  /* 서브넷 계산기 */
+  var sn = document.getElementById('fig-subnet');
+  if (sn) {
+    var ip = sn.querySelector('.sn-ip'), px = sn.querySelector('.sn-px'), bits = sn.querySelector('.sn-bits'), o = {};
+    sn.querySelectorAll('[data-o]').forEach(function(e){ o[e.dataset.o] = e; });
+    for (var i = 0; i < 32; i++) { var b = document.createElement('i'); if (i % 8 === 7 && i < 31) b.className = 'g'; bits.appendChild(b); }
+    var cells = bits.querySelectorAll('i');
+    function toS(n){ return [n>>>24, (n>>>16)&255, (n>>>8)&255, n&255].join('.'); }
+    function calc(){
+      var p = ip.value.trim().split('.').map(Number), k = Math.max(0, Math.min(32, parseInt(px.value, 10) || 0));
+      if (p.length !== 4 || p.some(function(x){ return isNaN(x) || x < 0 || x > 255; })) { o.mask.textContent = '올바른 IP를 입력'; return; }
+      var n = ((p[0]<<24)>>>0) + (p[1]<<16) + (p[2]<<8) + p[3];
+      var m = k === 0 ? 0 : (0xFFFFFFFF << (32 - k)) >>> 0;
+      var net = (n & m) >>> 0, bc = (net | (~m >>> 0)) >>> 0;
+      cells.forEach(function(c, i){ c.textContent = (n >>> (31 - i)) & 1; c.classList.toggle('n', i < k); });
+      o.mask.textContent = toS(m); o.net.textContent = toS(net); o.bc.textContent = toS(bc);
+      var h = k >= 31 ? (k === 32 ? 1 : 2) : Math.pow(2, 32 - k) - 2;
+      o.range.textContent = k >= 31 ? toS(net) + ' ~ ' + toS(bc) : toS(net + 1) + ' ~ ' + toS(bc - 1);
+      o.hosts.textContent = h.toLocaleString() + '개';
+      var c = p[0] < 128 ? 'A' : p[0] < 192 ? 'B' : p[0] < 224 ? 'C' : p[0] < 240 ? 'D' : 'E';
+      var priv = p[0] === 10 || (p[0] === 172 && p[1] >= 16 && p[1] <= 31) || (p[0] === 192 && p[1] === 168);
+      o.cls.textContent = c + '클래스 · ' + (p[0] === 127 ? '루프백' : priv ? '사설' : '공인');
+    }
+    ip.addEventListener('input', calc); px.addEventListener('input', calc); calc();
+  }
+  /* TCP 3-way */
+  var tc = document.getElementById('fig-tcp3'); if (tc) __onSeen(tc, function(){ tc.classList.add('play'); });
+  /* 페이지 교체 */
+  var pg = document.getElementById('fig-paging');
+  if (pg) {
+    var alg = 'FIFO', ref = pg.querySelector('.pg-ref'), fr = pg.querySelector('.pg-fr'), tb = pg.querySelector('tbody'), sum = pg.querySelector('.pg-sum');
+    function run(){
+      var R = ref.value.trim().split(/[\s,]+/).filter(Boolean), F = Math.max(1, Math.min(6, +fr.value || 3));
+      var mem = [], cols = [], faults = 0, last = {}, order = [];
+      R.forEach(function(r, t){
+        var hit = mem.indexOf(r) > -1;
+        if (!hit) {
+          faults++;
+          if (mem.length < F) { mem.push(r); order.push(r); }
+          else {
+            var victim;
+            if (alg === 'FIFO') victim = order.shift();
+            else if (alg === 'LRU') { victim = mem.slice().sort(function(a, b){ return last[a] - last[b]; })[0]; }
+            else { var far = -1; mem.forEach(function(m){ var nx = R.indexOf(m, t + 1); if (nx === -1) nx = 1e9; if (nx > far) { far = nx; victim = m; } }); }
+            mem[mem.indexOf(victim)] = r;
+            if (alg === 'FIFO') order.push(r);
+          }
+        }
+        last[r] = t; cols.push({r: r, m: mem.slice(), f: !hit});
+      });
+      var h = '<tr><th>참조</th>' + cols.map(function(c){ return '<th>' + c.r + '</th>'; }).join('') + '</tr>';
+      for (var i = 0; i < F; i++) h += '<tr><th>프레임' + (i + 1) + '</th>' + cols.map(function(c){ var v = c.m[i]; return '<td class="' + (c.f && v === c.r ? 'f' : 'h') + '">' + (v === undefined ? '' : v) + '</td>'; }).join('') + '</tr>';
+      tb.innerHTML = h; sum.textContent = alg + ' · 페이지 부재 ' + faults + '회 / 참조 ' + R.length + '회';
+    }
+    pg.querySelectorAll('.chip').forEach(function(b){ b.addEventListener('click', function(){ pg.querySelectorAll('.chip').forEach(function(x){ x.setAttribute('aria-pressed', x === b); }); alg = b.dataset.a; run(); }); });
+    ref.addEventListener('input', run); fr.addEventListener('input', run); run();
+  }
+})();
+
+</script>
+</body>
+</html>

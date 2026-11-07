@@ -1,0 +1,2243 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI-POT 프롬프트 활용능력 교본</title>
+<meta name="description" content="생성형 AI에게 원하는 결과를 받아내는 프롬프트 작성법을 실습형으로.">
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pretendard@1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+:root{--accent:#7d6200;--accent-2:#f5efd9;--accent-ink:#ffffff;}
+:root{
+  --bg:#ffffff; --surface:#f3f5f7; --surface-2:#e8ecf0; --line:#d6dce2;
+  --text:#121a22; --text-2:#4f5d6b; --code-bg:#11161b; --code-text:#e4eaf0; --code-dim:#8b97a3;
+  --ok:#0d7a4f; --ok-bg:#e2f3ea; --bad:#b42318; --bad-bg:#fcebe9;
+  --ease-out:cubic-bezier(.23,1,.32,1); --ease-io:cubic-bezier(.77,0,.175,1);
+  --font:"Pretendard Variable",Pretendard,-apple-system,"Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
+  --mono:ui-monospace,"SF Mono","D2Coding",Consolas,"Liberation Mono",monospace;
+  --top:60px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:calc(var(--top) + 20px);-webkit-text-size-adjust:100%;font-family:var(--font);overflow-x:clip}
+button,input,select,textarea{font-family:inherit}
+body{margin:0;overflow-x:clip;background:var(--bg);color:var(--text);font-family:var(--font);font-size:17px;line-height:1.75;
+  word-break:keep-all;overflow-wrap:anywhere;-webkit-font-smoothing:antialiased}
+::selection{background:var(--accent);color:var(--accent-ink)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:2px}
+a{color:var(--accent);text-underline-offset:3px;text-decoration-thickness:1px}
+h1,h2,h3,h4{text-wrap:balance;line-height:1.25;margin:0}
+img,svg{max-width:100%}
+html{scrollbar-color:var(--line) transparent}
+
+/* progress */
+.progress{position:fixed;inset:0 0 auto 0;height:3px;z-index:60;pointer-events:none}
+.progress i{display:block;height:100%;background:var(--accent);transform-origin:0 50%;transform:scaleX(0)}
+
+/* top bar */
+.topbar{position:sticky;top:0;z-index:50;background:var(--bg);border-bottom:1px solid var(--line)}
+.topbar-in{max-width:1320px;margin:0 auto;height:var(--top);display:flex;align-items:center;gap:28px;padding:0 28px}
+.brand{color:var(--text);text-decoration:none;font-size:16px;white-space:nowrap}
+.brand b{font-weight:700;margin-left:4px}
+.guides{display:flex;gap:22px;margin-left:auto}
+.guides a{color:var(--text-2);text-decoration:none;font-size:15px;padding:6px 0;border-bottom:2px solid transparent}
+.guides a[aria-current]{color:var(--text);border-bottom-color:var(--accent);font-weight:600}
+.toc-toggle{display:none}
+.btn{font:inherit;font-size:15px;font-weight:600;border-radius:999px;padding:10px 20px;cursor:pointer;border:1px solid transparent;
+  text-decoration:none;display:inline-flex;align-items:center;gap:8px;line-height:1.2;
+  transition:transform 160ms var(--ease-out),background-color 160ms var(--ease-out)}
+.btn:active{transform:scale(.97)}
+.btn-solid{background:var(--accent);color:var(--accent-ink)}
+.btn-light{background:#fff;color:var(--accent)}
+.btn-line-light{background:transparent;color:#fff;border-color:rgba(255,255,255,.55)}
+@media (hover:hover) and (pointer:fine){
+  .btn-solid:hover{background:color-mix(in srgb,var(--accent) 86%,#000)}
+  .btn-line-light:hover{background:rgba(255,255,255,.12)}
+  .guides a:hover{color:var(--text)}
+}
+
+/* hero: solid accent plane */
+.hero{background:var(--accent);color:#fff}
+.hero-in{max-width:1320px;margin:0 auto;padding:96px 28px 104px;display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:56px;align-items:center}
+.hero h1{font-size:clamp(40px,5.4vw,76px);letter-spacing:-.035em;line-height:1.08;font-weight:800}
+.hero-tag{font-size:clamp(18px,1.6vw,22px);margin:24px 0 0;max-width:30em;color:rgba(255,255,255,.9);line-height:1.6}
+.hero-stats{display:flex;gap:44px;margin:48px 0 0;padding:0}
+.hero-stats div{margin:0}
+.hero-stats dt{font-size:14px;color:rgba(255,255,255,.75)}
+.hero-stats dd{margin:2px 0 0;font-size:40px;font-weight:700;letter-spacing:-.02em;font-variant-numeric:tabular-nums;line-height:1.1}
+.hero-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:44px}
+.hero-fig svg{display:block;width:100%;height:auto}
+
+/* layout */
+.layout{max-width:1320px;margin:0 auto;display:grid;grid-template-columns:290px minmax(0,1fr);gap:64px;padding:0 28px}
+.sidebar{position:relative}
+.sidebar-in{position:sticky;top:calc(var(--top) + 0px);max-height:calc(100vh - var(--top));overflow:auto;padding:48px 8px 48px 0;scrollbar-width:thin}
+.toc-title{font-size:14px;color:var(--text-2);margin:0 0 12px}
+.toc,.toc ol{list-style:none;margin:0;padding:0}
+.toc>li{margin:0 0 4px}
+.toc-ch{display:block;color:var(--text);text-decoration:none;font-size:15px;font-weight:600;padding:8px 10px;border-radius:4px;line-height:1.4}
+.toc-g{display:block;font-size:13px;font-weight:500;color:var(--text-2)}
+.toc ol{display:none;padding:2px 0 8px 10px}
+.toc li.open>ol{display:block}
+.toc ol a{display:block;color:var(--text-2);text-decoration:none;font-size:14px;padding:4px 10px;line-height:1.45;border-radius:4px}
+.toc a.on{background:var(--accent-2);color:var(--text)}
+@media (hover:hover) and (pointer:fine){ .toc a:hover{background:var(--surface)} }
+
+.content{min-width:0;max-width:800px;padding:0 0 120px}
+
+/* chapter */
+.chapter{padding-top:120px}
+.ch-head{padding-bottom:36px;margin-bottom:44px;border-bottom:1px solid var(--line);position:relative}
+.ch-group{margin:0 0 12px;font-size:16px;color:var(--accent);font-weight:600}
+.ch-head h2{font-size:clamp(32px,4vw,50px);letter-spacing:-.03em;font-weight:800}
+.ch-pdf{margin-top:22px;font:inherit;font-size:14px;color:var(--text-2);background:var(--surface);border:0;border-radius:999px;padding:7px 14px 7px 11px;
+  display:inline-flex;align-items:center;gap:7px;cursor:pointer;transition:transform 160ms var(--ease-out),background-color 160ms var(--ease-out)}
+.ch-pdf svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.3;stroke-linejoin:round;stroke-linecap:round}
+.ch-pdf:active{transform:scale(.97)}
+@media (hover:hover) and (pointer:fine){ .ch-pdf:hover{background:var(--surface-2);color:var(--text)} }
+
+.ch-body h3{font-size:28px;letter-spacing:-.02em;font-weight:750;margin:80px 0 20px}
+.ch-body h3:first-child{margin-top:0}
+.ch-body h4{font-size:20px;font-weight:700;margin:44px 0 12px;letter-spacing:-.01em}
+.ch-body p{margin:0 0 16px}
+.ch-body ul,.ch-body ol{margin:0 0 18px;padding-left:1.4em}
+.ch-body li{margin:4px 0}
+.ch-body li>ul,.ch-body li>ol{margin:4px 0}
+.ch-body strong{font-weight:700}
+.ch-body hr{border:0;border-top:1px solid var(--line);margin:48px 0}
+
+/* inline code & blocks */
+code{font-family:var(--mono);font-size:.88em;background:var(--surface);padding:.12em .4em;border-radius:3px}
+pre{background:var(--code-bg);color:var(--code-text);border-radius:6px;padding:18px 20px;overflow:auto;margin:0 0 20px;line-height:1.6;font-size:14.5px}
+pre code{background:none;padding:0;font-size:inherit;color:inherit;white-space:pre}
+
+/* tables */
+.tw{overflow-x:auto;margin:0 0 22px}
+table{border-collapse:collapse;width:100%;font-size:15.5px;line-height:1.55;font-variant-numeric:tabular-nums}
+th,td{text-align:left;vertical-align:top;padding:10px 12px;border-bottom:1px solid var(--line)}
+thead th{background:var(--surface);font-weight:650;border-bottom:1px solid var(--text-2)}
+td code{white-space:nowrap}
+
+/* boxes */
+.box{margin:28px 0;padding:22px 24px 8px;background:var(--surface);border-radius:6px}
+.box-t{font-weight:700;margin:0 0 8px !important;font-size:16px}
+.box-exam{background:var(--accent-2)}
+.box-exam .box-t{color:var(--accent)}
+.box-warn{background:#fdf3e4}
+.box-warn .box-t{color:#8a4b00}
+.box-ex{background:transparent;border:1px solid var(--line)}
+.box table{background:#fff}
+
+/* quiz */
+.quiz{list-style:none;padding:0 !important;margin:32px 0 !important;counter-reset:q}
+.q{counter-increment:q;margin:0 0 18px !important;padding:22px 24px;background:var(--surface);border-radius:6px}
+.q-text{font-weight:600}
+.q-text p:first-child::before{content:"문제 " counter(q) ". ";color:var(--accent);font-weight:700}
+.q-text p{margin:0 0 10px}
+.q-text pre{font-weight:400;font-size:14px}
+.opts{list-style:none;padding:0 !important;margin:6px 0 0 !important;display:grid;gap:6px}
+.opts li{margin:0}
+.opt{all:unset;box-sizing:border-box;width:100%;display:flex;gap:10px;align-items:flex-start;padding:10px 14px;background:#fff;border:1px solid var(--line);
+  border-radius:4px;cursor:pointer;font-size:16px;line-height:1.55;transition:transform 140ms var(--ease-out),border-color 140ms var(--ease-out),background-color 140ms var(--ease-out)}
+.opt .n{flex:none;color:var(--text-2)}
+.opt:active{transform:scale(.99)}
+.opt:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+@media (hover:hover) and (pointer:fine){ .q:not(.done) .opt:hover{border-color:var(--text-2)} }
+.q.done .opt{cursor:default}
+.opt.right{border-color:var(--ok);background:var(--ok-bg)}
+.opt.wrong{border-color:var(--bad);background:var(--bad-bg)}
+.ans{display:none;margin-top:12px;padding-top:12px;border-top:1px solid var(--line);font-size:15.5px}
+.ans p{margin:0}
+.ans b{color:var(--ok);margin-right:6px}
+.q.done .ans{display:block}
+.no-js .ans{display:block}
+.ans-toggle{all:unset;cursor:pointer;font-size:14px;color:var(--text-2);margin-top:10px;display:inline-block;text-decoration:underline;text-underline-offset:3px}
+
+/* figures */
+.fig{margin:36px 0;padding:28px;background:var(--surface);border-radius:6px}
+.fig svg{display:block;width:100%;height:auto}
+.fig figcaption{font-size:15px;color:var(--text-2);margin-top:14px;line-height:1.6}
+.fig-ctrl{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px}
+.chip{font:inherit;font-size:14px;padding:6px 14px;border-radius:999px;border:1px solid var(--line);background:#fff;color:var(--text);cursor:pointer;
+  transition:transform 140ms var(--ease-out),background-color 140ms var(--ease-out),color 140ms var(--ease-out)}
+.chip:active{transform:scale(.97)}
+.chip[aria-pressed="true"]{background:var(--text);color:#fff;border-color:var(--text)}
+.term{background:var(--code-bg);color:var(--code-text);font-family:var(--mono);font-size:14px;border-radius:6px;padding:16px 18px;line-height:1.65;min-height:3em;white-space:pre-wrap}
+.term .p{color:#7ee2a8}
+.term .d{color:var(--code-dim)}
+
+/* reveal */
+.js .reveal{opacity:0;transform:translateY(22px);transition:opacity 520ms var(--ease-out),transform 520ms var(--ease-out)}
+.js .reveal.in{opacity:1;transform:none}
+
+.end{margin-top:140px;padding-top:28px;border-top:1px solid var(--line);color:var(--text-2);font-size:15px}
+
+/* modal */
+.modal[hidden]{display:none}
+.modal{position:fixed;inset:0;z-index:100;display:grid;place-items:center;padding:20px}
+.modal-back{position:absolute;inset:0;background:rgba(10,14,18,.5);animation:fade 180ms var(--ease-out)}
+.modal-box{position:relative;background:#fff;border-radius:10px;width:min(620px,100%);max-height:min(86vh,820px);display:flex;flex-direction:column;
+  box-shadow:0 24px 60px rgba(0,0,0,.25);animation:pop 220ms var(--ease-out)}
+@keyframes fade{from{opacity:0}}
+@keyframes pop{from{opacity:0;transform:scale(.96) translateY(8px)}}
+.modal-head{display:flex;align-items:center;justify-content:space-between;padding:22px 24px 10px}
+.modal-head h2{font-size:22px;letter-spacing:-.02em}
+.x{all:unset;cursor:pointer;width:36px;height:36px;display:grid;place-items:center;border-radius:999px}
+.x svg{width:16px;height:16px;stroke:var(--text);stroke-width:1.6}
+.x:hover{background:var(--surface)}
+.pick-tools{display:flex;gap:16px;align-items:center;padding:0 24px 12px;border-bottom:1px solid var(--line);font-size:14px;flex-wrap:wrap}
+.link{all:unset;cursor:pointer;color:var(--accent);font-weight:600}
+.switch{margin-left:auto;display:flex;gap:6px;align-items:center;color:var(--text-2);cursor:pointer}
+.pick-list{overflow:auto;padding:8px 14px}
+.pick{display:grid;grid-template-columns:22px 1fr;column-gap:10px;padding:9px 10px;border-radius:4px;cursor:pointer;line-height:1.4}
+.pick:hover{background:var(--surface)}
+.pick input{grid-row:span 2;margin-top:3px;accent-color:var(--accent);width:16px;height:16px}
+.pick-g{font-size:13px;color:var(--text-2)}
+.pick-t{font-size:16px;font-weight:600}
+.modal-foot{padding:16px 24px 22px;border-top:1px solid var(--line)}
+.hint{font-size:14px;color:var(--text-2);margin:0 0 14px;line-height:1.6}
+#doPrint{width:100%;justify-content:center;padding:13px}
+
+.print-cover{display:none}
+
+/* responsive */
+@media (max-width:1080px){
+  .layout{grid-template-columns:1fr;gap:0}
+  .sidebar{position:fixed;inset:var(--top) 0 0 auto;width:min(360px,88vw);background:#fff;z-index:45;border-left:1px solid var(--line);
+    transform:translateX(100%);visibility:hidden;transition:transform 260ms var(--ease-io),visibility 0s linear 260ms}
+  body.toc-open .sidebar{transform:none;visibility:visible;transition:transform 260ms var(--ease-io),visibility 0s;box-shadow:-20px 0 40px rgba(0,0,0,.12)}
+  .sidebar-in{position:static;max-height:100%;height:100%;padding:24px 20px}
+  .toc-toggle{display:inline-flex;font:inherit;font-size:15px;background:none;border:1px solid var(--line);border-radius:999px;padding:8px 16px;cursor:pointer;color:var(--text)}
+  .guides{display:none}
+  .topbar-in{gap:10px}
+  .toc-toggle{margin-left:auto}
+  .content{max-width:760px;width:100%;margin:0 auto}
+  .hero-in{grid-template-columns:1fr;padding:72px 28px 80px}
+  .hero-fig{max-width:560px}
+}
+@media (max-width:600px){
+  body{font-size:16px}
+  .topbar-in{padding:0 16px}
+  .layout{padding:0 18px}
+  .hero-in{padding:56px 20px 64px;gap:40px}
+  .hero-stats{gap:28px}
+  .hero-stats dd{font-size:32px}
+  .topbar .btn-solid{padding:8px 14px;font-size:14px}
+  .chapter{padding-top:88px}
+  .ch-body h3{font-size:24px;margin-top:64px}
+  .box,.q,.fig{padding-left:16px;padding-right:16px;margin-left:-4px;margin-right:-4px}
+  pre{font-size:13px;padding:14px;margin-left:-4px;margin-right:-4px}
+  table{font-size:14.5px}
+  th,td{padding:8px 9px}
+  .switch{margin-left:0}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .js .reveal{transform:none;transition:opacity 300ms linear}
+  *,*::before,*::after{animation-duration:1ms !important;animation-iteration-count:1 !important}
+  .sidebar{transition:none}
+}
+
+/* ============ PRINT ============ */
+@page{size:A4;margin:16mm 15mm 17mm}
+@media print{
+  :root{--surface:#f2f4f6}
+  *{-webkit-print-color-adjust:exact !important;print-color-adjust:exact !important;animation:none !important;transition:none !important}
+  html,body{background:#fff;font-size:10pt;line-height:1.62;scroll-behavior:auto}
+  .topbar,.progress,.sidebar,.hero,.ch-pdf,.modal,.fig-ctrl,.ans-toggle,.no-print,.end{display:none !important}
+  .layout{display:block;padding:0;max-width:none}
+  .content{max-width:none;padding:0}
+  .js .reveal{opacity:1 !important;transform:none !important}
+  body.pick-mode .chapter:not(.pr){display:none !important}
+
+  .print-cover{display:flex;flex-direction:column;justify-content:flex-start;min-height:250mm;break-after:page;padding-top:40mm}
+  .pc-kind{font-size:12pt;color:var(--accent);font-weight:700;margin:0 0 6mm}
+  .print-cover h1{font-size:34pt;letter-spacing:-.03em;line-height:1.15}
+  .pc-tag{font-size:13pt;color:var(--text-2);margin:6mm 0 18mm}
+  .pc-list{margin:0;padding:8mm 0 0 1.2em;border-top:1.5pt solid var(--accent);font-size:11pt;line-height:1.9}
+  .pc-list span{color:var(--text-2);margin-right:3mm}
+  .pc-date{margin-top:auto;font-size:9pt;color:var(--text-2)}
+
+  .chapter{padding-top:0;break-before:page}
+  .ch-head{padding-bottom:5mm;margin-bottom:7mm;break-after:avoid;break-inside:avoid}
+  .ch-group{font-size:10pt;margin-bottom:2mm}
+  .ch-head h2{font-size:22pt}
+  .ch-body h3{font-size:15pt;margin:9mm 0 3mm;break-after:avoid;break-inside:avoid}
+  .ch-body h4{font-size:12pt;margin:6mm 0 2mm;break-after:avoid;break-inside:avoid}
+  .keep{break-inside:avoid}
+  p{orphans:3;widows:3}
+  .ch-body p{margin-bottom:2.5mm}
+  pre{font-size:8.6pt;padding:3.5mm 4mm;line-height:1.5;white-space:pre-wrap;break-inside:avoid;overflow:visible;
+      background:#f4f6f8 !important;color:#14202b !important;border:.6pt solid #d6dce2}
+  pre code{white-space:pre-wrap}
+  .term{background:#f4f6f8 !important;color:#14202b !important;border:.6pt solid #d6dce2}
+  .term .p{color:#0d7a4f}
+  .tw{overflow:visible}
+  table{font-size:9pt;break-inside:auto}
+  thead{display:table-header-group}
+  tr,th,td{break-inside:avoid}
+  th,td{padding:1.6mm 2.2mm}
+  .tw.small-table, table.small{break-inside:avoid}
+  .box{break-inside:avoid;padding:4mm 5mm 1.5mm;margin:5mm 0}
+  .fig{break-inside:avoid;padding:4mm;margin:5mm 0}
+  .fig svg{max-height:120mm}
+  .quiz{margin:5mm 0 !important;display:block}
+  .opts{display:block !important}
+  .opts li{margin:0}
+  .opt{display:flex;border:0 !important;padding:.5mm 0 !important;background:transparent !important}
+  .q{break-inside:avoid;padding:3.2mm 4.5mm;margin-bottom:2.5mm !important}
+  .q-text p{margin-bottom:1.5mm}
+  .opt{padding:1.4mm 3mm;font-size:9.5pt;border-color:#d6dce2;background:#fff !important}
+  .opt.right,.opt.wrong{background:#fff !important;border-color:#d6dce2}
+  .ans{display:block !important;font-size:9.3pt;margin-top:2.5mm;padding-top:2.5mm}
+  body.no-ans .ans{display:none !important}
+  a{color:inherit;text-decoration:none}
+}
+
+/* hero svg animations */
+.hero-svg .pt{opacity:0;transform-box:fill-box;transform-origin:center;animation:ptIn 420ms var(--ease-out) forwards}
+@keyframes ptIn{from{opacity:0;transform:scale(.6)}to{opacity:.95;transform:none}}
+.hero-svg .reg{stroke-dasharray:500;stroke-dashoffset:500;animation:draw 1100ms var(--ease-io) 1400ms forwards}
+.hero-svg .rs{opacity:0;animation:fadeIn 300ms var(--ease-out) forwards}
+.hero-svg .eq{opacity:0;animation:fadeIn 500ms var(--ease-out) 2300ms forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+@keyframes fadeIn{to{opacity:1}}
+#hero-sqld .er rect,#hero-sqld .dr rect{transition:fill 260ms var(--ease-out)}
+#hero-sqld .on rect{fill:rgba(255,255,255,.2)}
+#hero-sqld .jl{transition:opacity 200ms var(--ease-out)}
+.hero-term{min-height:300px;font-size:15px;background:#0b0f12}
+.hero-term .cur{display:inline-block;width:.6em;height:1.1em;background:#7ee2a8;vertical-align:-.15em;animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+
+/* DIKW */
+.js #fig-dikw:not(.play) .lay{opacity:0}
+#fig-dikw.play .lay{animation:rise 620ms var(--ease-out) both;animation-delay:var(--d)}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+
+/* CRISP */
+#fig-crisp .ph rect{fill:#fff;stroke:var(--line);stroke-width:1.5;transition:fill 300ms var(--ease-out),stroke 300ms var(--ease-out)}
+#fig-crisp .ph text{fill:var(--text);transition:fill 300ms var(--ease-out)}
+#fig-crisp .ph.on rect{fill:var(--accent);stroke:var(--accent)}
+#fig-crisp .ph.on text{fill:#fff}
+#fig-crisp .orbit{transition:transform 900ms var(--ease-io)}
+
+/* CM */
+.cm{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:28px;align-items:start}
+.cm-grid{display:grid;grid-template-columns:auto 1fr 1fr;gap:6px;font-size:14px}
+.cm-h{font-weight:600;color:var(--text-2);text-align:center;align-self:end;padding-bottom:2px}
+.cm-v{writing-mode:horizontal-tb;text-align:right;align-self:center;padding-right:6px}
+.cm-c{display:flex;flex-direction:column;gap:4px;padding:12px;border-radius:4px;font-weight:700;font-size:14px;background:#fff;border:1px solid var(--line)}
+.cm-c.tp,.cm-c.tn{background:var(--accent-2);border-color:transparent}
+.cm-c input{font:inherit;font-size:24px;font-weight:700;width:100%;border:0;background:transparent;padding:0;color:var(--text);font-variant-numeric:tabular-nums}
+.cm-c input:focus{outline:none}
+.cm-c:focus-within{outline:2px solid var(--accent);outline-offset:1px}
+.cm-out{display:grid;grid-template-columns:1fr 1fr;gap:14px 18px;margin:0}
+.cm-out div{margin:0}
+.cm-out dt{font-size:13.5px;color:var(--text-2)}
+.cm-out dd{margin:0;font-size:26px;font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:-.01em;line-height:1.25}
+.cm-out p{margin:0 !important;font-size:14px;color:var(--text-2)}
+
+/* ORDER */
+.ord{display:grid;grid-template-columns:1fr 1.4fr;gap:28px}
+.ord-h{font-size:14px;color:var(--text-2);margin:0 0 8px !important;font-weight:600}
+.ord ol{list-style:none;padding:0 !important;margin:0 !important;display:grid;gap:6px}
+.ord li{margin:0;padding:10px 14px;background:#fff;border:1px solid var(--line);border-radius:4px;font-family:var(--mono);font-size:15px;
+  transition:background-color 260ms var(--ease-out),color 260ms var(--ease-out),border-color 260ms var(--ease-out),transform 260ms var(--ease-out)}
+.ord-x li{display:flex;justify-content:space-between;gap:12px}
+.ord-x li span{font-family:var(--font);color:var(--text-2);font-size:14px}
+.ord-x li::before{content:attr(data-s);font-family:var(--font);font-weight:700;color:var(--accent);margin-right:-4px;min-width:1.2em}
+.ord-x li b{flex:1}
+.ord li.on{background:var(--accent);border-color:var(--accent);color:#fff;transform:translateX(4px)}
+.ord li.on span,.ord-x li.on::before{color:#fff}
+.ord li.done{border-color:var(--accent)}
+
+/* JOIN */
+.j-sql{margin-bottom:16px}
+.j-wrap{display:grid;grid-template-columns:.8fr .8fr 1.4fr;gap:16px;align-items:start}
+.j-t{font-size:14px;font-weight:700;margin:0 0 6px !important}
+.j-n{color:var(--accent);font-weight:600;margin-left:6px}
+.j-wrap table{font-size:13.5px;background:#fff}
+.j-wrap th,.j-wrap td{padding:6px 8px;font-family:var(--mono);white-space:nowrap}
+.j-wrap tr.m td{background:var(--accent-2)}
+.j-wrap td.nul{color:var(--text-2);font-style:italic}
+.j-r tbody tr{animation:rowIn 260ms var(--ease-out) both}
+@keyframes rowIn{from{opacity:0;transform:translateY(6px)}}
+
+/* BOOT */
+.boot{list-style:none;padding:0 !important;margin:0 0 14px !important;display:grid;grid-template-columns:repeat(6,1fr);gap:6px}
+.boot li{margin:0;padding:12px 10px;background:#fff;border:1px solid var(--line);border-radius:4px;display:flex;flex-direction:column;
+  transition:background-color 300ms var(--ease-out),color 300ms var(--ease-out),border-color 300ms var(--ease-out)}
+.boot b{font-size:15px}
+.boot span{font-size:12.5px;color:var(--text-2);line-height:1.4;margin-top:2px}
+.boot li.on{background:var(--accent);border-color:var(--accent);color:#fff}
+.boot li.on span{color:rgba(255,255,255,.85)}
+.boot li.done{border-color:var(--accent)}
+.boot-bar{height:4px;background:var(--surface-2);border-radius:2px;overflow:hidden}
+.boot-bar i{display:block;height:100%;background:var(--accent);transform-origin:0 50%;transform:scaleX(0);transition:transform 900ms var(--ease-io)}
+.boot-desc{min-height:3.4em;margin:14px 0 0 !important;font-size:15.5px}
+
+/* CHMOD */
+.perm{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:24px;align-items:start}
+.perm-grid{display:grid;grid-template-columns:auto repeat(3,1fr);gap:6px;font-size:13.5px;align-items:center}
+.perm-grid>b{color:var(--text-2);font-weight:600;text-align:center}
+.perm-grid>b.perm-who{text-align:right;padding-right:6px;color:var(--text)}
+.perm-grid button{font:inherit;font-family:var(--mono);font-size:20px;font-weight:700;height:52px;border-radius:4px;border:1px solid var(--line);background:#fff;color:var(--text-2);cursor:pointer;
+  transition:background-color 160ms var(--ease-out),color 160ms var(--ease-out),transform 140ms var(--ease-out)}
+.perm-grid button:active{transform:scale(.96)}
+.perm-grid button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+.perm-grid button[aria-pressed="false"]{text-decoration:line-through;text-decoration-thickness:1px}
+.perm-out label{display:flex;flex-direction:column;font-size:13.5px;color:var(--text-2);gap:4px;margin-bottom:10px}
+.perm-num{font:inherit;font-family:var(--mono);font-size:30px;font-weight:700;width:5em;padding:4px 10px;border:1px solid var(--line);border-radius:4px;color:var(--text);letter-spacing:.08em}
+.perm-term{font-size:13.5px;min-height:7.5em}
+
+@media (max-width:720px){
+  .cm,.perm,.ord{grid-template-columns:1fr}
+  .j-wrap{grid-template-columns:1fr 1fr}
+  .j-res{grid-column:1/-1;overflow-x:auto}
+  .boot{grid-template-columns:repeat(3,1fr)}
+}
+@media print{
+  .hero-term{display:none}
+  #fig-dikw .lay{opacity:1 !important}
+  #fig-crisp .orbit{display:none}
+  #fig-crisp .ph rect{fill:#fff !important;stroke:var(--accent) !important}
+  #fig-crisp .ph text{fill:var(--text) !important}
+  .ord li.on,.boot li.on{background:#fff !important;color:var(--text) !important;border-color:var(--accent) !important;transform:none}
+  .ord li.on span,.boot li.on span{color:var(--text-2) !important}
+  .ord-x li.on::before{color:var(--accent) !important}
+  .boot-bar,.boot-desc{display:none}
+  .boot{grid-template-columns:repeat(6,1fr)}
+  .perm-grid button{height:9mm;font-size:12pt}
+  .cm-c input{font-size:14pt}
+  .j-wrap{grid-template-columns:.8fr .8fr 1.4fr}
+}
+
+/* SUBNET */
+.sn-in{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:14px}
+.sn-in label,.pg-in{display:flex;flex-direction:column;font-size:13.5px;color:var(--text-2);gap:4px}
+.sn-in input,.pg-in input{font:inherit;font-family:var(--mono);font-size:18px;padding:6px 10px;border:1px solid var(--line);border-radius:4px;color:var(--text);background:#fff}
+.sn-ip{width:11em}.sn-px{width:5em}
+.sn-bits{display:grid;grid-template-columns:repeat(32,1fr);gap:2px;margin-bottom:16px}
+.sn-bits i{height:26px;border-radius:2px;background:var(--surface-2);font-style:normal;font-family:var(--mono);font-size:11px;display:grid;place-items:center;color:var(--text-2);
+  transition:background-color 200ms var(--ease-out),color 200ms var(--ease-out)}
+.sn-bits i.n{background:var(--accent);color:#fff}
+.sn-bits i.g{margin-right:5px}
+.sn-out{display:grid;grid-template-columns:repeat(3,1fr);gap:12px 18px;margin:0}
+.sn-out div{margin:0}.sn-out dt{font-size:13.5px;color:var(--text-2)}
+.sn-out dd{margin:0;font-family:var(--mono);font-size:17px;font-weight:700;font-variant-numeric:tabular-nums}
+/* TCP3 */
+.js #fig-tcp3:not(.play) .tm{opacity:0}
+#fig-tcp3.play .tm{animation:rise 520ms var(--ease-out) both;animation-delay:var(--d)}
+/* PAGING */
+.pg-in{flex-direction:row;align-items:center;margin-left:8px}
+.pg-in input{font-size:14px;padding:4px 8px}
+.pg-ref{width:14em}.pg-fr{width:4em}
+.pg-wrap{overflow-x:auto}
+.pg td,.pg th{text-align:center;font-family:var(--mono);padding:6px 8px;min-width:34px;border:1px solid var(--line)}
+.pg th{background:#fff}
+.pg td.f{background:var(--accent);color:#fff;font-weight:700}
+.pg td.h{background:#fff}
+.pg-sum{margin:12px 0 0 !important;font-weight:600}
+@media (max-width:720px){ .sn-out{grid-template-columns:1fr 1fr} .sn-bits i{font-size:0;height:18px} }
+@media print{ .js #fig-tcp3 .tm{opacity:1 !important} .sn-in input,.pg-in input{border-color:#d6dce2} }
+
+</style>
+<script>document.documentElement.classList.add('js')</script>
+</head>
+<body data-guide="aipot">
+<div class="progress" aria-hidden="true"><i></i></div>
+<header class="topbar">
+  <div class="topbar-in">
+    <a class="brand" href="index.html">교본 <b>AI-POT</b></a>
+    <nav class="guides" aria-label="다른 교본"><a href="index.html">전체 교본 목록</a></nav>
+    <button type="button" class="toc-toggle" aria-expanded="false" aria-controls="toc">목차</button>
+    <button type="button" class="btn btn-solid open-pdf">PDF로 저장</button>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="hero-in">
+    <div class="hero-text">
+      <h1>AI-POT 프롬프트 활용능력</h1>
+      <p class="hero-tag">생성형 AI에게 원하는 결과를 받아내는 프롬프트 작성법을 실습형으로.</p>
+      <dl class="hero-stats">
+        <div><dt>단원</dt><dd>8</dd></div>
+        <div><dt>주제</dt><dd>25</dd></div>
+        <div><dt>확인 문제</dt><dd>35</dd></div>
+      </dl>
+      <div class="hero-actions">
+        <a class="btn btn-light" href="#ch0">처음부터 읽기</a>
+        <button type="button" class="btn btn-line-light open-pdf">원하는 단원만 PDF로</button>
+      </div>
+    </div>
+    <div class="hero-fig"><div class="term hero-term gen-term" data-prompt="프롬프트 >" data-lines='[["역할 > ", "당신은 10년 차 채용 담당자입니다.", ""], ["작업 > ", "아래 자기소개서를 3가지 기준으로 평가해 표로 정리하세요.", ""], ["형식 > ", "| 기준 | 점수(5점) | 근거 |", "→ 조건이 분명할수록 결과가 안정된다"]]' aria-label="실행 예시"><span class="d">프롬프트 ></span></div></div>
+  </div>
+</section>
+
+<div class="print-cover" aria-hidden="true">
+  <p class="pc-kind">교본</p>
+  <h1>AI-POT 프롬프트 활용능력</h1>
+  <p class="pc-tag">생성형 AI에게 원하는 결과를 받아내는 프롬프트 작성법을 실습형으로.</p>
+  <ol class="pc-list"></ol>
+  <p class="pc-date">2026년 11월 기준으로 정리 · 시험 일정과 세부 규정은 접수 전 공식 사이트에서 다시 확인하세요.</p>
+</div>
+
+<div class="layout">
+  <aside class="sidebar" id="toc" aria-label="목차">
+    <div class="sidebar-in">
+      <p class="toc-title">목차</p>
+      <ol class="toc"><li><a href="#ch0" class="toc-ch" data-ch="ch0"><span class="toc-g">시작하기</span>시험 구성과 공부 순서</a>
+<ol><li><a href="#s1">AI-POT은 어떤 시험인가</a></li><li><a href="#s2">공부 순서</a></li></ol>
+</li>
+<li><a href="#ch1" class="toc-ch" data-ch="ch1"><span class="toc-g">① 인공지능 기초 이론</span>인공지능의 기초</a>
+<ol><li><a href="#s3">인공지능의 정의와 역사</a></li><li><a href="#s4">머신러닝과 딥러닝</a></li><li><a href="#s5">AI의 주요 분야</a></li></ol>
+</li>
+<li><a href="#ch2" class="toc-ch" data-ch="ch2"><span class="toc-g">② 생성형 AI 기초 이론</span>생성형 AI와 LLM</a>
+<ol><li><a href="#s6">생성형 AI란</a></li><li><a href="#s7">대규모 언어 모델 (LLM)</a></li><li><a href="#s8">생성 결과를 조절하는 설정</a></li><li><a href="#s9">생성형 AI의 한계</a></li><li><a href="#s10">생성형 AI를 확장하는 기술</a></li></ol>
+</li>
+<li><a href="#ch3" class="toc-ch" data-ch="ch3"><span class="toc-g">③ 프롬프트 엔지니어링 기술 기초</span>프롬프트의 구성</a>
+<ol><li><a href="#s11">프롬프트와 프롬프트 엔지니어링</a></li><li><a href="#s12">좋은 프롬프트의 구성 요소</a></li><li><a href="#s13">작성 원칙</a></li></ol>
+</li>
+<li><a href="#ch4" class="toc-ch" data-ch="ch4"><span class="toc-g">④ 프롬프트 엔지니어링 기술 활용</span>프롬프트 기법</a>
+<ol><li><a href="#s14">예시 개수에 따른 기법</a></li><li><a href="#s15">추론을 돕는 기법</a></li><li><a href="#s16">대화와 작업 흐름을 설계하는 기법</a></li><li><a href="#s17">이미지 생성 프롬프트</a></li></ol>
+</li>
+<li><a href="#ch5" class="toc-ch" data-ch="ch5"><span class="toc-g">⑤ 업무 활용 및 윤리의식</span>업무 활용 실습</a>
+<ol><li><a href="#s18">업무별 프롬프트 패턴</a></li><li><a href="#s19">결과 검증과 개선</a></li></ol>
+</li>
+<li><a href="#ch6" class="toc-ch" data-ch="ch6"><span class="toc-g">⑤ 업무 활용 및 윤리의식</span>AI 윤리와 법</a>
+<ol><li><a href="#s20">AI 윤리 원칙</a></li><li><a href="#s21">생성형 AI 사용 시 위험</a></li><li><a href="#s22">저작권</a></li><li><a href="#s23">관련 법과 제도</a></li></ol>
+</li>
+<li><a href="#ch7" class="toc-ch" data-ch="ch7"><span class="toc-g">마무리</span>실전 모의 문제</a>
+<ol><li><a href="#s24">이론 섞어 풀기</a></li><li><a href="#s25">실습형 연습</a></li></ol>
+</li></ol>
+    </div>
+  </aside>
+  <main class="content">
+
+<section class="chapter" id="ch0" data-title="시험 구성과 공부 순서" data-group="시작하기">
+  <header class="ch-head reveal">
+    <p class="ch-group">시작하기</p>
+    <h2>시험 구성과 공부 순서</h2>
+    <button type="button" class="ch-pdf" data-ch="ch0"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 1.5h5.5L12.5 4.5V14.5h-8.5z M9.5 1.5v3h3 M6 9.5l2 2 2-2 M8 6.5v5"/></svg>이 장만 PDF로</button>
+  </header>
+  <div class="ch-body">
+<h3 id="s1">AI-POT은 어떤 시험인가</h3>
+<p>AI-POT(AI Prompt Optimization Test, <strong>AI 프롬프트 활용능력</strong>)은 <strong>한국생산성본부(KPC)</strong>가 시행하는 등록 민간자격이다. 생성형 AI에게 원하는 결과를 받아내는 프롬프트 작성 능력을 이론과 <strong>실습형 문항</strong>으로 확인한다.</p>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>구분</th>
+<th>내용</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>시행</td>
+<td>한국생산성본부(KPC) 자격 홈페이지 license.kpc.or.kr</td>
+</tr>
+<tr>
+<td>등급</td>
+<td><strong>2급</strong>(생성형 AI 기초 활용) · <strong>1급</strong>(프롬프트를 직접 작성해 결과물 도출, 실기 비중 큼)</td>
+</tr>
+<tr>
+<td>방식</td>
+<td>CBT. 실습형 문항은 시험 중 생성형 AI를 실제로 사용</td>
+</tr>
+<tr>
+<td>2급 문항·시간</td>
+<td><strong>40문항 / 60분</strong> (이론 + 실습형)</td>
+</tr>
+<tr>
+<td>합격</td>
+<td>100점 만점 <strong>70점 이상</strong></td>
+</tr>
+<tr>
+<td>응시료</td>
+<td>2급 38,000원 · 1급 68,000원</td>
+</tr>
+<tr>
+<td>응시 자격</td>
+<td>제한 없음</td>
+</tr>
+<tr>
+<td>시행</td>
+<td>2026년 정기시험 연 6회 (2개월 간격)</td>
+</tr>
+</tbody>
+</table></div>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>평가 영역</th>
+<th>이 교본의 장</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>① 인공지능 기초 이론</td>
+<td>인공지능의 기초</td>
+</tr>
+<tr>
+<td>② 생성형 AI 기초 이론</td>
+<td>생성형 AI와 LLM</td>
+</tr>
+<tr>
+<td>③ 프롬프트 엔지니어링 기술 기초</td>
+<td>프롬프트의 구성</td>
+</tr>
+<tr>
+<td>④ 프롬프트 엔지니어링 기술 활용</td>
+<td>프롬프트 기법</td>
+</tr>
+<tr>
+<td>⑤ 프롬프트 엔지니어링 업무 활용 및 윤리의식</td>
+<td>업무 활용 · AI 윤리와 법</td>
+</tr>
+</tbody>
+</table></div>
+<aside class="box box-warn">
+<p class="box-t">접수 전에 꼭 다시 확인할 것</p>
+<p>2026년 11월 기준이다. 문항 수·배점·응시료는 바뀐 적이 있다 (2024년 첫 시행 때는 30문항, 60점 합격 → 2025년 개편 후 40문항, 70점). 1급은 서술형으로 프롬프트를 직접 쓰고 결과물을 제출한다. <strong>응시 전에 KPC 자격 홈페이지의 최신 공고와 시험에서 쓰는 AI 서비스, 계정 준비 안내</strong>를 꼭 확인하자.</p>
+</aside>
+<h3 id="s2">공부 순서</h3>
+<ol>
+<li><strong>1주</strong> — ①② 이론: 용어가 많으니 표로 외운다</li>
+<li><strong>2주</strong> — ③④ 프롬프트 구성 요소와 기법: 이 교본의 예시를 실제 AI에 넣어 결과를 비교해 본다</li>
+<li><strong>3주</strong> — ⑤ 업무 활용 실습과 윤리·법</li>
+<li><strong>시험 전</strong> — 마지막 장 모의 문제, 실습형은 시간을 재며 연습</li>
+</ol>
+  </div>
+</section>
+
+<section class="chapter" id="ch1" data-title="인공지능의 기초" data-group="① 인공지능 기초 이론">
+  <header class="ch-head reveal">
+    <p class="ch-group">① 인공지능 기초 이론</p>
+    <h2>인공지능의 기초</h2>
+    <button type="button" class="ch-pdf" data-ch="ch1"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 1.5h5.5L12.5 4.5V14.5h-8.5z M9.5 1.5v3h3 M6 9.5l2 2 2-2 M8 6.5v5"/></svg>이 장만 PDF로</button>
+  </header>
+  <div class="ch-body">
+<h3 id="s3">인공지능의 정의와 역사</h3>
+<p><strong>인공지능(AI)</strong>은 사람의 지능이 하는 일(인식, 추론, 학습, 판단, 언어 이해)을 컴퓨터가 하도록 만드는 기술이다.</p>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>시기</th>
+<th>사건</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1950</td>
+<td>앨런 튜링 <strong>튜링 테스트</strong> 제안 ("기계가 생각할 수 있는가")</td>
+</tr>
+<tr>
+<td>1956</td>
+<td><strong>다트머스 회의</strong>, 존 매카시가 '인공지능' 용어 사용</td>
+</tr>
+<tr>
+<td>1958</td>
+<td>로젠블랫 <strong>퍼셉트론</strong></td>
+</tr>
+<tr>
+<td>1970년대</td>
+<td>1차 <strong>AI 겨울</strong> (퍼셉트론의 XOR 문제 등 한계)</td>
+</tr>
+<tr>
+<td>1980년대</td>
+<td><strong>전문가 시스템</strong> 유행 → 유지 비용 문제로 2차 AI 겨울</td>
+</tr>
+<tr>
+<td>1986</td>
+<td>역전파 알고리즘 재조명</td>
+</tr>
+<tr>
+<td>1997</td>
+<td>IBM 딥블루, 체스 챔피언에 승리</td>
+</tr>
+<tr>
+<td>2012</td>
+<td><strong>AlexNet</strong>(CNN)이 이미지 인식 대회 압승 → 딥러닝 시대</td>
+</tr>
+<tr>
+<td>2016</td>
+<td>알파고, 이세돌 9단에 승리</td>
+</tr>
+<tr>
+<td>2017</td>
+<td>구글 <strong>"Attention Is All You Need"</strong> — 트랜스포머 발표</td>
+</tr>
+<tr>
+<td>2022</td>
+<td><strong>ChatGPT</strong> 공개 → 생성형 AI 대중화</td>
+</tr>
+<tr>
+<td>2023~</td>
+<td>멀티모달 모델, AI 에이전트, 오픈 모델 확산</td>
+</tr>
+</tbody>
+</table></div>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>구분</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>약인공지능 (Narrow AI)</strong></td>
+<td>특정 작업만 수행. 현재의 모든 AI</td>
+</tr>
+<tr>
+<td><strong>강인공지능 / AGI</strong></td>
+<td>사람처럼 범용적 지능</td>
+</tr>
+<tr>
+<td>초인공지능 (ASI)</td>
+<td>사람의 지능을 넘어섬</td>
+</tr>
+<tr>
+<td><strong>규칙 기반 AI</strong></td>
+<td>사람이 규칙을 직접 작성 (전문가 시스템)</td>
+</tr>
+<tr>
+<td><strong>학습 기반 AI</strong></td>
+<td>데이터에서 규칙을 스스로 학습 (머신러닝)</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="s4">머신러닝과 딥러닝</h3>
+<p><strong>인공지능 ⊃ 머신러닝 ⊃ 딥러닝 ⊃ (생성형 AI의 기반 모델)</strong></p>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>학습 방식</th>
+<th>설명</th>
+<th>예</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>지도 학습</strong></td>
+<td>정답(레이블)이 있는 데이터로 학습. 분류·회귀</td>
+<td>스팸 분류, 집값 예측</td>
+</tr>
+<tr>
+<td><strong>비지도 학습</strong></td>
+<td>정답 없이 구조·패턴 발견. 군집·차원 축소</td>
+<td>고객 세분화</td>
+</tr>
+<tr>
+<td><strong>강화 학습</strong></td>
+<td>행동 결과의 <strong>보상</strong>을 최대화하도록 학습</td>
+<td>알파고, 로봇 제어, <strong>RLHF</strong></td>
+</tr>
+<tr>
+<td>자기지도 학습</td>
+<td>데이터 자체에서 정답을 만들어 학습 (다음 단어 맞히기)</td>
+<td>LLM 사전학습</td>
+</tr>
+<tr>
+<td>전이 학습</td>
+<td>큰 데이터로 학습한 모델을 다른 작업에 재사용</td>
+<td>파인튜닝</td>
+</tr>
+</tbody>
+</table></div>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>개념</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>과대적합 (Overfitting)</strong></td>
+<td>학습 데이터에만 지나치게 맞춰 새 데이터에서 성능이 떨어짐</td>
+</tr>
+<tr>
+<td>과소적합</td>
+<td>모델이 너무 단순해 학습 데이터도 못 맞힘</td>
+</tr>
+<tr>
+<td>학습·검증·테스트 데이터</td>
+<td>학습용, 조정용, 최종 평가용으로 나눔</td>
+</tr>
+<tr>
+<td><strong>인공신경망</strong></td>
+<td>입력층 → 은닉층 → 출력층. 가중치를 학습</td>
+</tr>
+<tr>
+<td><strong>딥러닝</strong></td>
+<td>은닉층이 여러 개인 신경망</td>
+</tr>
+<tr>
+<td>CNN</td>
+<td>이미지 처리 (합성곱)</td>
+</tr>
+<tr>
+<td>RNN / LSTM</td>
+<td>순서 데이터 처리 (텍스트, 시계열)</td>
+</tr>
+<tr>
+<td><strong>트랜스포머</strong></td>
+<td><strong>어텐션</strong>으로 문장 전체 관계를 한 번에 처리. LLM의 기반</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="s5">AI의 주요 분야</h3>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>분야</th>
+<th>예</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>자연어 처리 (NLP)</td>
+<td>번역, 요약, 챗봇, 감성 분석</td>
+</tr>
+<tr>
+<td>컴퓨터 비전</td>
+<td>얼굴 인식, 객체 탐지, 자율주행</td>
+</tr>
+<tr>
+<td>음성 인식·합성</td>
+<td>STT(음성→텍스트), TTS(텍스트→음성)</td>
+</tr>
+<tr>
+<td>추천 시스템</td>
+<td>콘텐츠·상품 추천</td>
+</tr>
+<tr>
+<td>생성형 AI</td>
+<td>텍스트·이미지·음성·영상·코드 생성</td>
+</tr>
+</tbody>
+</table></div>
+<ol class="quiz">
+<li class="q" data-ans="2"><div class="q-text"><p>'인공지능'이라는 용어가 처음 사용된 1956년의 행사는?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>튜링 테스트</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>다트머스 회의</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>이미지넷 대회</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>알파고 대국</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> 존 매카시가 다트머스 회의에서 사용했다.</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>정답이 없는 데이터에서 비슷한 고객끼리 묶는 학습 방식은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>지도 학습</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>비지도 학습</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>강화 학습</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>전이 학습</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> 군집은 비지도 학습이다.</p></div></li>
+<li class="q" data-ans="3"><div class="q-text"><p>행동에 대한 보상을 최대화하도록 학습하는 방식은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>지도 학습</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>비지도 학습</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>강화 학습</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>자기지도 학습</span></button></li>
+</ol><div class="ans"><p><b>정답 ③</b> 강화 학습이다.</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>학습 데이터에서는 성능이 매우 좋지만 새로운 데이터에서 성능이 떨어지는 현상은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>과소적합</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>과대적합</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>정규화</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>일반화</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> 과대적합이다.</p></div></li>
+<li class="q" data-ans="3"><div class="q-text"><p>2017년 발표되어 현재 대규모 언어 모델의 기반이 된 구조는?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>CNN</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>RNN</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>트랜스포머</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>퍼셉트론</span></button></li>
+</ol><div class="ans"><p><b>정답 ③</b> "Attention Is All You Need" 논문의 트랜스포머다.</p></div></li>
+</ol>
+  </div>
+</section>
+
+<section class="chapter" id="ch2" data-title="생성형 AI와 LLM" data-group="② 생성형 AI 기초 이론">
+  <header class="ch-head reveal">
+    <p class="ch-group">② 생성형 AI 기초 이론</p>
+    <h2>생성형 AI와 LLM</h2>
+    <button type="button" class="ch-pdf" data-ch="ch2"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 1.5h5.5L12.5 4.5V14.5h-8.5z M9.5 1.5v3h3 M6 9.5l2 2 2-2 M8 6.5v5"/></svg>이 장만 PDF로</button>
+  </header>
+  <div class="ch-body">
+<h3 id="s6">생성형 AI란</h3>
+<p><strong>생성형 AI</strong>는 학습한 데이터의 패턴을 바탕으로 <strong>새로운 콘텐츠(텍스트, 이미지, 음성, 영상, 코드)를 만들어 내는</strong> AI다. 기존 AI가 주로 분류·예측(판별형)을 했다면 생성형 AI는 결과물을 만든다.</p>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>생성 대상</th>
+<th>대표 기술·서비스 예</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>텍스트</td>
+<td>ChatGPT, Gemini, Claude, 클로바X</td>
+</tr>
+<tr>
+<td>이미지</td>
+<td>DALL·E, Midjourney, Stable Diffusion, Imagen</td>
+</tr>
+<tr>
+<td>음성·음악</td>
+<td>TTS, 음악 생성 모델</td>
+</tr>
+<tr>
+<td>영상</td>
+<td>Sora, Veo 등 텍스트→영상 모델</td>
+</tr>
+<tr>
+<td>코드</td>
+<td>GitHub Copilot, 코드 어시스턴트</td>
+</tr>
+</tbody>
+</table></div>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>생성 모델</th>
+<th>원리</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>GAN</strong></td>
+<td>생성자와 판별자가 경쟁하며 학습</td>
+</tr>
+<tr>
+<td><strong>VAE</strong></td>
+<td>데이터를 잠재 공간으로 압축했다가 복원하며 생성</td>
+</tr>
+<tr>
+<td><strong>확산 모델 (Diffusion)</strong></td>
+<td>이미지에 잡음을 더하는 과정을 거꾸로 학습해, 잡음에서 이미지를 만들어 냄. 이미지 생성 모델 대부분</td>
+</tr>
+<tr>
+<td><strong>트랜스포머 / LLM</strong></td>
+<td>앞 내용을 보고 <strong>다음 토큰을 예측</strong>하는 방식으로 글 생성</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="s7">대규모 언어 모델 (LLM)</h3>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>개념</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>LLM</strong></td>
+<td>방대한 텍스트로 학습한 수십억~수조 개 매개변수의 언어 모델</td>
+</tr>
+<tr>
+<td><strong>토큰</strong></td>
+<td>모델이 처리하는 글자 단위 (단어 일부, 한 글자 등). 사용량·길이 제한의 기준</td>
+</tr>
+<tr>
+<td><strong>컨텍스트 윈도</strong></td>
+<td>한 번에 입력·출력으로 다룰 수 있는 최대 토큰 수. 넘으면 앞 내용을 잊음</td>
+</tr>
+<tr>
+<td><strong>사전학습 (Pre-training)</strong></td>
+<td>대량 텍스트로 다음 토큰 예측을 학습</td>
+</tr>
+<tr>
+<td><strong>파인튜닝 (Fine-tuning)</strong></td>
+<td>특정 작업·분야 데이터로 추가 학습</td>
+</tr>
+<tr>
+<td><strong>RLHF</strong></td>
+<td>사람 피드백 기반 강화 학습. 사람이 선호하는 답변 쪽으로 조정</td>
+</tr>
+<tr>
+<td><strong>파운데이션 모델</strong></td>
+<td>다양한 작업에 적용할 수 있는 대규모 기반 모델</td>
+</tr>
+<tr>
+<td><strong>멀티모달</strong></td>
+<td>텍스트·이미지·음성 등 여러 형태를 함께 입력·출력</td>
+</tr>
+<tr>
+<td>매개변수 (파라미터)</td>
+<td>모델이 학습한 가중치의 수</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="s8">생성 결과를 조절하는 설정</h3>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>설정</th>
+<th>의미</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Temperature</strong></td>
+<td>무작위성. <strong>낮으면(0에 가까움) 일관되고 정확</strong>, 높으면 다양하고 창의적</td>
+</tr>
+<tr>
+<td><strong>Top-p</strong></td>
+<td>확률 상위 누적 p 안의 토큰에서만 선택</td>
+</tr>
+<tr>
+<td>Top-k</td>
+<td>확률 상위 k개 토큰에서만 선택</td>
+</tr>
+<tr>
+<td>최대 토큰 수</td>
+<td>출력 길이 제한</td>
+</tr>
+<tr>
+<td><strong>시스템 프롬프트</strong></td>
+<td>대화 전체에 적용되는 역할·규칙 지시</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="s9">생성형 AI의 한계</h3>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>한계</th>
+<th>설명</th>
+<th>대응</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>할루시네이션 (환각)</strong></td>
+<td>사실이 아닌 내용을 그럴듯하게 생성</td>
+<td>출처 요구, 사실 확인, RAG, "모르면 모른다고 답하라"</td>
+</tr>
+<tr>
+<td>지식 기준일</td>
+<td>학습 이후 정보를 모름</td>
+<td>검색 연동, 최신 자료 제공</td>
+</tr>
+<tr>
+<td>편향</td>
+<td>학습 데이터의 편향 반영</td>
+<td>다양한 관점 요청, 검토</td>
+</tr>
+<tr>
+<td>계산·논리 오류</td>
+<td>복잡한 계산 실수</td>
+<td>단계별 추론, 도구(코드 실행) 사용</td>
+</tr>
+<tr>
+<td>일관성 부족</td>
+<td>같은 질문에도 답이 달라짐</td>
+<td>Temperature 낮추기, 형식 고정</td>
+</tr>
+<tr>
+<td>보안·개인정보</td>
+<td>입력 내용 유출 위험</td>
+<td>민감 정보 입력 금지</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="s10">생성형 AI를 확장하는 기술</h3>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>기술</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>RAG (검색 증강 생성)</strong></td>
+<td>질문과 관련된 문서를 <strong>검색해 프롬프트에 넣고</strong> 그 내용을 근거로 답하게 함. 환각 감소, 최신·사내 정보 반영</td>
+</tr>
+<tr>
+<td>임베딩 / 벡터 DB</td>
+<td>문장을 숫자 벡터로 바꿔 의미가 비슷한 문서를 찾음 (RAG의 검색 부분)</td>
+</tr>
+<tr>
+<td><strong>AI 에이전트</strong></td>
+<td>목표를 받아 스스로 계획하고 <strong>도구(검색, 코드 실행, API)를 사용</strong>하며 여러 단계를 수행</td>
+</tr>
+<tr>
+<td>함수 호출 (Tool use)</td>
+<td>모델이 외부 함수·API를 호출</td>
+</tr>
+<tr>
+<td>GPTs / 맞춤형 챗봇</td>
+<td>지시문과 자료를 미리 넣어 둔 전용 챗봇</td>
+</tr>
+<tr>
+<td>sLLM / 온디바이스 AI</td>
+<td>작은 모델을 기기 안에서 실행</td>
+</tr>
+</tbody>
+</table></div>
+<ol class="quiz">
+<li class="q" data-ans="2"><div class="q-text"><p>생성형 AI가 사실이 아닌 내용을 사실처럼 그럴듯하게 만들어 내는 현상은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>과대적합</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>할루시네이션</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>파인튜닝</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>토큰화</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> 할루시네이션(환각)이다.</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>답변을 더 일관되고 예측 가능하게 만들려면 Temperature를 어떻게 조정하는가?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>높인다</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>낮춘다</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>최대 토큰 수를 늘린다</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>Top-k를 무한대로</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> 낮을수록 무작위성이 줄어든다.</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>외부 문서를 검색해 프롬프트에 함께 넣어 답변의 근거로 삼게 하는 기술은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>RLHF</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>RAG</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>GAN</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>파인튜닝</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> 검색 증강 생성(RAG)이다.</p></div></li>
+<li class="q" data-ans="1"><div class="q-text"><p>잡음을 점차 제거하며 이미지를 생성하는 모델은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>확산 모델</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>RNN</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>의사결정나무</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>LSTM</span></button></li>
+</ol><div class="ans"><p><b>정답 ①</b> Diffusion 모델이다.</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>사람이 평가한 선호도를 바탕으로 LLM의 답변을 조정하는 학습 방법은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>비지도 학습</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>RLHF</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>전이 학습</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>자기지도 학습</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> Reinforcement Learning from Human Feedback.</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>LLM이 한 번에 처리할 수 있는 입력과 출력의 최대 길이를 뜻하는 것은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>매개변수</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>컨텍스트 윈도</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>Temperature</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>임베딩</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> 컨텍스트 윈도다.</p></div></li>
+</ol>
+  </div>
+</section>
+
+<section class="chapter" id="ch3" data-title="프롬프트의 구성" data-group="③ 프롬프트 엔지니어링 기술 기초">
+  <header class="ch-head reveal">
+    <p class="ch-group">③ 프롬프트 엔지니어링 기술 기초</p>
+    <h2>프롬프트의 구성</h2>
+    <button type="button" class="ch-pdf" data-ch="ch3"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 1.5h5.5L12.5 4.5V14.5h-8.5z M9.5 1.5v3h3 M6 9.5l2 2 2-2 M8 6.5v5"/></svg>이 장만 PDF로</button>
+  </header>
+  <div class="ch-body">
+<h3 id="s11">프롬프트와 프롬프트 엔지니어링</h3>
+<p><strong>프롬프트</strong>는 AI에게 주는 입력(지시, 질문, 자료)이다. <strong>프롬프트 엔지니어링</strong>은 원하는 결과를 정확하고 안정적으로 얻도록 프롬프트를 설계하고 개선하는 일이다.</p>
+<h3 id="s12">좋은 프롬프트의 구성 요소</h3>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>요소</th>
+<th>내용</th>
+<th>예</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>역할 (Role / Persona)</strong></td>
+<td>AI가 맡을 전문가 역할</td>
+<td>"당신은 10년 차 고등학교 국어 교사입니다."</td>
+</tr>
+<tr>
+<td><strong>지시 (Instruction / Task)</strong></td>
+<td>해야 할 작업을 동사로 명확하게</td>
+<td>"다음 글을 3문장으로 요약하세요."</td>
+</tr>
+<tr>
+<td><strong>맥락 (Context)</strong></td>
+<td>배경, 목적, 대상 독자</td>
+<td>"중학생 대상 가정통신문에 쓸 내용입니다."</td>
+</tr>
+<tr>
+<td><strong>입력 데이터 (Input)</strong></td>
+<td>처리할 자료</td>
+<td>기사 본문, 표, 문서</td>
+</tr>
+<tr>
+<td><strong>출력 형식 (Format)</strong></td>
+<td>결과 모양</td>
+<td>표, 글머리표, JSON, 글자 수</td>
+</tr>
+<tr>
+<td><strong>제약 조건 (Constraint)</strong></td>
+<td>지켜야 할 규칙</td>
+<td>"전문 용어는 쓰지 마세요", "300자 이내"</td>
+</tr>
+<tr>
+<td><strong>예시 (Example)</strong></td>
+<td>원하는 결과의 본보기</td>
+<td>입력→출력 예 1~3개</td>
+</tr>
+<tr>
+<td>어조 (Tone)</td>
+<td>말투</td>
+<td>정중하게, 친근하게, 간결하게</td>
+</tr>
+</tbody>
+</table></div>
+<aside class="box box-ex">
+<p class="box-t">같은 요청, 다른 결과</p>
+<p><strong>모호한 프롬프트</strong></p>
+<pre><code>환경 보호에 대해 써 줘.
+</code></pre>
+<p><strong>구체적인 프롬프트</strong></p>
+<pre><code>[역할] 당신은 초등학교 5학년 담임 교사입니다.
+[작업] 학급 게시판에 붙일 '교실에서 실천하는 환경 보호' 안내문을 쓰세요.
+[조건] - 실천 방법 5가지, 각 1문장
+       - 초등학생이 이해할 수 있는 쉬운 말
+       - 전체 200자 이내
+[형식] 제목 1줄 + 번호 목록
+</code></pre>
+<p>두 번째는 대상·분량·형식이 정해져 있어 다시 물어볼 일이 줄어든다.</p>
+</aside>
+<h3 id="s13">작성 원칙</h3>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>원칙</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>명확하고 구체적으로</strong></td>
+<td>"짧게" → "3문장으로", "좋게" → "초등학생이 이해할 수 있게"</td>
+</tr>
+<tr>
+<td><strong>긍정형으로 지시</strong></td>
+<td>"~하지 마"보다 "~하라"가 잘 지켜진다 ("전문 용어 금지" + "쉬운 말로 풀어 쓰라")</td>
+</tr>
+<tr>
+<td><strong>구분자 사용</strong></td>
+<td>지시와 자료를 <code>"""</code>, <code>###</code>, <code>---</code>, <code>&lt;자료&gt;&lt;/자료&gt;</code>로 구분</td>
+</tr>
+<tr>
+<td><strong>단계 나누기</strong></td>
+<td>복잡한 작업은 순서를 번호로</td>
+</tr>
+<tr>
+<td><strong>출력 형식 지정</strong></td>
+<td>표, JSON, 마크다운처럼 형식을 정하면 결과가 안정됨</td>
+</tr>
+<tr>
+<td><strong>반복 개선</strong></td>
+<td>결과를 보고 프롬프트를 고쳐 다시 시도 (Iterative refinement)</td>
+</tr>
+<tr>
+<td>근거 요구</td>
+<td>"근거가 되는 문장을 함께 제시하라"</td>
+</tr>
+<tr>
+<td>모를 때의 처리</td>
+<td>"자료에 없으면 '확인 불가'라고 답하라" (환각 감소)</td>
+</tr>
+</tbody>
+</table></div>
+<pre><code>아래 ### 사이의 회의록을 읽고 결정 사항만 표로 정리하세요.
+열: 결정 사항 | 담당자 | 기한
+회의록에 없는 정보는 '미정'이라고 쓰세요.
+
+###
+(회의록 붙여넣기)
+###
+</code></pre>
+<ol class="quiz">
+<li class="q" data-ans="2"><div class="q-text"><p>프롬프트에서 AI에게 '당신은 마케팅 전문가입니다'라고 지정하는 요소는?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>출력 형식</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>역할</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>제약 조건</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>입력 데이터</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> 역할(페르소나) 부여다.</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>지시문과 처리할 자료를 ###나 """로 나누는 이유로 가장 알맞은 것은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>토큰 수를 줄이려고</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>지시와 자료를 혼동하지 않게 하려고</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>Temperature를 낮추려고</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>이미지 생성을 위해</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> 구분자는 경계를 분명히 한다.</p></div></li>
+<li class="q" data-ans="3"><div class="q-text"><p>다음 중 가장 구체적인 지시는?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>짧게 요약해 줘</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>잘 정리해 줘</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>핵심 내용을 3개의 글머리표로, 각 20자 이내로 요약해 줘</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>요약 부탁해</span></button></li>
+</ol><div class="ans"><p><b>정답 ③</b> 개수·형식·분량이 정해져 있다.</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>할루시네이션을 줄이는 프롬프트 지시로 알맞은 것은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>"창의적으로 자유롭게 상상해서 써라"</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>"제공한 자료에 없는 내용은 '확인 불가'라고 답하라"</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>"길게 써라"</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>"Temperature를 높여라"</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> 근거 밖 생성을 막는다.</p></div></li>
+</ol>
+  </div>
+</section>
+
+<section class="chapter" id="ch4" data-title="프롬프트 기법" data-group="④ 프롬프트 엔지니어링 기술 활용">
+  <header class="ch-head reveal">
+    <p class="ch-group">④ 프롬프트 엔지니어링 기술 활용</p>
+    <h2>프롬프트 기법</h2>
+    <button type="button" class="ch-pdf" data-ch="ch4"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 1.5h5.5L12.5 4.5V14.5h-8.5z M9.5 1.5v3h3 M6 9.5l2 2 2-2 M8 6.5v5"/></svg>이 장만 PDF로</button>
+  </header>
+  <div class="ch-body">
+<h3 id="s14">예시 개수에 따른 기법</h3>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>기법</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>제로샷 (Zero-shot)</strong></td>
+<td>예시 없이 지시만</td>
+</tr>
+<tr>
+<td><strong>원샷 (One-shot)</strong></td>
+<td>예시 1개</td>
+</tr>
+<tr>
+<td><strong>퓨샷 (Few-shot)</strong></td>
+<td>예시 여러 개로 원하는 형식·기준을 보여 줌</td>
+</tr>
+</tbody>
+</table></div>
+<pre><code>다음 고객 리뷰의 감정을 긍정/부정/중립으로 분류하세요.
+
+리뷰: 배송이 빨라서 좋았어요. → 긍정
+리뷰: 포장이 찢어져서 왔어요. → 부정
+리뷰: 보통이에요. → 중립
+리뷰: 색이 사진이랑 너무 달라요. →
+</code></pre>
+<h3 id="s15">추론을 돕는 기법</h3>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>기법</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>사고의 사슬 (Chain-of-Thought, CoT)</strong></td>
+<td>"단계별로 생각해 보자"처럼 <strong>중간 추론 과정을 쓰게 해</strong> 계산·논리 문제 정확도를 높임</td>
+</tr>
+<tr>
+<td>제로샷 CoT</td>
+<td>예시 없이 "단계별로 풀이하라"만 덧붙임</td>
+</tr>
+<tr>
+<td><strong>자기 일관성 (Self-Consistency)</strong></td>
+<td>여러 번 추론하게 한 뒤 <strong>가장 많이 나온 답</strong>을 선택</td>
+</tr>
+<tr>
+<td><strong>생각의 나무 (Tree of Thoughts, ToT)</strong></td>
+<td>여러 해결 경로를 가지처럼 펼쳐 평가하고 좋은 경로를 고름</td>
+</tr>
+<tr>
+<td><strong>ReAct</strong></td>
+<td><strong>추론(Reason)과 행동(Act, 검색·도구 사용)</strong>을 번갈아 수행</td>
+</tr>
+<tr>
+<td>질문 분해 (Least-to-Most)</td>
+<td>어려운 문제를 쉬운 하위 질문으로 나눠 차례로 풀기</td>
+</tr>
+<tr>
+<td>자기 검토 (Self-Refine / Reflection)</td>
+<td>답을 쓴 뒤 스스로 검토·수정하게 함</td>
+</tr>
+<tr>
+<td>생성 지식 (Generated Knowledge)</td>
+<td>먼저 관련 지식을 생성하게 한 뒤 답하게 함</td>
+</tr>
+</tbody>
+</table></div>
+<aside class="box box-ex">
+<p class="box-t">CoT 예</p>
+<pre><code>가게에 사과 23개가 있었다. 점심에 20개를 쓰고 6개를 더 샀다. 지금 몇 개인가?
+단계별로 계산 과정을 쓰고 마지막 줄에 '답: 숫자' 형식으로 쓰세요.
+</code></pre>
+<p>→ 23 − 20 = 3, 3 + 6 = 9 → <strong>답: 9</strong></p>
+</aside>
+<h3 id="s16">대화와 작업 흐름을 설계하는 기법</h3>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>기법</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>프롬프트 체이닝</strong></td>
+<td>큰 작업을 여러 프롬프트로 나눠 <strong>앞 결과를 다음 입력으로</strong> (자료 요약 → 목차 작성 → 본문 작성)</td>
+</tr>
+<tr>
+<td><strong>역할 프롬프트 (페르소나)</strong></td>
+<td>전문가 역할로 관점과 어휘를 맞춤</td>
+</tr>
+<tr>
+<td><strong>역질문 (Flipped Interaction)</strong></td>
+<td>"필요한 정보를 먼저 나에게 질문하라" → AI가 부족한 정보를 물어봄</td>
+</tr>
+<tr>
+<td>템플릿 프롬프트</td>
+<td>빈칸이 있는 틀을 만들어 반복 사용</td>
+</tr>
+<tr>
+<td>메타 프롬프트</td>
+<td>"이 작업에 좋은 프롬프트를 만들어 줘"처럼 AI에게 프롬프트를 쓰게 함</td>
+</tr>
+<tr>
+<td>출력 형식 고정</td>
+<td>JSON, 표, 마크다운 스키마 지정</td>
+</tr>
+<tr>
+<td>청중 페르소나</td>
+<td>"초등학생에게 설명하듯", "임원 보고용으로"</td>
+</tr>
+</tbody>
+</table></div>
+<pre><code>당신은 여행 일정 전문가입니다.
+제가 원하는 여행을 계획하려면 필요한 정보를 한 번에 하나씩 질문하세요.
+정보가 충분히 모이면 일자별 일정을 표로 만들어 주세요.
+</code></pre>
+<h3 id="s17">이미지 생성 프롬프트</h3>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>요소</th>
+<th>예</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>주제</td>
+<td>창가에서 책을 읽는 고양이</td>
+</tr>
+<tr>
+<td>스타일</td>
+<td>수채화, 사진 같은, 3D 렌더, 픽셀 아트, 미니멀 일러스트</td>
+</tr>
+<tr>
+<td>구도·시점</td>
+<td>클로즈업, 위에서 내려다본, 와이드 샷</td>
+</tr>
+<tr>
+<td>조명·분위기</td>
+<td>따뜻한 오후 햇살, 차분한 분위기</td>
+</tr>
+<tr>
+<td>색감</td>
+<td>파스텔 톤, 흑백</td>
+</tr>
+<tr>
+<td>비율·품질</td>
+<td>16:9, 고해상도</td>
+</tr>
+<tr>
+<td>네거티브 프롬프트</td>
+<td>넣지 말 요소 (텍스트, 흐림, 왜곡된 손)</td>
+</tr>
+</tbody>
+</table></div>
+<pre><code>창가에서 책을 읽는 회색 고양이, 수채화 스타일, 따뜻한 오후 햇살,
+파스텔 톤, 위에서 약간 내려다본 구도, 16:9
+</code></pre>
+<aside class="box box-warn">
+<p class="box-t">이미지 생성과 저작권</p>
+<p>특정 작가 이름이나 캐릭터, 브랜드 로고를 그대로 따라 그리게 하는 프롬프트는 저작권·상표권 문제가 생길 수 있다. 시험에서도 윤리 영역과 연결해 묻는다.</p>
+</aside>
+<ol class="quiz">
+<li class="q" data-ans="2"><div class="q-text"><p>예시 여러 개를 함께 제시해 원하는 형식을 보여 주는 기법은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>제로샷</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>퓨샷</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>CoT</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>ReAct</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> Few-shot이다.</p></div></li>
+<li class="q" data-ans="1"><div class="q-text"><p>"단계별로 생각해 보자"를 덧붙여 중간 추론 과정을 쓰게 하는 기법은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>사고의 사슬(CoT)</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>프롬프트 체이닝</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>자기 일관성</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>역할 프롬프트</span></button></li>
+</ol><div class="ans"><p><b>정답 ①</b> Chain-of-Thought다.</p></div></li>
+<li class="q" data-ans="1"><div class="q-text"><p>같은 문제를 여러 번 추론하게 하고 가장 많이 나온 답을 고르는 기법은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>자기 일관성</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>생각의 나무</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>생성 지식</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>원샷</span></button></li>
+</ol><div class="ans"><p><b>정답 ①</b> Self-Consistency다.</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>추론과 검색 같은 도구 사용을 번갈아 수행하게 하는 기법은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>ToT</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>ReAct</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>Few-shot</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>메타 프롬프트</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> Reason + Act.</p></div></li>
+<li class="q" data-ans="1"><div class="q-text"><p>보고서 작업을 '자료 요약 → 목차 작성 → 본문 작성' 순서로 나눠 앞 결과를 다음 프롬프트에 넣는 방식은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>프롬프트 체이닝</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>제로샷</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>네거티브 프롬프트</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>자기 일관성</span></button></li>
+</ol><div class="ans"><p><b>정답 ①</b> 프롬프트 체이닝이다.</p></div></li>
+<li class="q" data-ans="1"><div class="q-text"><p>AI에게 '필요한 정보를 먼저 나에게 질문하라'고 지시하는 기법은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>역질문(Flipped Interaction)</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>CoT</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>퓨샷</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>RAG</span></button></li>
+</ol><div class="ans"><p><b>정답 ①</b> 역질문 패턴이다.</p></div></li>
+</ol>
+  </div>
+</section>
+
+<section class="chapter" id="ch5" data-title="업무 활용 실습" data-group="⑤ 업무 활용 및 윤리의식">
+  <header class="ch-head reveal">
+    <p class="ch-group">⑤ 업무 활용 및 윤리의식</p>
+    <h2>업무 활용 실습</h2>
+    <button type="button" class="ch-pdf" data-ch="ch5"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 1.5h5.5L12.5 4.5V14.5h-8.5z M9.5 1.5v3h3 M6 9.5l2 2 2-2 M8 6.5v5"/></svg>이 장만 PDF로</button>
+  </header>
+  <div class="ch-body">
+<h3 id="s18">업무별 프롬프트 패턴</h3>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>업무</th>
+<th>프롬프트 핵심</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>요약</strong></td>
+<td>분량·형식·대상 지정. "핵심 3가지, 각 1문장, 수치는 그대로"</td>
+</tr>
+<tr>
+<td><strong>문서 작성</strong></td>
+<td>문서 종류, 독자, 목적, 어조, 분량. 보고서·이메일·공문·보도자료</td>
+</tr>
+<tr>
+<td><strong>번역</strong></td>
+<td>대상 언어, 용도(공식 문서, 마케팅), 용어 통일, 원문 형식 유지</td>
+</tr>
+<tr>
+<td><strong>교정·윤문</strong></td>
+<td>"맞춤법만", "의미는 바꾸지 말고 문장만 매끄럽게" + 수정 내역 표</td>
+</tr>
+<tr>
+<td><strong>아이디어 발상</strong></td>
+<td>개수, 기준, 제약 ("예산 50만 원 이하 행사 아이디어 10개, 표로 비용 포함")</td>
+</tr>
+<tr>
+<td><strong>데이터 분석</strong></td>
+<td>표 데이터 제공 + 질문 + 결과 형식. 계산은 단계별 또는 코드로 검증</td>
+</tr>
+<tr>
+<td><strong>코드 작성</strong></td>
+<td>언어, 입력·출력, 예외 처리, 주석 요청</td>
+</tr>
+<tr>
+<td><strong>표·정리</strong></td>
+<td>열 이름을 지정한 표, 비교표</td>
+</tr>
+<tr>
+<td>학습</td>
+<td>"개념 설명 → 예시 → 확인 문제 3개"</td>
+</tr>
+<tr>
+<td>회의록</td>
+<td>결정 사항·할 일·담당자·기한 추출</td>
+</tr>
+</tbody>
+</table></div>
+<aside class="box box-ex">
+<p class="box-t">업무 이메일 작성</p>
+<pre><code>[역할] 당신은 IT 회사 영업팀 대리입니다.
+[상황] 고객사 담당자 김 과장에게 납품 일정이 3일 늦어진다는 사실을 알려야 합니다.
+       원인은 부품 수급 지연이고, 새 납품일은 11월 20일입니다.
+[요청] 사과, 원인, 새 일정, 보상 제안(다음 주문 5% 할인)을 포함한 이메일을 쓰세요.
+[조건] 정중한 비즈니스 어조, 본문 250자 내외, 제목 포함
+</code></pre>
+</aside>
+<aside class="box box-ex">
+<p class="box-t">표 데이터 분석</p>
+<pre><code>아래는 월별 매출(만 원)입니다.
+1월 320, 2월 280, 3월 410, 4월 390, 5월 450, 6월 520
+
+1) 전월 대비 증감률을 표로 계산하세요 (소수점 첫째 자리).
+2) 가장 많이 성장한 달과 그 이유로 생각할 수 있는 가설 2가지를 쓰세요.
+3) 계산 과정을 단계별로 보여 주세요.
+</code></pre>
+<p>3월 증감률 = (410 − 280) / 280 × 100 ≈ <strong>46.4%</strong>로 가장 크다. 생성형 AI의 계산은 틀릴 수 있으므로 결과를 직접 확인한다.</p>
+</aside>
+<h3 id="s19">결과 검증과 개선</h3>
+<ol>
+<li><strong>사실 확인</strong> — 수치, 인명, 날짜, 법령은 원본 출처로 확인</li>
+<li><strong>요구 조건 점검</strong> — 분량, 형식, 빠진 항목</li>
+<li><strong>피드백 프롬프트</strong> — "2번 항목을 더 구체적으로, 예시를 하나 추가해서 다시 써 줘"</li>
+<li><strong>사람의 최종 검토 (Human-in-the-loop)</strong> — 결과물의 책임은 사용자에게 있다</li>
+</ol>
+  </div>
+</section>
+
+<section class="chapter" id="ch6" data-title="AI 윤리와 법" data-group="⑤ 업무 활용 및 윤리의식">
+  <header class="ch-head reveal">
+    <p class="ch-group">⑤ 업무 활용 및 윤리의식</p>
+    <h2>AI 윤리와 법</h2>
+    <button type="button" class="ch-pdf" data-ch="ch6"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 1.5h5.5L12.5 4.5V14.5h-8.5z M9.5 1.5v3h3 M6 9.5l2 2 2-2 M8 6.5v5"/></svg>이 장만 PDF로</button>
+  </header>
+  <div class="ch-body">
+<h3 id="s20">AI 윤리 원칙</h3>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>원칙</th>
+<th>내용</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>공정성</strong></td>
+<td>성별·인종·지역 등에 따른 차별·편향이 없어야 함</td>
+</tr>
+<tr>
+<td><strong>투명성·설명가능성</strong></td>
+<td>AI가 쓰였음을 알리고, 판단 근거를 설명할 수 있어야 함 (블랙박스 문제 → <strong>XAI</strong>, 설명 가능한 AI)</td>
+</tr>
+<tr>
+<td><strong>책임성</strong></td>
+<td>AI 결과에 대한 책임 주체가 분명해야 함</td>
+</tr>
+<tr>
+<td><strong>안전성·신뢰성</strong></td>
+<td>오작동·악용을 막고 안정적으로 작동</td>
+</tr>
+<tr>
+<td><strong>프라이버시</strong></td>
+<td>개인정보를 보호하고 목적 외로 쓰지 않음</td>
+</tr>
+<tr>
+<td><strong>인간 중심 (인간 존엄성)</strong></td>
+<td>사람의 권리와 자율성 존중, 사람의 감독</td>
+</tr>
+</tbody>
+</table></div>
+<p>우리나라 <strong>'국가 인공지능 윤리기준'</strong>(2020, 과학기술정보통신부): 3대 기본원칙(<strong>인간 존엄성, 사회의 공공선, 기술의 합목적성</strong>)과 10대 핵심요건(인권 보장, 프라이버시 보호, 다양성 존중, 침해 금지, 공공성, 연대성, 데이터 관리, 책임성, 안전성, 투명성).</p>
+<h3 id="s21">생성형 AI 사용 시 위험</h3>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>위험</th>
+<th>예</th>
+<th>대응</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>개인정보·기밀 유출</strong></td>
+<td>고객 명단, 사내 기밀 문서를 입력</td>
+<td>민감 정보 입력 금지, 가명 처리, 기업용 서비스·학습 제외 설정</td>
+</tr>
+<tr>
+<td><strong>저작권 침해</strong></td>
+<td>남의 글·그림을 그대로 생성·사용</td>
+<td>출처 확인, 상업적 이용 조건 확인</td>
+</tr>
+<tr>
+<td><strong>할루시네이션</strong></td>
+<td>존재하지 않는 논문·판례 인용</td>
+<td>사실 확인</td>
+</tr>
+<tr>
+<td><strong>편향·차별</strong></td>
+<td>특정 집단에 대한 고정관념</td>
+<td>검토, 다양한 관점 요청</td>
+</tr>
+<tr>
+<td><strong>딥페이크</strong></td>
+<td>실존 인물의 가짜 영상·음성</td>
+<td>생성·유포 금지, 워터마크·표시</td>
+</tr>
+<tr>
+<td><strong>프롬프트 인젝션</strong></td>
+<td>입력 자료 속에 숨긴 지시로 AI가 원래 지시를 무시하게 함</td>
+<td>외부 자료와 지시 구분, 출력 검토</td>
+</tr>
+<tr>
+<td>탈옥 (Jailbreak)</td>
+<td>안전 장치를 우회하는 프롬프트</td>
+<td>이용 정책 준수</td>
+</tr>
+<tr>
+<td>과의존</td>
+<td>스스로 생각·검토하지 않음</td>
+<td>사람의 최종 판단</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="s22">저작권</h3>
+<ul>
+<li>현재 우리나라 저작권법은 <strong>사람의 창작물</strong>만 저작물로 본다. AI가 스스로 만든 결과물은 원칙적으로 저작권 등록 대상이 아니며, 사람이 창작적으로 기여한 부분(편집, 배열 등)만 보호될 수 있다</li>
+<li>결과물이 기존 저작물과 <strong>비슷하면 침해</strong>가 될 수 있다 (실질적 유사성 + 의거성)</li>
+<li>서비스마다 <strong>이용 약관</strong>(상업적 이용 가능 여부, 결과물 권리)이 다르다</li>
+<li>학습 데이터의 저작권 문제는 국내외에서 논의·소송이 진행 중</li>
+</ul>
+<h3 id="s23">관련 법과 제도</h3>
+<div class="tw keep"><table>
+<thead>
+<tr>
+<th>법·제도</th>
+<th>내용</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>인공지능 기본법</strong> (인공지능 발전과 신뢰 기반 조성 등에 관한 기본법)</td>
+<td>2026년 1월 시행. <strong>고영향 AI</strong> 사업자 의무, <strong>생성형 AI 결과물 표시</strong>(워터마크 등) 의무, AI 안전·신뢰 기반</td>
+</tr>
+<tr>
+<td>EU AI Act</td>
+<td>위험 기반 규제: <strong>금지 → 고위험 → 제한적 위험(투명성 의무) → 최소 위험</strong></td>
+</tr>
+<tr>
+<td>개인정보 보호법</td>
+<td>개인정보 처리 원칙, 가명정보, 자동화된 결정에 대한 설명 요구권</td>
+</tr>
+<tr>
+<td>저작권법</td>
+<td>인간의 창작물 보호</td>
+</tr>
+<tr>
+<td>딥페이크 관련 법</td>
+<td>성적 허위 영상물 제작·소지·시청 처벌 강화</td>
+</tr>
+</tbody>
+</table></div>
+<ol class="quiz">
+<li class="q" data-ans="2"><div class="q-text"><p>AI가 판단한 근거를 사람이 이해할 수 있게 설명하는 기술을 뜻하는 것은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>RAG</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>XAI</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>GAN</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>RLHF</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> 설명 가능한 AI다.</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>생성형 AI 업무 활용 시 가장 먼저 지켜야 할 보안 수칙은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>답변을 길게 받는다</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>고객 개인정보·사내 기밀을 입력하지 않는다</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>Temperature를 높인다</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>여러 서비스를 동시에 쓴다</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> 입력 내용이 유출되거나 학습에 쓰일 수 있다.</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>웹 페이지 안에 숨겨 둔 문장으로 AI가 사용자의 원래 지시를 무시하게 만드는 공격은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>할루시네이션</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>프롬프트 인젝션</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>과대적합</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>퓨샷</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> 프롬프트 인젝션이다.</p></div></li>
+<li class="q" data-ans="4"><div class="q-text"><p>우리나라 국가 인공지능 윤리기준의 3대 기본원칙이 아닌 것은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>인간 존엄성</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>사회의 공공선</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>기술의 합목적성</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>기술의 경제성</span></button></li>
+</ol><div class="ans"><p><b>정답 ④</b> 경제성은 포함되지 않는다.</p></div></li>
+<li class="q" data-ans="4"><div class="q-text"><p>EU AI Act의 위험 분류에서 가장 강한 단계는?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>최소 위험</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>제한적 위험</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>고위험</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>금지(수용 불가 위험)</span></button></li>
+</ol><div class="ans"><p><b>정답 ④</b> 사회적 점수화 등은 금지된다.</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>현재 우리나라 저작권법에 대한 설명으로 옳은 것은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>AI가 만든 결과물은 모두 AI 회사의 저작물이다</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>사람의 창작적 기여가 있는 부분이 보호될 수 있다</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>생성형 AI 결과물은 언제나 자유롭게 상업적으로 써도 된다</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>기존 작품과 비슷해도 AI가 만들었으면 침해가 아니다</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> 저작물은 인간의 사상·감정의 창작적 표현이다.</p></div></li>
+</ol>
+  </div>
+</section>
+
+<section class="chapter" id="ch7" data-title="실전 모의 문제" data-group="마무리">
+  <header class="ch-head reveal">
+    <p class="ch-group">마무리</p>
+    <h2>실전 모의 문제</h2>
+    <button type="button" class="ch-pdf" data-ch="ch7"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 1.5h5.5L12.5 4.5V14.5h-8.5z M9.5 1.5v3h3 M6 9.5l2 2 2-2 M8 6.5v5"/></svg>이 장만 PDF로</button>
+  </header>
+  <div class="ch-body">
+<h3 id="s24">이론 섞어 풀기</h3>
+<ol class="quiz">
+<li class="q" data-ans="2"><div class="q-text"><p>1997년 체스 세계 챔피언에게 승리한 컴퓨터는?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>알파고</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>딥블루</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>왓슨</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>엘리자</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> IBM 딥블루다.</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>LLM이 글을 생성하는 기본 원리는?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>미리 저장한 답변을 검색한다</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>앞 내용을 바탕으로 다음 토큰을 확률적으로 예측한다</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>규칙을 사람이 모두 입력한다</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>이미지를 분류한다</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> 다음 토큰 예측이다.</p></div></li>
+<li class="q" data-ans="1"><div class="q-text"><p>이미지와 텍스트를 함께 입력받아 이해하는 모델의 특성은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>멀티모달</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>온디바이스</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>퓨샷</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>과소적합</span></button></li>
+</ol><div class="ans"><p><b>정답 ①</b> 멀티모달이다.</p></div></li>
+<li class="q" data-ans="3"><div class="q-text"><p>프롬프트 구성 요소 중 '표로, 열은 이름 | 장점 | 단점'에 해당하는 것은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>역할</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>맥락</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>출력 형식</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>예시</span></button></li>
+</ol><div class="ans"><p><b>정답 ③</b> 출력 형식이다.</p></div></li>
+<li class="q" data-ans="1"><div class="q-text"><p>새 상품 홍보 문구를 다양하게 받고 싶을 때 알맞은 설정은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>Temperature를 높인다</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>Temperature를 0으로</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>최대 토큰을 1로</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>시스템 프롬프트 삭제</span></button></li>
+</ol><div class="ans"><p><b>정답 ①</b> 다양성이 커진다.</p></div></li>
+<li class="q" data-ans="1"><div class="q-text"><p>여러 해결 경로를 가지처럼 탐색하고 평가해 최선의 경로를 고르는 기법은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>ToT (생각의 나무)</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>CoT</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>제로샷</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>역할 프롬프트</span></button></li>
+</ol><div class="ans"><p><b>정답 ①</b> Tree of Thoughts다.</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>AI가 쓴 보고서에 인용된 통계를 사용하기 전에 해야 할 일은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>그대로 사용한다</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>원본 출처로 사실을 확인한다</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>숫자를 반올림한다</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>다른 AI에게 같은 질문을 하지 않는다</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> 할루시네이션 가능성이 있다.</p></div></li>
+<li class="q" data-ans="2"><div class="q-text"><p>사내 규정 문서를 검색해 답하는 챗봇을 만들 때 가장 알맞은 기술은?</p></div><ol class="opts">
+<li><button type="button" class="opt" data-i="1"><span class="n">①</span><span>GAN</span></button></li>
+<li><button type="button" class="opt" data-i="2"><span class="n">②</span><span>RAG</span></button></li>
+<li><button type="button" class="opt" data-i="3"><span class="n">③</span><span>확산 모델</span></button></li>
+<li><button type="button" class="opt" data-i="4"><span class="n">④</span><span>강화 학습</span></button></li>
+</ol><div class="ans"><p><b>정답 ②</b> 사내 문서를 근거로 답하게 한다.</p></div></li>
+</ol>
+
+<h3 id="s25">실습형 연습</h3>
+<p>시험의 실습형 문항처럼 아래 과제를 실제 생성형 AI에 프롬프트로 작성해 보고, 결과가 조건을 모두 지켰는지 점검하자.</p>
+<aside class="box box-ex">
+<p class="box-t">과제 1 — 요약</p>
+<p>뉴스 기사 한 편을 붙여 넣고 "고등학생이 이해할 수 있게 핵심 3가지를 각 30자 이내 글머리표로" 요약하게 하라.
+<strong>점검</strong>: 개수 3개, 글자 수, 쉬운 말, 기사에 없는 내용이 없는지.</p>
+</aside>
+<aside class="box box-ex">
+<p class="box-t">과제 2 — 표 정리</p>
+<p>노트북 3종의 사양(가격, 무게, 배터리)을 제시하고 "대학생 과제용 추천 순위를 표로, 근거 열 포함"으로 정리하게 하라.
+<strong>점검</strong>: 표 형식, 근거가 사양과 맞는지.</p>
+</aside>
+<aside class="box box-ex">
+<p class="box-t">과제 3 — 퓨샷 분류</p>
+<p>문의 글 6개를 '배송 / 환불 / 제품 문의'로 분류하는 프롬프트를 예시 3개를 넣어 작성하라.
+<strong>점검</strong>: 예시와 같은 형식으로 답했는지.</p>
+</aside>
+<aside class="box box-ex">
+<p class="box-t">과제 4 — 프롬프트 개선</p>
+<p>"발표 자료 만들어 줘"라는 프롬프트를 역할·맥락·작업·형식·제약이 모두 들어가게 고쳐 쓰라.
+<strong>예시 답안</strong>:</p>
+<pre><code>당신은 고등학교 진로 교사입니다. 1학년 학생 대상 10분 진로 특강에 쓸
+'AI 시대의 직업 변화' 발표 자료 목차를 만들어 주세요.
+슬라이드 6장, 장마다 제목과 핵심 문장 2개, 마지막 장은 토론 질문으로 구성하세요.
+어려운 용어는 괄호로 쉬운 설명을 덧붙이세요.
+</code></pre>
+</aside>
+<aside class="box box-tip">
+<p class="box-t">시험 직전 체크리스트</p>
+<ul>
+<li>AI 역사 연표(튜링 테스트, 다트머스, AI 겨울, AlexNet, 알파고, 트랜스포머, ChatGPT)</li>
+<li>지도·비지도·강화·자기지도 학습, 과대적합</li>
+<li>LLM 용어: 토큰, 컨텍스트 윈도, 사전학습, 파인튜닝, RLHF, 멀티모달</li>
+<li>Temperature·Top-p, 할루시네이션과 대응, RAG, 에이전트</li>
+<li>프롬프트 구성 요소 8가지와 작성 원칙(구체성, 구분자, 형식 지정)</li>
+<li>제로·원·퓨샷, CoT, 자기 일관성, ToT, ReAct, 체이닝, 역질문, 메타 프롬프트</li>
+<li>업무별 패턴, 결과 검증(Human-in-the-loop)</li>
+<li>윤리 원칙, 국가 AI 윤리기준 3대 원칙, 개인정보·저작권·딥페이크·프롬프트 인젝션, 인공지능 기본법, EU AI Act</li>
+</ul>
+</aside>
+  </div>
+</section>
+    <footer class="end">
+      <p><b>AI-POT 프롬프트 활용능력 교본</b> · 2026년 11월 기준. 시험 일정·응시료·출제 기준은 바뀔 수 있으니 접수 전 공식 사이트 공지를 확인하세요.</p>
+    </footer>
+  </main>
+</div>
+
+<div class="modal" id="pdfModal" role="dialog" aria-modal="true" aria-labelledby="pdfTitle" hidden>
+  <div class="modal-back" data-close></div>
+  <div class="modal-box">
+    <div class="modal-head">
+      <h2 id="pdfTitle">PDF로 저장할 단원</h2>
+      <button type="button" class="x" data-close aria-label="닫기"><svg viewBox="0 0 16 16"><path d="M3 3l10 10M13 3L3 13"/></svg></button>
+    </div>
+    <div class="pick-tools">
+      <button type="button" class="link" data-all="1">전체 선택</button>
+      <button type="button" class="link" data-all="0">전체 해제</button>
+      <label class="switch"><input type="checkbox" id="optAns" checked> 정답·해설 함께 인쇄</label>
+    </div>
+    <div class="pick-list"><label class="pick"><input type="checkbox" value="ch0" checked><span class="pick-g">시작하기</span><span class="pick-t">시험 구성과 공부 순서</span></label>
+<label class="pick"><input type="checkbox" value="ch1" checked><span class="pick-g">① 인공지능 기초 이론</span><span class="pick-t">인공지능의 기초</span></label>
+<label class="pick"><input type="checkbox" value="ch2" checked><span class="pick-g">② 생성형 AI 기초 이론</span><span class="pick-t">생성형 AI와 LLM</span></label>
+<label class="pick"><input type="checkbox" value="ch3" checked><span class="pick-g">③ 프롬프트 엔지니어링 기술 기초</span><span class="pick-t">프롬프트의 구성</span></label>
+<label class="pick"><input type="checkbox" value="ch4" checked><span class="pick-g">④ 프롬프트 엔지니어링 기술 활용</span><span class="pick-t">프롬프트 기법</span></label>
+<label class="pick"><input type="checkbox" value="ch5" checked><span class="pick-g">⑤ 업무 활용 및 윤리의식</span><span class="pick-t">업무 활용 실습</span></label>
+<label class="pick"><input type="checkbox" value="ch6" checked><span class="pick-g">⑤ 업무 활용 및 윤리의식</span><span class="pick-t">AI 윤리와 법</span></label>
+<label class="pick"><input type="checkbox" value="ch7" checked><span class="pick-g">마무리</span><span class="pick-t">실전 모의 문제</span></label></div>
+    <div class="modal-foot">
+      <p class="hint">인쇄 창에서 <b>대상: PDF로 저장</b>, 용지 <b>A4</b>를 고르세요. 단원마다 새 페이지에서 시작하고, 표·코드·문제는 페이지 경계에서 잘리지 않게 넘어갑니다.</p>
+      <button type="button" class="btn btn-solid" id="doPrint">선택한 단원 PDF로 저장</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  var $ = function(s, r){ return (r||document).querySelector(s); };
+  var $$ = function(s, r){ return Array.prototype.slice.call((r||document).querySelectorAll(s)); };
+  var body = document.body;
+
+  /* ---- reveal on scroll ---- */
+  var revs = $$('.reveal');
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function(es){
+      es.forEach(function(e){ if (e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, {rootMargin:'0px 0px -8% 0px'});
+    revs.forEach(function(el){ io.observe(el); });
+  } else revs.forEach(function(el){ el.classList.add('in'); });
+
+  /* ---- progress bar + toc spy ---- */
+  var bar = $('.progress i');
+  var chs = $$('.chapter');
+  var subs = $$('.ch-body h3[id]');
+  var tocCh = {}; $$('.toc-ch').forEach(function(a){ tocCh[a.dataset.ch] = a; });
+  var tocSub = {}; $$('.toc ol a').forEach(function(a){ tocSub[a.getAttribute('href').slice(1)] = a; });
+  var curCh = null, curSub = null, ticking = false;
+  function spy(){
+    ticking = false;
+    var h = document.documentElement, max = h.scrollHeight - innerHeight;
+    if (bar) bar.style.transform = 'scaleX(' + (max > 0 ? Math.min(1, scrollY / max) : 0) + ')';
+    var line = 140, c = null, s = null;
+    for (var i = 0; i < chs.length; i++) { if (chs[i].getBoundingClientRect().top - line < 0) c = chs[i]; else break; }
+    for (var j = 0; j < subs.length; j++) { if (subs[j].getBoundingClientRect().top - line < 0) s = subs[j]; else break; }
+    if (c !== curCh) {
+      if (curCh && tocCh[curCh.id]) { tocCh[curCh.id].classList.remove('on'); tocCh[curCh.id].parentNode.classList.remove('open'); }
+      curCh = c;
+      if (c && tocCh[c.id]) { tocCh[c.id].classList.add('on'); tocCh[c.id].parentNode.classList.add('open'); }
+    }
+    if (s !== curSub) {
+      if (curSub && tocSub[curSub.id]) tocSub[curSub.id].classList.remove('on');
+      curSub = s;
+      if (s && tocSub[s.id] && c && c.contains(s)) tocSub[s.id].classList.add('on');
+    }
+  }
+  addEventListener('scroll', function(){ if (!ticking){ ticking = true; requestAnimationFrame(spy); } }, {passive:true});
+  spy();
+
+  /* ---- mobile toc ---- */
+  var tg = $('.toc-toggle');
+  if (tg) tg.addEventListener('click', function(){
+    var open = body.classList.toggle('toc-open'); tg.setAttribute('aria-expanded', open);
+  });
+  $$('.toc a').forEach(function(a){ a.addEventListener('click', function(){ body.classList.remove('toc-open'); if (tg) tg.setAttribute('aria-expanded', false); }); });
+
+  /* ---- quiz ---- */
+  document.addEventListener('click', function(e){
+    var b = e.target.closest && e.target.closest('.opt');
+    if (!b) return;
+    var q = b.closest('.q'); if (q.classList.contains('done')) return;
+    var ans = +q.dataset.ans, pick = +b.dataset.i;
+    q.classList.add('done');
+    $$('.opt', q).forEach(function(o){ if (+o.dataset.i === ans) o.classList.add('right'); });
+    if (pick !== ans) b.classList.add('wrong');
+  });
+  $$('.q').forEach(function(q){
+    var t = document.createElement('button'); t.type = 'button'; t.className = 'ans-toggle'; t.textContent = '정답만 보기';
+    t.addEventListener('click', function(){
+      q.classList.add('done'); $$('.opt', q).forEach(function(o){ if (+o.dataset.i === +q.dataset.ans) o.classList.add('right'); });
+      t.remove();
+    });
+    q.appendChild(t);
+  });
+
+  /* ---- PDF (print) ---- */
+  var modal = $('#pdfModal'), lastFocus = null;
+  function openModal(){ lastFocus = document.activeElement; modal.hidden = false; $('#doPrint').focus(); }
+  function closeModal(){ modal.hidden = true; if (lastFocus) lastFocus.focus(); }
+  $$('.open-pdf').forEach(function(b){ b.addEventListener('click', openModal); });
+  $$('[data-close]', modal).forEach(function(b){ b.addEventListener('click', closeModal); });
+  addEventListener('keydown', function(e){ if (e.key === 'Escape' && !modal.hidden) closeModal(); });
+  $$('[data-all]', modal).forEach(function(b){ b.addEventListener('click', function(){
+    var v = b.dataset.all === '1'; $$('.pick input', modal).forEach(function(i){ i.checked = v; });
+  }); });
+
+  var cover = $('.pc-list');
+  function fillCover(ids){
+    cover.innerHTML = '';
+    chs.forEach(function(c){
+      if (ids && ids.indexOf(c.id) < 0) return;
+      var li = document.createElement('li'), g = c.dataset.group;
+      li.innerHTML = (g ? '<span>' + g + '</span>' : '') + c.dataset.title;
+      cover.appendChild(li);
+    });
+  }
+  function printChapters(ids, withAns){
+    if (!ids.length) { alert('저장할 단원을 하나 이상 고르세요.'); return; }
+    var all = ids.length === chs.length;
+    chs.forEach(function(c){ c.classList.toggle('pr', ids.indexOf(c.id) > -1); });
+    body.classList.toggle('pick-mode', !all);
+    body.classList.toggle('no-ans', !withAns);
+    fillCover(ids);
+    revs.forEach(function(el){ el.classList.add('in'); });
+    var t = document.title;
+    if (!all && ids.length === 1) document.title = t.replace(' 교본', '') + ' - ' + $('#' + ids[0]).dataset.title;
+    modal.hidden = true;
+    setTimeout(function(){
+      window.print();
+      setTimeout(function(){ document.title = t; }, 500);
+    }, 60);
+  }
+  $('#doPrint').addEventListener('click', function(){
+    var ids = $$('.pick input:checked', modal).map(function(i){ return i.value; });
+    printChapters(ids, $('#optAns').checked);
+  });
+  $$('.ch-pdf').forEach(function(b){ b.addEventListener('click', function(){ printChapters([b.dataset.ch], true); }); });
+  addEventListener('afterprint', function(){
+    body.classList.remove('pick-mode', 'no-ans'); chs.forEach(function(c){ c.classList.remove('pr'); });
+    fillCover(null);
+  });
+  addEventListener('beforeprint', function(){ revs.forEach(function(el){ el.classList.add('in'); }); });
+  /* 브라우저 메뉴(Ctrl+P)로 바로 인쇄해도 표지 목록이 채워지도록 */
+  fillCover(null);
+
+  /* figures: run once when visible */
+  window.__onSeen = function(el, fn){
+    if (!el) return;
+    if (!('IntersectionObserver' in window)) { fn(); return; }
+    var o = new IntersectionObserver(function(es){ es.forEach(function(e){ if (e.isIntersecting){ o.disconnect(); fn(); } }); }, {threshold:.35});
+    o.observe(el);
+  };
+})();
+
+
+(function(){
+  var d = document.getElementById('fig-dikw'); __onSeen(d, function(){ d.classList.add('play'); });
+  var c = document.getElementById('fig-crisp');
+  if (c) {
+    var ph = c.querySelectorAll('.ph'), orb = c.querySelector('.orbit'), desc = c.querySelector('.crisp-desc');
+    var tx = ['비즈니스 목표 → 분석 목표','데이터 수집·품질 확인','정제·통합·변환 (가장 오래 걸림)','기법 선택·모델 작성','목표 달성 여부 판단','배포·모니터링·보고서'];
+    var n = -1, timer = null;
+    function step(){ n++; var i = n % 6; ph.forEach(function(p){ p.classList.toggle('on', +p.dataset.i === i); });
+      orb.style.transform = 'rotate(' + (n*60) + 'deg)'; desc.textContent = tx[i]; }
+    __onSeen(c, function(){ step(); timer = setInterval(step, 1800); });
+  }
+  var m = document.getElementById('fig-cm');
+  if (m) {
+    var ins = m.querySelectorAll('input'), out = {};
+    m.querySelectorAll('[data-o]').forEach(function(e){ out[e.dataset.o] = e; });
+    function f(x){ return isFinite(x) ? (x*100).toFixed(1) + '%' : '—'; }
+    function calc(){ var v = {}; ins.forEach(function(i){ v[i.dataset.k] = Math.max(0, +i.value || 0); });
+      var all = v.tp+v.fn+v.fp+v.tn, P = v.tp/(v.tp+v.fp), R = v.tp/(v.tp+v.fn);
+      out.acc.textContent = f((v.tp+v.tn)/all); out.pre.textContent = f(P); out.rec.textContent = f(R);
+      out.spe.textContent = f(v.tn/(v.tn+v.fp)); out.f1.textContent = isFinite(2*P*R/(P+R)) ? (2*P*R/(P+R)).toFixed(3) : '—';
+      out.fpr.textContent = f(v.fp/(v.fp+v.tn)); }
+    ins.forEach(function(i){ i.addEventListener('input', calc); }); calc();
+  }
+})();
+
+
+(function(){
+  /* hero: 조인 행 연결 애니메이션 */
+  var h = document.getElementById('hero-sqld');
+  if (h) {
+    var er = h.querySelectorAll('.er'), dr = h.querySelectorAll('.dr'), jl = h.querySelector('.jl');
+    var map = [1, 2, 1, 0], k = 0; // EMP행 -> DEPT행 인덱스 (20,30,20,10)
+    function yE(r){ return 60 + 34 + r*36 + 18; } function yD(r){ return 78 + 34 + r*36 + 18; }
+    function tick(){
+      er.forEach(function(g){ g.classList.remove('on'); }); dr.forEach(function(g){ g.classList.remove('on'); });
+      var r = k % 4, d = map[r]; er[r].classList.add('on'); dr[d].classList.add('on');
+      jl.setAttribute('d', 'M240 ' + yE(r) + ' C290 ' + yE(r) + ' 290 ' + yD(d) + ' 340 ' + yD(d)); k++;
+    }
+    if (!matchMedia('(prefers-reduced-motion: reduce)').matches) { tick(); setInterval(tick, 1500); } else tick();
+  }
+  /* 실행 순서 */
+  var o = document.getElementById('fig-order');
+  if (o) {
+    var w = o.querySelectorAll('li'), s = 0;
+    function st(){ s = s % 6 + 1; w.forEach(function(li){ var n = +li.dataset.s; li.classList.toggle('on', n === s); li.classList.toggle('done', n < s); }); }
+    __onSeen(o, function(){ st(); setInterval(st, 1400); });
+  }
+  /* 조인 시각화 */
+  var j = document.getElementById('fig-join');
+  if (j) {
+    var A = [['SMITH',20],['ALLEN',30],['KING',10],['SCOTT',null]];
+    var B = [[10,'ACCOUNTING'],[20,'RESEARCH'],[40,'OPERATIONS']];
+    var SQL = {
+      inner:'SELECT E.ENAME, E.DEPTNO, D.DEPTNO, D.DNAME\n  FROM EMP E INNER JOIN DEPT D\n    ON E.DEPTNO = D.DEPTNO;',
+      left:'SELECT E.ENAME, E.DEPTNO, D.DEPTNO, D.DNAME\n  FROM EMP E LEFT OUTER JOIN DEPT D\n    ON E.DEPTNO = D.DEPTNO;',
+      right:'SELECT E.ENAME, E.DEPTNO, D.DEPTNO, D.DNAME\n  FROM EMP E RIGHT OUTER JOIN DEPT D\n    ON E.DEPTNO = D.DEPTNO;',
+      full:'SELECT E.ENAME, E.DEPTNO, D.DEPTNO, D.DNAME\n  FROM EMP E FULL OUTER JOIN DEPT D\n    ON E.DEPTNO = D.DEPTNO;',
+      cross:'SELECT E.ENAME, E.DEPTNO, D.DEPTNO, D.DNAME\n  FROM EMP E CROSS JOIN DEPT D;'
+    };
+    function cell(v){ return v === null ? '<td class="nul">NULL</td>' : '<td>' + v + '</td>'; }
+    function run(t){
+      var res = [], ma = {}, mb = {};
+      if (t === 'cross') { A.forEach(function(a){ B.forEach(function(b){ res.push([a[0],a[1],b[0],b[1]]); }); }); }
+      else {
+        A.forEach(function(a, i){ B.forEach(function(b, k){ if (a[1] !== null && a[1] === b[0]) { res.push([a[0],a[1],b[0],b[1]]); ma[i]=1; mb[k]=1; } }); });
+        if (t === 'left' || t === 'full') A.forEach(function(a, i){ if (!ma[i]) res.push([a[0],a[1],null,null]); });
+        if (t === 'right' || t === 'full') B.forEach(function(b, k){ if (!mb[k]) res.push([null,null,b[0],b[1]]); });
+      }
+      j.querySelector('.j-a tbody').innerHTML = A.map(function(a,i){ return '<tr' + (ma[i]||t==='cross' ? ' class="m"' : '') + '>' + cell(a[0]) + cell(a[1]) + '</tr>'; }).join('');
+      j.querySelector('.j-b tbody').innerHTML = B.map(function(b,k){ return '<tr' + (mb[k]||t==='cross' ? ' class="m"' : '') + '>' + cell(b[0]) + cell(b[1]) + '</tr>'; }).join('');
+      j.querySelector('.j-r tbody').innerHTML = res.map(function(r,i){ return '<tr style="animation-delay:' + (i*35) + 'ms">' + r.map(cell).join('') + '</tr>'; }).join('');
+      j.querySelector('.j-n').textContent = res.length + '행';
+      j.querySelector('.j-sql code').textContent = SQL[t];
+    }
+    j.querySelectorAll('.chip').forEach(function(b){ b.addEventListener('click', function(){
+      j.querySelectorAll('.chip').forEach(function(x){ x.setAttribute('aria-pressed', x === b); }); run(b.dataset.j); }); });
+    run('inner');
+  }
+})();
+
+
+(function(){
+  /* hero terminal typing */
+  var t = document.getElementById('heroTerm');
+  if (t) {
+    var S = [
+      ['$ ', 'whoami', 'student'],
+      ['$ ', 'pwd', '/home/student'],
+      ['$ ', 'ls -l report.txt', '-rw-r--r--. 1 student student 2048 Nov  7 16:00 report.txt'],
+      ['$ ', 'chmod 640 report.txt', ''],
+      ['$ ', 'ls -l report.txt', '-rw-r-----. 1 student student 2048 Nov  7 16:00 report.txt'],
+      ['$ ', 'ps -ef | grep sshd | head -1', 'root      1024     1  0 09:12 ?   00:00:00 /usr/sbin/sshd -D']
+    ];
+    var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var html = '<span class="d">[student@rocky ~]</span>';
+    function esc(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;'); }
+    if (reduce) { S.forEach(function(s){ html += '\n<span class="p">' + s[0] + '</span>' + esc(s[1]) + (s[2] ? '\n' + esc(s[2]) : ''); }); t.innerHTML = html; }
+    else {
+      var ln = 0, ci = 0;
+      function frame(){
+        if (ln >= S.length) { t.innerHTML = html + '\n<span class="p">$ </span><span class="cur"></span>'; return; }
+        var s = S[ln];
+        if (ci <= s[1].length) {
+          t.innerHTML = html + '\n<span class="p">' + s[0] + '</span>' + esc(s[1].slice(0, ci)) + '<span class="cur"></span>';
+          ci++; setTimeout(frame, 38 + Math.random()*50);
+        } else {
+          html += '\n<span class="p">' + s[0] + '</span>' + esc(s[1]) + (s[2] ? '\n' + esc(s[2]) : '');
+          ln++; ci = 0; t.innerHTML = html; setTimeout(frame, 520);
+        }
+      }
+      setTimeout(frame, 500);
+    }
+  }
+  /* boot */
+  var b = document.getElementById('fig-boot');
+  if (b) {
+    var steps = b.querySelectorAll('li'), bar = b.querySelector('.boot-bar i'), dsc = b.querySelector('.boot-desc');
+    var D = ['전원이 들어오면 메인보드 펌웨어(BIOS 또는 UEFI)가 POST(하드웨어 자가 진단)를 하고, 부팅 장치에서 부트로더를 찾는다.',
+             '부트로더 GRUB2가 메뉴를 보여주고, 선택한 커널 이미지와 initramfs를 메모리에 올린다. 설정은 /boot/grub2/grub.cfg.',
+             '커널이 하드웨어를 초기화하고 루트 파일 시스템을 마운트한다. initramfs는 그 전에 필요한 임시 드라이버 묶음이다.',
+             '커널이 첫 프로세스 systemd를 실행한다. PID는 1번이고, 이후 모든 프로세스의 조상이 된다.',
+             'systemd가 기본 target(예전의 런레벨)에 필요한 서비스들을 띄운다. 기본값 확인은 systemctl get-default.',
+             '텍스트 로그인(getty) 또는 그래픽 로그인(GDM) 화면이 뜬다. 로그인하면 셸이 시작된다.'];
+    var i = -1;
+    function go(){ i = (i + 1) % 6; steps.forEach(function(e){ var n = +e.dataset.i; e.classList.toggle('on', n === i); e.classList.toggle('done', n < i); });
+      bar.style.transform = 'scaleX(' + ((i + 1) / 6) + ')'; dsc.textContent = (i + 1) + '단계 · ' + D[i]; }
+    __onSeen(b, function(){ go(); setInterval(go, 2600); });
+  }
+  /* chmod */
+  var p = document.getElementById('fig-chmod');
+  if (p) {
+    var bt = p.querySelectorAll('.perm-grid button'), num = p.querySelector('.perm-num'), term = p.querySelector('.perm-term');
+    function val(){ var v = 0; bt.forEach(function(x){ if (x.getAttribute('aria-pressed') === 'true') v += +x.dataset.b; }); return v; }
+    function sym(v){ var s = 'rwxrwxrwx', o = '-'; for (var k = 0; k < 9; k++) o += (v & (256 >> k)) ? s[k] : '-'; return o; }
+    function show(v, fromNum){
+      var oc = v.toString(8); while (oc.length < 3) oc = '0' + oc;
+      if (!fromNum) num.value = oc;
+      bt.forEach(function(x){ x.setAttribute('aria-pressed', (v & +x.dataset.b) ? 'true' : 'false'); });
+      var u = 'ugo', parts = [];
+      for (var k = 0; k < 3; k++) { var seg = sym(v).slice(1 + k*3, 4 + k*3).replace(/-/g, ''); parts.push(u[k] + '=' + seg); }
+      term.innerHTML = '<span class="p">$ </span>chmod ' + oc + ' report.txt\n<span class="d"># 같은 뜻</span>\n<span class="p">$ </span>chmod ' + parts.join(',') + ' report.txt\n<span class="p">$ </span>ls -l report.txt\n' + sym(v) + '. 1 student student 2048 report.txt';
+    }
+    bt.forEach(function(x){ x.addEventListener('click', function(){ x.setAttribute('aria-pressed', x.getAttribute('aria-pressed') !== 'true'); show(val()); }); });
+    num.addEventListener('input', function(){ var s = num.value.replace(/[^0-7]/g, ''); num.value = s; if (s.length === 3) show(parseInt(s, 8), true); });
+    show(val());
+  }
+})();
+
+
+(function(){
+  /* 범용 터미널 히어로 */
+  document.querySelectorAll('.gen-term').forEach(function(t){
+    var S; try { S = JSON.parse(t.dataset.lines); } catch(e) { return; }
+    var P = t.dataset.prompt || '';
+    function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;'); }
+    var html = '<span class="d">' + esc(P) + '</span>';
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      S.forEach(function(s){ html += '\n<span class="p">' + esc(s[0]) + '</span>' + esc(s[1]) + (s[2] ? '\n' + esc(s[2]) : ''); }); t.innerHTML = html; return;
+    }
+    var ln = 0, ci = 0;
+    function frame(){
+      if (ln >= S.length) { t.innerHTML = html + '\n<span class="cur"></span>'; return; }
+      var s = S[ln];
+      if (ci <= s[1].length) { t.innerHTML = html + '\n<span class="p">' + esc(s[0]) + '</span>' + esc(s[1].slice(0, ci)) + '<span class="cur"></span>'; ci++; setTimeout(frame, 30 + Math.random()*40); }
+      else { html += '\n<span class="p">' + esc(s[0]) + '</span>' + esc(s[1]) + (s[2] ? '\n' + esc(s[2]) : ''); ln++; ci = 0; t.innerHTML = html; setTimeout(frame, 450); }
+    }
+    setTimeout(frame, 500);
+  });
+  /* 서브넷 계산기 */
+  var sn = document.getElementById('fig-subnet');
+  if (sn) {
+    var ip = sn.querySelector('.sn-ip'), px = sn.querySelector('.sn-px'), bits = sn.querySelector('.sn-bits'), o = {};
+    sn.querySelectorAll('[data-o]').forEach(function(e){ o[e.dataset.o] = e; });
+    for (var i = 0; i < 32; i++) { var b = document.createElement('i'); if (i % 8 === 7 && i < 31) b.className = 'g'; bits.appendChild(b); }
+    var cells = bits.querySelectorAll('i');
+    function toS(n){ return [n>>>24, (n>>>16)&255, (n>>>8)&255, n&255].join('.'); }
+    function calc(){
+      var p = ip.value.trim().split('.').map(Number), k = Math.max(0, Math.min(32, parseInt(px.value, 10) || 0));
+      if (p.length !== 4 || p.some(function(x){ return isNaN(x) || x < 0 || x > 255; })) { o.mask.textContent = '올바른 IP를 입력'; return; }
+      var n = ((p[0]<<24)>>>0) + (p[1]<<16) + (p[2]<<8) + p[3];
+      var m = k === 0 ? 0 : (0xFFFFFFFF << (32 - k)) >>> 0;
+      var net = (n & m) >>> 0, bc = (net | (~m >>> 0)) >>> 0;
+      cells.forEach(function(c, i){ c.textContent = (n >>> (31 - i)) & 1; c.classList.toggle('n', i < k); });
+      o.mask.textContent = toS(m); o.net.textContent = toS(net); o.bc.textContent = toS(bc);
+      var h = k >= 31 ? (k === 32 ? 1 : 2) : Math.pow(2, 32 - k) - 2;
+      o.range.textContent = k >= 31 ? toS(net) + ' ~ ' + toS(bc) : toS(net + 1) + ' ~ ' + toS(bc - 1);
+      o.hosts.textContent = h.toLocaleString() + '개';
+      var c = p[0] < 128 ? 'A' : p[0] < 192 ? 'B' : p[0] < 224 ? 'C' : p[0] < 240 ? 'D' : 'E';
+      var priv = p[0] === 10 || (p[0] === 172 && p[1] >= 16 && p[1] <= 31) || (p[0] === 192 && p[1] === 168);
+      o.cls.textContent = c + '클래스 · ' + (p[0] === 127 ? '루프백' : priv ? '사설' : '공인');
+    }
+    ip.addEventListener('input', calc); px.addEventListener('input', calc); calc();
+  }
+  /* TCP 3-way */
+  var tc = document.getElementById('fig-tcp3'); if (tc) __onSeen(tc, function(){ tc.classList.add('play'); });
+  /* 페이지 교체 */
+  var pg = document.getElementById('fig-paging');
+  if (pg) {
+    var alg = 'FIFO', ref = pg.querySelector('.pg-ref'), fr = pg.querySelector('.pg-fr'), tb = pg.querySelector('tbody'), sum = pg.querySelector('.pg-sum');
+    function run(){
+      var R = ref.value.trim().split(/[\s,]+/).filter(Boolean), F = Math.max(1, Math.min(6, +fr.value || 3));
+      var mem = [], cols = [], faults = 0, last = {}, order = [];
+      R.forEach(function(r, t){
+        var hit = mem.indexOf(r) > -1;
+        if (!hit) {
+          faults++;
+          if (mem.length < F) { mem.push(r); order.push(r); }
+          else {
+            var victim;
+            if (alg === 'FIFO') victim = order.shift();
+            else if (alg === 'LRU') { victim = mem.slice().sort(function(a, b){ return last[a] - last[b]; })[0]; }
+            else { var far = -1; mem.forEach(function(m){ var nx = R.indexOf(m, t + 1); if (nx === -1) nx = 1e9; if (nx > far) { far = nx; victim = m; } }); }
+            mem[mem.indexOf(victim)] = r;
+            if (alg === 'FIFO') order.push(r);
+          }
+        }
+        last[r] = t; cols.push({r: r, m: mem.slice(), f: !hit});
+      });
+      var h = '<tr><th>참조</th>' + cols.map(function(c){ return '<th>' + c.r + '</th>'; }).join('') + '</tr>';
+      for (var i = 0; i < F; i++) h += '<tr><th>프레임' + (i + 1) + '</th>' + cols.map(function(c){ var v = c.m[i]; return '<td class="' + (c.f && v === c.r ? 'f' : 'h') + '">' + (v === undefined ? '' : v) + '</td>'; }).join('') + '</tr>';
+      tb.innerHTML = h; sum.textContent = alg + ' · 페이지 부재 ' + faults + '회 / 참조 ' + R.length + '회';
+    }
+    pg.querySelectorAll('.chip').forEach(function(b){ b.addEventListener('click', function(){ pg.querySelectorAll('.chip').forEach(function(x){ x.setAttribute('aria-pressed', x === b); }); alg = b.dataset.a; run(); }); });
+    ref.addEventListener('input', run); fr.addEventListener('input', run); run();
+  }
+})();
+
+</script>
+</body>
+</html>

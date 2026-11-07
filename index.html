@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>자격증 교본 — ADsP · SQLD · 리눅스마스터 2급</title>
+<title>자격증 교본</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pretendard@1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <style>
 :root{--text:#121a22;--text-2:#4f5d6b;--line:#d6dce2;--surface:#f3f5f7;--ease-out:cubic-bezier(.23,1,.32,1);
@@ -15,12 +15,15 @@ body{margin:0;font-family:var(--font);color:var(--text);background:#fff;word-bre
 header{padding:120px 0 96px}
 h1{font-size:clamp(44px,7vw,96px);letter-spacing:-.04em;line-height:1.08;margin:0;font-weight:800;text-wrap:balance}
 .lead{font-size:clamp(18px,1.8vw,22px);color:var(--text-2);max-width:32em;margin:28px 0 0}
+.grp{margin:0 0 96px}
+.grp h2{font-size:clamp(26px,3vw,34px);letter-spacing:-.02em;margin:0;font-weight:800}
+.gd{color:var(--text-2);margin:6px 0 20px;font-size:16px}
 ol{list-style:none;margin:0;padding:0;border-top:1px solid var(--text)}
 li{border-bottom:1px solid var(--line)}
-a.row{display:grid;grid-template-columns:96px minmax(0,1fr) auto;gap:32px;align-items:center;padding:40px 0;color:inherit;text-decoration:none}
+a.row{display:grid;grid-template-columns:96px minmax(0,1fr) auto;gap:32px;align-items:center;padding:28px 0;color:inherit;text-decoration:none}
 .sw{width:96px;height:96px;border-radius:4px;display:grid;place-items:end start;padding:12px;color:#fff;font-weight:700;font-size:15px;
   transform-origin:left center;transition:transform 260ms var(--ease-out)}
-.row h2{font-size:clamp(26px,3vw,38px);letter-spacing:-.02em;margin:0;line-height:1.2}
+.row h3{font-size:clamp(22px,2.4vw,30px);letter-spacing:-.02em;margin:0;line-height:1.2}
 .row p{margin:8px 0 0;color:var(--text-2);font-size:17px;max-width:36em}
 .go{font-weight:600;font-size:16px;white-space:nowrap;display:flex;align-items:center;gap:10px}
 .go svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.6;transition:transform 220ms var(--ease-out)}
@@ -43,23 +46,63 @@ a.row:active .go svg{transform:translateX(2px)}
 <body>
 <div class="wrap">
   <header>
-    <h1 class="in">자격증 교본 세 권</h1>
-    <p class="lead in">시험 범위 전체를 정리하고, 단원마다 확인 문제를 붙였다. 필요한 단원만 골라 A4 PDF로 저장할 수 있다.</p>
+    <h1 class="in">자격증 교본 12권</h1>
+    <p class="lead in">개발, 데이터·AI, 보안·인프라 자격증의 시험 범위 전체를 정리하고 단원마다 확인 문제를 붙였다. 필요한 단원만 골라 A4 PDF로 저장할 수 있다.</p>
   </header>
-  <ol>
-    <li class="in"><a class="row" href="adsp.html">
+  <section class="grp in"><h2>개발</h2><p class="gd">소프트웨어 개발, 데이터베이스, 프로그래밍 언어를 다루는 국가기술자격</p><ol>
+<li><a class="row" href="jeongcheogi.html">
+      <span class="sw" style="background:#0d6b7d">정처기</span>
+      <span><h3>정보처리기사</h3><p>소프트웨어 개발, 데이터베이스, C·Java·Python 코드 해석, 정보시스템 구축관리와 실기 필답형까지.</p></span>
+      <span class="go">읽기<svg viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></span></a></li>
+<li><a class="row" href="jeongsangi.html">
+      <span class="sw" style="background:#586b12">정처산</span>
+      <span><h3>정보처리산업기사</h3><p>정보시스템 기반 기술, 프로그래밍 언어 활용, 데이터베이스 활용 3과목과 실기.</p></span>
+      <span class="go">읽기<svg viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></span></a></li>
+<li><a class="row" href="programming.html">
+      <span class="sw" style="background:#2b3640">프기능</span>
+      <span><h3>프로그래밍기능사</h3><p>2026년 정보처리기능사에서 개편된 시험. C·Java·Python 기초, 웹, 네트워크·DB 기초.</p></span>
+      <span class="go">읽기<svg viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></span></a></li>
+</ol></section>
+<section class="grp in"><h2>데이터 · AI</h2><p class="gd">데이터 분석, SQL, 머신러닝, 생성형 AI 활용 자격</p><ol>
+<li><a class="row" href="adsp.html">
       <span class="sw" style="background:#0b6e57">ADsP</span>
-      <span><h2>ADsP 데이터분석 준전문가</h2><p>데이터 이해, 분석 기획, R·통계·회귀·시계열·머신러닝까지 3과목 전체와 실전 모의 문제.</p></span>
+      <span><h3>ADsP 데이터분석 준전문가</h3><p>데이터 이해, 분석 기획, R·통계·회귀·시계열·머신러닝까지 3과목 전체와 실전 모의 문제.</p></span>
       <span class="go">읽기<svg viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></span></a></li>
-    <li class="in"><a class="row" href="sqld.html">
+<li><a class="row" href="sqld.html">
       <span class="sw" style="background:#0a55c2">SQLD</span>
-      <span><h2>SQLD SQL 개발자</h2><p>데이터 모델링과 정규화, SELECT부터 조인·서브쿼리·윈도우 함수·계층형 질의·DDL까지.</p></span>
+      <span><h3>SQLD SQL 개발자</h3><p>데이터 모델링과 정규화, SELECT부터 조인·서브쿼리·윈도우 함수·계층형 질의·DDL까지.</p></span>
       <span class="go">읽기<svg viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></span></a></li>
-    <li class="in"><a class="row" href="linux.html">
+<li><a class="row" href="bigdata.html">
+      <span class="sw" style="background:#374957">빅분기</span>
+      <span><h3>빅데이터분석기사</h3><p>분석 기획, 탐색, 모델링, 결과 해석 4과목과 실기 작업형 1·2·3유형 파이썬 코드.</p></span>
+      <span class="go">읽기<svg viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></span></a></li>
+<li><a class="row" href="aice.html">
+      <span class="sw" style="background:#a3134f">AICE</span>
+      <span><h3>AICE Associate</h3><p>KT가 만든 국가공인 AI 자격. pandas 전처리, scikit-learn 모델링, Keras 딥러닝 실기.</p></span>
+      <span class="go">읽기<svg viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></span></a></li>
+<li><a class="row" href="aipot.html">
+      <span class="sw" style="background:#7d6200">AI-POT</span>
+      <span><h3>AI-POT 프롬프트 활용능력</h3><p>한국생산성본부 AI 프롬프트 활용능력. AI·생성형 AI 기초, 프롬프트 기법, 업무 활용과 윤리.</p></span>
+      <span class="go">읽기<svg viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></span></a></li>
+</ol></section>
+<section class="grp in"><h2>보안 · 인프라</h2><p class="gd">리눅스 서버, 네트워크 장비, 정보보안 자격</p><ol>
+<li><a class="row" href="linux.html">
       <span class="sw" style="background:#b4500c">LM2</span>
-      <span><h2>리눅스마스터 2급</h2><p>리눅스 역사와 설치, 명령어, 권한, 셸, 프로세스, vi, 패키지, X 윈도, 네트워크, 가상화·클라우드.</p></span>
+      <span><h3>리눅스마스터 2급</h3><p>리눅스 역사와 설치, 명령어, 권한, 셸, 프로세스, vi, 패키지, X 윈도, 네트워크, 가상화·클라우드.</p></span>
       <span class="go">읽기<svg viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></span></a></li>
-  </ol>
+<li><a class="row" href="ccna.html">
+      <span class="sw" style="background:#0f5257">CCNA</span>
+      <span><h3>CCNA 200-301</h3><p>시스코 네트워크 자격. 서브넷팅, VLAN·STP, OSPF, NAT·ACL, 무선, 자동화와 AI. v2.0 기준.</p></span>
+      <span class="go">읽기<svg viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></span></a></li>
+<li><a class="row" href="secgisa.html">
+      <span class="sw" style="background:#a1162b">보안기사</span>
+      <span><h3>정보보안기사</h3><p>시스템·네트워크·어플리케이션 보안, 정보보안 일반(암호·인증), 관리 및 법규 5과목과 실기.</p></span>
+      <span class="go">읽기<svg viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></span></a></li>
+<li><a class="row" href="secsangi.html">
+      <span class="sw" style="background:#7a4510">보안산</span>
+      <span><h3>정보보안산업기사</h3><p>시스템·네트워크·어플리케이션 보안, 정보보안 일반 4과목과 실기. 기사와 차이점 표시.</p></span>
+      <span class="go">읽기<svg viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></span></a></li>
+</ol></section>
   <p class="note in"><b>PDF로 저장하는 법</b> — 각 교본 위쪽의 <b>PDF로 저장</b>을 눌러 단원을 고르거나, 단원 제목 아래 <b>이 장만 PDF로</b>를 누른다. 인쇄 창에서 대상을 <b>PDF로 저장</b>, 용지를 A4로 고르면 된다. 2026년 11월 기준으로 정리했으며, 시험 일정과 응시료는 접수 전 공식 사이트에서 다시 확인하자.</p>
 </div>
 <script>
